@@ -1,10 +1,264 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>Hello, world</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Next Bike Shortlist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Saira+Condensed:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-  <h1>Hello, world!</h1>
+<header class="masthead">
+  <div class="masthead-inner">
+    <div class="brand">
+      <h1>Next Bike Shortlist</h1>
+      <p class="brand-sub">Cambridge · 6′4″ rider, 34″ inseam · budget up to £12k, ideally under £8k</p>
+    </div>
+    <div class="route-sign" id="route-sign" aria-live="polite" aria-label="Current top three bikes"></div>
+  </div>
+  <nav class="tabs" role="tablist" aria-label="Sections">
+    <button role="tab" id="tab-btn-compare" aria-controls="tab-compare" data-tab="compare">Compare</button>
+    <button role="tab" id="tab-btn-scoring" aria-controls="tab-scoring" data-tab="scoring">Scoring</button>
+    <button role="tab" id="tab-btn-listings" aria-controls="tab-listings" data-tab="listings">Listings &amp; dealers</button>
+    <button role="tab" id="tab-btn-about" aria-controls="tab-about" data-tab="about">About the data</button>
+  </nav>
+</header>
+
+<main>
+  <!-- ============ COMPARE ============ -->
+  <section id="tab-compare" role="tabpanel" aria-labelledby="tab-btn-compare" class="tabpanel">
+    <div class="compare-layout">
+      <aside class="weights-panel" aria-label="Weights">
+        <div class="panel-head">
+          <h2>What matters</h2>
+          <button class="link-btn" id="weights-reset" type="button">Reset</button>
+        </div>
+        <p class="hint">Drag to set how much each criterion counts. The share column shows its slice of the overall score.</p>
+        <div class="presets" id="presets"></div>
+        <div id="weights-list" class="weights-list"></div>
+        <label class="field">
+          <span class="field-label">Weak-spot penalty</span>
+          <select id="penalty"></select>
+        </label>
+        <p class="hint">With a penalty, one poor score drags the overall down more than a plain average would.</p>
+      </aside>
+
+      <div class="compare-main">
+        <div class="filters" id="filters">
+          <label class="field grow">
+            <span class="field-label">Search</span>
+            <input type="search" id="f-q" placeholder="Make, model, engine…" autocomplete="off">
+          </label>
+          <label class="field">
+            <span class="field-label">Price up to <output id="f-maxprice-out"></output></span>
+            <input type="range" id="f-maxprice" min="3000" max="13000" step="250">
+          </label>
+          <label class="field">
+            <span class="field-label">Power up to <output id="f-maxhp-out"></output></span>
+            <input type="range" id="f-maxhp" min="40" max="100" step="5">
+          </label>
+          <label class="field">
+            <span class="field-label">Which option to score</span>
+            <select id="f-mode">
+              <option value="best">Best-scoring option</option>
+              <option value="cheapest">Cheapest option</option>
+              <option value="new">New where available</option>
+              <option value="used">Used where available</option>
+            </select>
+          </label>
+          <label class="field">
+            <span class="field-label">Available as</span>
+            <select id="f-cond">
+              <option value="any">New or used</option>
+              <option value="new">New available</option>
+              <option value="used">Used available</option>
+            </select>
+          </label>
+          <div class="field">
+            <span class="field-label">Style</span>
+            <div class="chips" id="f-styles"></div>
+          </div>
+          <div class="field checks">
+            <label><input type="checkbox" id="f-starred"> Shortlist only</label>
+            <label><input type="checkbox" id="f-showhidden"> Show hidden</label>
+            <label><input type="checkbox" id="f-showref"> Show my CRF300L</label>
+            <label><input type="checkbox" id="f-private"> Used = private sale (−8%)</label>
+          </div>
+          <details class="min-scores">
+            <summary>Minimum scores <span id="min-count" class="count-pill"></span></summary>
+            <div id="f-mins" class="mins-grid"></div>
+          </details>
+        </div>
+
+        <div class="table-status" id="table-status"></div>
+        <div class="table-wrap" id="table-wrap">
+          <table class="bikes" id="bikes-table">
+            <thead id="bikes-thead"></thead>
+            <tbody id="bikes-tbody"></tbody>
+          </table>
+        </div>
+        <p class="legend">
+          <span class="legend-scale" aria-hidden="true"><i style="--s:0"></i><i style="--s:1"></i><i style="--s:2"></i><i style="--s:3"></i><i style="--s:4"></i><i style="--s:5"></i></span>
+          Scores run 0 (poor) to 5 (excellent). <span class="you-mark">Underlined</span> scores are your own overrides.
+          Click a row for details, sources of each score, and to enter your own scores after a test ride.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SCORING ============ -->
+  <section id="tab-scoring" role="tabpanel" aria-labelledby="tab-btn-scoring" class="tabpanel" hidden>
+    <div class="prose">
+      <h2>How the overall score works</h2>
+      <p>Each bike gets a 0–5 score on twelve criteria. Price, power and weight are computed from the numbers through the curves below. The rest are researched judgements, which you can override per bike (open a row in the Compare tab). Test-ride access depends on whether you pick a new or used option.</p>
+      <p>The overall score is a weighted average of the criteria, using the weights from the Compare tab. With the weak-spot penalty turned up, it becomes a weighted power mean: a bike that scores 1 on something you care about can't make up for it elsewhere.</p>
+      <pre class="formula" id="formula"></pre>
+      <h3>New or used</h3>
+      <p>Each bike has one or more buying options, such as “New 2026” or “Used 2019–21”. The option changes the price, test-ride score, and sometimes reliability (older bikes lose a little) or specs (a different generation). By default each row shows whichever option scores best; pick another from the row’s drop-down, or change “Which option to score” above the table.</p>
+    </div>
+    <div class="curves" id="curves"></div>
+  </section>
+
+  <!-- ============ LISTINGS ============ -->
+  <section id="tab-listings" role="tabpanel" aria-labelledby="tab-btn-listings" class="tabpanel" hidden>
+    <div class="listings-top">
+      <div class="prose">
+        <h2>Find one near you</h2>
+        <p>Pick bikes, and this builds searches on the main UK sites, pre-filled with your postcode, radius and price. Save the listings you like below to see them on the map with the nearest dealers, sorted by distance.</p>
+      </div>
+      <form class="search-setup" id="search-setup">
+        <label class="field">
+          <span class="field-label">Home postcode</span>
+          <input type="text" id="home-postcode" autocomplete="postal-code" spellcheck="false">
+        </label>
+        <label class="field">
+          <span class="field-label">Radius (miles)</span>
+          <select id="radius">
+            <option>10</option><option>25</option><option>50</option><option>75</option><option>100</option><option>200</option>
+          </select>
+        </label>
+        <label class="field">
+          <span class="field-label">Max price (£)</span>
+          <input type="number" id="search-maxprice" min="0" step="250">
+        </label>
+        <p class="hint" id="home-status"></p>
+      </form>
+    </div>
+
+    <div class="bike-picker">
+      <div class="panel-head">
+        <h3>Bikes to search for</h3>
+        <div class="btn-row">
+          <button type="button" class="link-btn" id="pick-starred">Shortlist</button>
+          <button type="button" class="link-btn" id="pick-top5">Top 5</button>
+          <button type="button" class="link-btn" id="pick-none">None</button>
+        </div>
+      </div>
+      <div class="chips" id="listing-bikes"></div>
+    </div>
+
+    <div class="table-wrap">
+      <table class="links-table" id="links-table"></table>
+    </div>
+    <p class="hint">Facebook Marketplace uses the location set in your Marketplace settings. Craigslist barely operates in the UK; Gumtree fills that role. Bikes in Stock shows dealer stock, including new bikes.</p>
+
+    <div class="map-and-list">
+      <div class="map-card">
+        <div class="panel-head">
+          <h3>Map</h3>
+          <div class="btn-row" role="group" aria-label="Map range">
+            <button type="button" class="seg" data-range="30">30 mi</button>
+            <button type="button" class="seg" data-range="60">60 mi</button>
+            <button type="button" class="seg" data-range="120">120 mi</button>
+          </div>
+        </div>
+        <div class="map-box">
+          <svg id="map" role="img" aria-label="Map of dealers and saved listings around home"></svg>
+          <div class="map-tip" id="map-tip" hidden></div>
+        </div>
+        <div class="map-legend">
+          <span><i class="lg lg-home"></i>Home</span>
+          <span><i class="lg lg-dealer"></i>Dealer for a bike you picked</span>
+          <span><i class="lg lg-dealer-dim"></i>Other dealer</span>
+          <span><i class="lg lg-listing"></i>Saved listing</span>
+        </div>
+      </div>
+
+      <div class="saved-card">
+        <h3>Saved listings</h3>
+        <form id="listing-form" class="listing-form">
+          <label class="field"><span class="field-label">Bike</span><select id="lf-bike" required></select></label>
+          <label class="field grow"><span class="field-label">Link to the ad</span><input type="url" id="lf-url" placeholder="https://…"></label>
+          <label class="field"><span class="field-label">Price (£)</span><input type="number" id="lf-price" min="0" step="1" required></label>
+          <label class="field"><span class="field-label">Year</span><input type="number" id="lf-year" min="1990" max="2030"></label>
+          <label class="field"><span class="field-label">Miles</span><input type="number" id="lf-miles" min="0" step="1"></label>
+          <label class="field grow"><span class="field-label">Where (postcode or town)</span><input type="text" id="lf-where" placeholder="e.g. PE19 or Ely" required></label>
+          <label class="field"><span class="field-label">Seller</span>
+            <select id="lf-seller"><option value="private">Private</option><option value="dealer">Dealer</option></select>
+          </label>
+          <label class="field grow"><span class="field-label">Notes</span><input type="text" id="lf-notes" placeholder="Condition, extras, questions…"></label>
+          <div class="form-actions">
+            <button type="submit" class="btn">Save listing</button>
+            <span class="hint" id="lf-status" role="status"></span>
+          </div>
+        </form>
+        <div class="table-wrap">
+          <table class="saved-table" id="saved-table"></table>
+        </div>
+      </div>
+    </div>
+
+    <div class="dealers">
+      <div class="panel-head">
+        <h3>Dealers by distance</h3>
+        <label class="inline-check"><input type="checkbox" id="dealers-picked-only"> Only brands I picked</label>
+      </div>
+      <div class="table-wrap">
+        <table class="dealers-table" id="dealers-table"></table>
+      </div>
+      <p class="hint" id="locators"></p>
+    </div>
+  </section>
+
+  <!-- ============ ABOUT ============ -->
+  <section id="tab-about" role="tabpanel" aria-labelledby="tab-btn-about" class="tabpanel" hidden>
+    <div class="prose">
+      <h2>Where the numbers come from</h2>
+      <p>Researched in September 2026. Treat every figure as an estimate to check, not a quote.</p>
+      <h3>Prices</h3>
+      <ul>
+        <li><strong>New:</strong> the UK on-the-road price (registration, first VED, plates, delivery and PDI included), from manufacturer UK sites and current dealer adverts. Where a brand quotes a price “plus OTR” (CFMOTO), about £200 is added. Where dealers are advertising below RRP, the price used is between the two.</li>
+        <li><strong>Used:</strong> a typical dealer asking price for a tidy, average-mileage bike in that year range, from AutoTrader listings. Private sales usually run about 8% lower; tick “Used = private sale” to apply that.</li>
+        <li>Your own price for any bike (for example, a listing you found) can be entered in the bike’s detail panel.</li>
+      </ul>
+      <h3>Researched scores</h3>
+      <p>Comfort, motorway manners, standing position, fun, reliability, running costs, luggage and green-laning scores come from UK and US reviews (MCN, Bennetts BikeSocial, Visordown, Cycle World, owner forums) and weigh what matters for a 6′4″ rider. Each score has a one-line reason in the bike’s detail panel. They are opinions: after a test ride, override them.</p>
+      <h3>Test-ride access</h3>
+      <p>New bikes: how close the nearest dealer is and whether the brand runs demo fleets (Honda, Yamaha, Triumph and BMW do; Aprilia, Moto Guzzi and CFMOTO demos are harder to find). Used bikes: how many are for sale, since common bikes are easy to find within a short drive, and most sellers allow a ride with cash or ID left as security.</p>
+      <h3>Map and places</h3>
+      <p>Coastline: Natural Earth. Postcode districts and towns: OS Code-Point Open via the Gibbs/uk-postcodes dataset (Open Government Licence). Locations are district centroids, accurate to a mile or two.</p>
+      <h3>Your data</h3>
+      <p>Weights, overrides, shortlist and saved listings are stored in this browser only. Use the box below to back them up or move them to another device.</p>
+      <div class="backup">
+        <textarea id="backup-text" rows="6" spellcheck="false" aria-label="Backup data"></textarea>
+        <div class="btn-row">
+          <button type="button" class="btn" id="backup-copy">Copy backup</button>
+          <button type="button" class="btn btn-quiet" id="backup-import">Load from box</button>
+          <button type="button" class="btn btn-quiet" id="backup-reset">Reset everything</button>
+          <span class="hint" id="backup-status" role="status"></span>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script src="js/data/bikes.js"></script>
+<script src="js/data/dealers.js"></script>
+<script src="js/data/geo.js"></script>
+<script src="js/scoring.js"></script>
+<script src="js/listings.js"></script>
+<script src="js/app.js"></script>
 </body>
 </html>
