@@ -15,7 +15,7 @@
     { key: 'comfort', label: 'Tall-rider comfort', short: 'Comfort', kind: 'researched', weight: 9,
       help: 'Ergonomics for 6\'4" and a 34" inseam; seat and riding position over 2+ hours.' },
     { key: 'highway', label: 'Motorway manners', short: 'Motorway', kind: 'researched', weight: 7,
-      help: 'Comfort at 75mph: stability, vibration, wind protection, power in reserve.' },
+      help: 'Stability, vibration and wind protection at 75mph. Power is judged under Power, not here.' },
     { key: 'standing', label: 'Standing position', short: 'Standing', kind: 'researched', weight: 4,
       help: 'Bar height and reach when standing on the pegs.' },
     { key: 'fun', label: 'Fun factor', short: 'Fun', kind: 'researched', weight: 7,

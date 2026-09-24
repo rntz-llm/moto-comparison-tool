@@ -156,7 +156,7 @@ window.MOTO_BIKES = [
     cons: ['Small for a tall rider', 'Busy and buzzy at 75mph', 'Soft budget suspension'],
     scores: {
       comfort: [3, 'Plush enough, but compact for your size.'],
-      highway: [2.5, 'Will sit at 75–80mph but is revving hard, with little in reserve and some buzz.'],
+      highway: [3, 'Sits at 75–80mph with some buzz; being light, it gets pushed about in crosswinds.'],
       standing: [3, 'OK, though bars are low for your height.'],
       fun: [3.5, 'Light and thrashable. The fun of a small bike ridden hard.'],
       reliability: [5, 'Honda\'s 500 twin is famously durable.'],
@@ -409,7 +409,7 @@ window.MOTO_BIKES = [
     cons: ['Strained at 75mph', 'Early-model recalls', 'Single-cylinder vibes'],
     scores: {
       comfort: [3.5, 'Roomy and upright for its size; the seat is firm on long days.'],
-      highway: [2.5, 'Will cruise at 70–75mph, but it is near its limit and single-cylinder vibes build up.'],
+      highway: [3, 'Cruises at 70–75mph without fuss. Single-cylinder vibes build up on long stints.'],
       standing: [4, 'Tall bars, good standing position.'],
       fun: [3.5, 'You can thrash it everywhere. Charming character.'],
       reliability: [3, 'The new Sherpa 450 engine had several recalls and teething issues in 2024. Improving, and parts are cheap.'],
@@ -435,7 +435,7 @@ window.MOTO_BIKES = [
     cons: ['Brand new model', 'Little in reserve at 75mph'],
     scores: {
       comfort: [3.5, 'Tall seat with a hollowed comfort cushion. Few long-distance reports yet.'],
-      highway: [2.5, 'The twin is smoother than a single, but 44hp leaves little in reserve at 75mph.'],
+      highway: [3, 'The twin is smoother than a single; the screen is small. A new model, so few long-term motorway reports yet.'],
       standing: [4.5, 'Bars and pegs placed for standing, KX-style.'],
       fun: [3.5, 'Revvy twin in a light bike.'],
       reliability: [4, 'Engine proven in the Ninja 500 / Z500. New chassis.'],
@@ -459,7 +459,7 @@ window.MOTO_BIKES = [
     cons: ['Buzzy at 75mph', 'KTM reliability reputation', 'Firm, narrow seat'],
     scores: {
       comfort: [3, 'Legroom is good; the seat is narrow and hard.'],
-      highway: [2, 'A revvy single at 75mph: buzzy, and pushed about by gusts.'],
+      highway: [2.5, 'A revvy single: buzzy at 75mph, and light enough to be pushed about by gusts.'],
       standing: [4.5, 'Designed to be ridden standing.'],
       fun: [4, 'Revvy and very agile.'],
       reliability: [2.5, 'Mixed build-quality reports on the Indian-built 390 range.'],
@@ -485,7 +485,7 @@ window.MOTO_BIKES = [
     cons: ['Cramped for tall riders', 'Small dealer network', 'Unknown long-term reliability'],
     scores: {
       comfort: [2.5, 'Compact for a tall rider.'],
-      highway: [2.5, 'Smoother than a single, but little in reserve at 75mph.'],
+      highway: [3, 'Smoother than a single, with an adjustable screen. Some buzz at 75mph.'],
       standing: [3.5, 'OK, but low for your height.'],
       fun: [3.5, 'Light and eager.'],
       reliability: [3, 'Early reports are good, but there is little long-term data and parts supply can be slow.'],
@@ -680,7 +680,7 @@ window.MOTO_BIKES = [
     cons: ['Buzzy at 75mph', 'Water pump and swingarm bearing issues', '18–25 years old'],
     scores: {
       comfort: [3.5, 'Great legroom; the seat and single-cylinder vibes tire you on long days.'],
-      highway: [2, 'Holds 75mph, but vibey and working hard.'],
+      highway: [2.5, 'Holds 75mph, but single-cylinder vibes wear on you.'],
       standing: [4, 'Tall, with decent bars for standing.'],
       fun: [3, 'Light-ish and thumpy.'],
       reliability: [4, 'The Rotax single is tough; water pump seals and ungreased swingarm bearings are known issues.'],
@@ -833,7 +833,7 @@ window.MOTO_BIKES = [
     cons: ['23–36 years old', 'Heavy for 60hp', 'Parts getting scarcer'],
     scores: {
       comfort: [4, 'Tall, roomy and comfortable, with good wind protection.'],
-      highway: [3.5, 'Good fairing and smooth V-twin; 60hp is fine at 75mph but has little in reserve. 5 gears.'],
+      highway: [3.5, 'Good fairing and smooth V-twin; relaxed at 75mph.'],
       standing: [4, 'Tall bars; good standing.'],
       fun: [3, 'Charismatic, but soft and heavy by modern standards.'],
       reliability: [4.5, 'Famously tough. Known weak points: regulator/rectifier and fuel pump relay.'],
