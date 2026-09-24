@@ -7,7 +7,8 @@
 //   options  : the ways you could buy it (new / used generations), each with a typical
 //              on-the-road price in GBP, a price range, a test-ride score, and optional
 //              adjustments (adj) or spec overrides (specs)
-//   search   : names used to build listing-site searches
+//   search   : names used to build listing-site searches (slug: AutoTrader model page,
+//              null where AutoTrader has none; mcn: MCN path when it differs)
 window.MOTO_BIKES = [
   {
     id: 'tenere700', make: 'Yamaha', model: 'Ténéré 700', style: 'Adventure',
@@ -115,7 +116,7 @@ window.MOTO_BIKES = [
       { id: 'used-23', label: 'Used 2023–25', condition: 'used', years: '2023–25', price: 7900, range: [7200, 8600], testRide: 4,
         note: 'Fewer listed than the Ténéré or Transalp.' }
     ],
-    search: { at: ['SUZUKI', 'V-STROM 800DE'], slug: 'suzuki/v-strom-800de', q: 'Suzuki V-Strom 800DE' }
+    search: { at: ['SUZUKI', 'V-STROM 800DE'], slug: 'suzuki/v-strom-800', mcn: 'suzuki/v-strom-800de', q: 'Suzuki V-Strom 800DE' }
   },
   {
     id: 'nc750x', make: 'Honda', model: 'NC750X', style: 'Adventure-tourer',
@@ -170,7 +171,7 @@ window.MOTO_BIKES = [
       { id: 'used-cb', label: 'Used CB500X 2019–23', condition: 'used', years: '2019–23', price: 4300, range: [3800, 5000], testRide: 4.5, specs: { wetKg: 199 },
         note: 'Same bike under its previous name. Very common.' }
     ],
-    search: { at: ['HONDA', 'NX500'], slug: 'honda/nx500', q: 'Honda NX500 OR CB500X' }
+    search: { at: ['HONDA', 'NX500'], slug: 'honda/nx500', q: 'Honda NX500', alt: ['Honda CB500X'] }
   },
   {
     id: 'versys650', make: 'Kawasaki', model: 'Versys 650', style: 'Adventure-tourer',
@@ -297,7 +298,7 @@ window.MOTO_BIKES = [
       { id: 'used-21', label: 'Used 2021–24', condition: 'used', years: '2021–24', price: 6900, range: [6000, 7500], testRide: 4,
         note: 'Mostly sold through Triumph dealers as approved used.' }
     ],
-    search: { at: ['TRIUMPH', 'TIGER 850 SPORT'], slug: 'triumph/tiger-850-sport', q: 'Triumph Tiger 850 Sport' }
+    search: { at: ['TRIUMPH', 'TIGER 850 SPORT'], slug: null, mcn: 'triumph/tiger-850-sport', q: 'Triumph Tiger 850 Sport' }
   },
   {
     id: 'tiger800', make: 'Triumph', model: 'Tiger 800 XC / XR', style: 'Adventure-tourer',
@@ -396,7 +397,7 @@ window.MOTO_BIKES = [
       { id: 'used-21', label: 'Used 2021–24', condition: 'used', years: '2021–24', price: 7400, range: [6500, 8500], testRide: 3.5 },
       { id: 'used-19', label: 'Used 2019–20', condition: 'used', years: '2019–20', price: 6300, range: [5700, 7000], testRide: 3.5, adj: { reliability: -0.25 }, specs: { hp: 76 } }
     ],
-    search: { at: ['MOTO GUZZI', 'V85 TT'], slug: 'moto-guzzi/v85-tt', q: 'Moto Guzzi V85 TT' }
+    search: { at: ['MOTO GUZZI', 'V85 TT'], slug: 'moto-guzzi/v85', mcn: 'moto-guzzi/v85-tt', q: 'Moto Guzzi V85 TT' }
   },
   {
     id: 'himalayan450', make: 'Royal Enfield', model: 'Himalayan 450', style: 'Adventure',
@@ -422,7 +423,7 @@ window.MOTO_BIKES = [
       { id: 'used-24', label: 'Used 2024–25', condition: 'used', years: '2024–25', price: 4600, range: [4200, 5200], testRide: 4, adj: { reliability: -0.25 },
         note: 'Check recall work has been done.' }
     ],
-    search: { at: ['ROYAL ENFIELD', 'HIMALAYAN'], slug: 'royal-enfield/himalayan', q: 'Royal Enfield Himalayan 450' }
+    search: { at: ['ROYAL ENFIELD', 'HIMALAYAN'], slug: 'royal-enfield/himalayan-450', mcn: 'enfield/himalayan', q: 'Royal Enfield Himalayan 450' }
   },
   {
     id: 'kle500', make: 'Kawasaki', model: 'KLE500 (2026)', style: 'Adventure',
@@ -571,7 +572,7 @@ window.MOTO_BIKES = [
       { id: 'used-08', label: 'Used 2008–12', condition: 'used', years: '2008–12', price: 3400, range: [2800, 4200], testRide: 4, adj: { reliability: -0.5 },
         note: 'Condition matters more than year. Budget for tyres, chain and a service.' }
     ],
-    search: { at: ['HONDA', 'XL700V TRANSALP'], slug: 'honda/xl700v-transalp', q: 'Honda XL700V Transalp' }
+    search: { at: ['HONDA', 'XL700V TRANSALP'], slug: null, mcn: 'honda/xl700v-transalp', q: 'Honda XL700V Transalp' }
   },
   {
     id: 'xt660z', make: 'Yamaha', model: 'XT660Z Ténéré', style: 'Dual-sport',
@@ -594,7 +595,7 @@ window.MOTO_BIKES = [
     options: [
       { id: 'used-08', label: 'Used 2008–16', condition: 'used', years: '2008–16', price: 3700, range: [3000, 4500], testRide: 3.5, adj: { reliability: -0.5 } }
     ],
-    search: { at: ['YAMAHA', 'XT660Z TENERE'], slug: 'yamaha/xt660z-tenere', q: 'Yamaha XT660Z Tenere' }
+    search: { at: ['YAMAHA', 'XT660Z TENERE'], slug: null, mcn: 'yamaha/xt660z-tenere', q: 'Yamaha XT660Z Tenere' }
   },
   {
     id: 'hornet750', make: 'Honda', model: 'CB750 Hornet', style: 'Naked',
@@ -622,6 +623,281 @@ window.MOTO_BIKES = [
     search: { at: ['HONDA', 'CB750 HORNET'], slug: 'honda/cb750-hornet', q: 'Honda CB750 Hornet' }
   },
   {
+    id: 'tdm900', make: 'Yamaha', model: 'TDM900', style: 'Adventure-tourer',
+    engine: '897cc parallel twin (270°)', hp: 86, torqueNm: 89, wetKg: 223, seatMm: 825, tankL: 20,
+    delivery: 'relaxed', drive: 'chain',
+    summary: 'A tall, long-travel road all-rounder with a torquey 270° twin, famous for being fun on twisty roads. Cheap now, but getting old (2002–2014) and scarce: only a handful are listed at any time.',
+    tall: 'Upright, with long-travel suspension, a roomy seat-to-peg distance and wide bars. Popular with tall riders.',
+    pros: ['Torquey, characterful twin', 'Great on twisty roads', 'Upright and roomy', 'Cheap'],
+    cons: ['12–24 years old', 'Scarce: few for sale', 'Small screen'],
+    scores: {
+      comfort: [4, 'Upright and roomy, with plush long-travel suspension. A proven touring bike.'],
+      highway: [3.5, 'Smooth, balanced twin and stable at 75mph. The small screen buffets a tall rider.'],
+      standing: [2.5, 'Wide bars, but a road bike.'],
+      fun: [4, 'Grunty 270° twin, light steering, loves B-roads.'],
+      reliability: [4, 'The engine is tough and simple; age is the bigger risk now.'],
+      running: [3.5, 'Around 50mpg and 6,000-mile services. Parts are cheap, but expect age-related jobs.'],
+      luggage: [4, 'Givi and Yamaha racks and panniers are common on used bikes.'],
+      greenlane: [1.5, 'Road bike with 18/17" wheels.']
+    },
+    options: [
+      { id: 'used-02', label: 'Used 2002–14', condition: 'used', years: '2002–14', price: 2800, range: [2000, 3800], testRide: 3, adj: { reliability: -0.5 },
+        note: 'Only about 3 on AutoTrader at a time, so look on eBay, Gumtree and Facebook too. Check chain, suspension, corrosion and history.' }
+    ],
+    search: { at: ['YAMAHA', 'TDM900'], slug: 'yamaha/tdm900', mcn: 'yamaha/tdm900', q: 'Yamaha TDM900' }
+  },
+  {
+    id: 'k75', make: 'BMW', model: 'K75', style: 'Sport-tourer',
+    engine: '740cc inline triple', hp: 75, torqueNm: 68, wetKg: 228, seatMm: 810, tankL: 21,
+    delivery: 'relaxed', drive: 'shaft',
+    summary: 'A 1985–96 classic: smooth "flying brick" triple, shaft drive and a big tank, with engines known to run past 150,000 miles. Comfortable and understated, but 30–40 years old, with dated brakes and suspension.',
+    tall: '810mm seat and upright bars; roomy enough, with a slight knee bend for a 34" inseam. The K75RT adds a full touring fairing (and weight).',
+    pros: ['Very smooth triple', 'Shaft drive', 'Long-lived engine', 'Cheap classic'],
+    cons: ['30–40 years old', 'Dated brakes and suspension', 'Parts via specialists'],
+    scores: {
+      comfort: [3.5, 'Upright and comfortable; the K75RT and K75S add wind protection.'],
+      highway: [3.5, 'Smooth and stable at 75mph. Wind protection depends on the variant (RT best, base K75 minimal).'],
+      standing: [1.5, 'Not designed for it.'],
+      fun: [3, 'Charming triple, but heavy with period brakes and suspension.'],
+      reliability: [4, 'The engine and shaft drive are famously durable; the rest is old.'],
+      running: [3.5, 'Shaft drive and around 50mpg, but specialist parts and labour. Classic insurance can be cheap with a mileage limit.'],
+      luggage: [4.5, 'BMW and Krauser panniers are common.'],
+      greenlane: [0.5, 'No.']
+    },
+    options: [
+      { id: 'used-85', label: 'Used 1985–96', condition: 'used', years: '1985–96', price: 3300, range: [2500, 4500], testRide: 3, adj: { reliability: -1 },
+        note: 'Most observed prices are £2,900–4,300. Rare on AutoTrader; try eBay and classic sites. Check the gearbox input spline, fuel pump and electrics. K75RT variant: about 258kg.' }
+    ],
+    search: { at: ['BMW', 'K 75'], slug: 'bmw/k-75', mcn: 'bmw/k75', q: 'BMW K75' }
+  },
+  {
+    id: 'f650dakar', make: 'BMW', model: 'F650GS Dakar', style: 'Adventure',
+    engine: '652cc single (Rotax)', hp: 50, torqueNm: 60, wetKg: 192, seatMm: 890, tankL: 17.3,
+    delivery: 'normal', drive: 'chain',
+    summary: 'The tall version of BMW\'s 2000–07 single: 21" front, long travel, 890mm seat. Cheap, frugal and a good fit for long legs, but a single is buzzy at 75mph. (The 2008+ "F650GS" is a different, 800cc twin.)',
+    tall: '890mm seat, one of the tallest here, suits a 34" inseam.',
+    pros: ['Tall rider fit', 'Very cheap', 'Frugal', 'Capable off-road'],
+    cons: ['Buzzy at 75mph', 'Water pump and swingarm bearing issues', '18–25 years old'],
+    scores: {
+      comfort: [3.5, 'Great legroom; the seat and single-cylinder vibes tire you on long days.'],
+      highway: [2, 'Holds 75mph, but vibey and working hard.'],
+      standing: [4, 'Tall, with decent bars for standing.'],
+      fun: [3, 'Light-ish and thumpy.'],
+      reliability: [4, 'The Rotax single is tough; water pump seals and ungreased swingarm bearings are known issues.'],
+      running: [4, 'Around 60mpg and cheap parts.'],
+      luggage: [4.5, 'A long-time overlanders\' favourite.'],
+      greenlane: [4, '21" front and long travel.']
+    },
+    options: [
+      { id: 'used-00', label: 'Used 2000–07', condition: 'used', years: '2000–07', price: 2300, range: [1500, 3200], testRide: 3.5, adj: { reliability: -0.5 },
+        note: 'Bennetts puts a good private one at about £1,500 and a very tidy one at £2,500–3,000. Check the water pump, swingarm bearings and lambda sensor.' }
+    ],
+    search: { at: ['BMW', 'F 650 GS'], slug: 'bmw/f-650', mcn: 'bmw/f650gs', q: 'BMW F650GS Dakar' }
+  },
+  {
+    id: 'r1200gs', make: 'BMW', model: 'R1200GS', style: 'Adventure',
+    engine: '1170cc boxer twin', hp: 100, torqueNm: 115, wetKg: 229, seatMm: 850, tankL: 20,
+    delivery: 'relaxed', drive: 'shaft',
+    summary: 'The default big adventure tourer: supremely comfortable, stable and torquey, with shaft drive. Its 100–125hp is well beyond your comfort band on paper, though a boxer delivers it very lazily.',
+    tall: 'Adjustable 850/870mm seat and a roomy riding position. An excellent tall-rider bike.',
+    pros: ['Superb long-distance comfort', 'Shaft drive', 'Everything available for it', 'Plentiful used'],
+    cons: ['100–125hp', 'Final drive and early-LC issues', 'Expensive to service'],
+    scores: {
+      comfort: [4.5, 'All-day comfortable, with an adjustable seat and roomy riding position.'],
+      highway: [4, 'Planted and smooth at 75mph with a decent screen.'],
+      standing: [3.5, 'OK; the cylinders sit close to your shins.'],
+      fun: [3.5, 'Torquey and surprisingly agile, but heavy and not rev-happy.'],
+      reliability: [3.5, 'Mostly durable. Air-cooled bikes had final drive failures; early water-cooled (2013–14) bikes had some teething issues. Parts and labour are expensive.'],
+      running: [3, 'Around 45–50mpg, pricey BMW servicing and big tyres.'],
+      luggage: [5, 'Everything exists for it.'],
+      greenlane: [3.5, 'Capable, but heavy to pick up.']
+    },
+    options: [
+      { id: 'used-04', label: 'Used 2004–09 (air-cooled)', condition: 'used', years: '2004–09', price: 4500, range: [3500, 5500], testRide: 4.5, adj: { reliability: -0.25 }, specs: { hp: 100, wetKg: 229 },
+        note: 'Check final drive for play or leaks, and service history.' },
+      { id: 'used-10', label: 'Used 2010–12 (DOHC)', condition: 'used', years: '2010–12', price: 5600, range: [4800, 6500], testRide: 4.5, specs: { hp: 110, wetKg: 229 } },
+      { id: 'used-13', label: 'Used 2013–18 (water-cooled)', condition: 'used', years: '2013–18', price: 7600, range: [6000, 9500], testRide: 4.5, adj: { highway: 0.5, fun: 0.25 }, specs: { hp: 125, wetKg: 244 },
+        note: 'Smoother, stronger and better equipped. 2013–14 bikes: check recall work.' }
+    ],
+    search: { at: ['BMW', 'R 1200 GS'], slug: 'bmw/r-1200-gs', mcn: 'bmw/r1200gs', q: 'BMW R1200GS' }
+  },
+  {
+    id: 'r1150gs', make: 'BMW', model: 'R1150GS', style: 'Adventure',
+    engine: '1130cc boxer twin', hp: 85, torqueNm: 98, wetKg: 249, seatMm: 840, tankL: 22,
+    delivery: 'relaxed', drive: 'shaft',
+    summary: 'The 1999–2004 predecessor of the R1200GS: 85hp, lazy and very comfortable, with shaft drive and a 22L tank (30L on the Adventure). Heavy at 249kg, and the servo brakes and final drive need checking.',
+    tall: 'Adjustable 840/860mm seat and a roomy riding position.',
+    pros: ['Very comfortable', 'Lazy, torquey engine', 'Shaft drive', 'Cheap for a big GS'],
+    cons: ['249kg', 'Servo brakes (2002+) and final drive can be costly', '22–27 years old'],
+    scores: {
+      comfort: [4.5, 'Big, roomy and comfortable.'],
+      highway: [4, 'Stable and relaxed at 75mph; buffeting from the standard screen.'],
+      standing: [3.5, 'OK.'],
+      fun: [3, 'Characterful boxer, but heavy and old.'],
+      reliability: [3.5, 'Generally rugged; known issues are servo ABS brakes, final drive, clutch splines and fuel pump controller.'],
+      running: [3, 'Around 45mpg; specialist servicing.'],
+      luggage: [5, 'Everything exists for it.'],
+      greenlane: [3.5, 'Capable, but very heavy to pick up.']
+    },
+    options: [
+      { id: 'used-99', label: 'Used 1999–2004', condition: 'used', years: '1999–2004', price: 3300, range: [2200, 4500], testRide: 3.5, adj: { reliability: -0.5 },
+        note: 'Adventure versions (30L tank, taller) command a premium. Check final drive, servo brake operation and clutch.' }
+    ],
+    search: { at: ['BMW', 'R 1150 GS'], slug: 'bmw/r-1150-gs', mcn: 'bmw/r1150gs-adventure', q: 'BMW R1150GS' }
+  },
+  {
+    id: 'scoutsixty', make: 'Indian', model: 'Scout Sixty', style: 'Cruiser',
+    engine: '999cc V-twin', hp: 78, torqueNm: 88, wetKg: 254, seatMm: 643, tankL: 12.5,
+    delivery: 'relaxed', drive: 'belt',
+    summary: 'A well-made, good-looking cruiser with a smooth V-twin and belt drive. For a 6\'4" rider who wants long days and twisty roads it is a poor fit: very low seat, feet forward, little lean angle and no wind protection.',
+    tall: '643mm seat puts your knees high. Tall owners fit extended-reach kits for bars, seat and pegs.',
+    pros: ['Smooth, characterful V-twin', 'Belt drive', 'Build quality'],
+    cons: ['Cramped for 6\'4"', 'Little lean angle', 'No wind protection', 'Small tank'],
+    scores: {
+      comfort: [1.5, 'Very low seat, cramped legroom for a 34" inseam, short-travel rear shocks.'],
+      highway: [2, 'Stable, but wind blast and harsh rear suspension at 75mph. 12.5L tank limits range.'],
+      standing: [0.5, 'No.'],
+      fun: [2.5, 'Nice engine and sound, but pegs scrape early on twisty roads.'],
+      reliability: [4, 'Liquid-cooled engine has a good record.'],
+      running: [3.5, 'Belt drive is low-maintenance; around 45–50mpg.'],
+      luggage: [2.5, 'Saddlebags available; limited capacity.'],
+      greenlane: [0, 'No.']
+    },
+    options: [
+      { id: 'new', label: 'New 2026', condition: 'new', years: '2026', price: 9995, range: [9995, 11695], testRide: 3.5, specs: { hp: 85, wetKg: 243, seatMm: 649 },
+        note: 'New-generation 999cc, 85hp. £9,995; Bobber £10,995, Classic £11,695. Demo fleet at Krazy Horse, Bury St Edmunds (27 miles); also Freedom Motorcycles, March.' },
+      { id: 'used-16', label: 'Used 2016–24', condition: 'used', years: '2016–24', price: 6300, range: [5500, 8000], testRide: 3.5,
+        note: 'Only about 5 on AutoTrader.' }
+    ],
+    search: { at: ['INDIAN', 'SCOUT SIXTY'], slug: 'indian/scout-sixty', mcn: 'indian/scout-sixty', q: 'Indian Scout Sixty' }
+  },
+  {
+    id: 'scrambler400x', make: 'Triumph', model: 'Scrambler 400 X', style: 'Retro',
+    engine: '398cc single', hp: 40, torqueNm: 38, wetKg: 185, seatMm: 835, tankL: 13,
+    delivery: 'normal', drive: 'chain',
+    summary: 'A light, punchy retro scrambler: great fun on B-roads and gravel, cheap, with 10,000-mile services. Small for a 6\'4" rider and working hard at 75mph with no screen.',
+    tall: '835mm seat and wide bars, but a compact bike overall. Fine for an hour; cramped for all-day rides.',
+    pros: ['Fun and light', 'Cheap to buy and run', '10,000-mile services', 'Triumph demo network'],
+    cons: ['Small for 6\'4"', 'No wind protection', 'Buzzy at 75mph'],
+    scores: {
+      comfort: [2.5, 'Upright, but compact for your size.'],
+      highway: [2, 'No screen and a revving single at 75mph.'],
+      standing: [3.5, 'Wide bars; OK standing.'],
+      fun: [4, 'Light, punchy and playful. You can use all of it.'],
+      reliability: [3.5, 'Bajaj-built; mostly good reports so far, with some early quality niggles.'],
+      running: [4.5, 'Around 65–70mpg, 10,000-mile services, cheap insurance.'],
+      luggage: [3, 'Racks and soft luggage.'],
+      greenlane: [3.5, '19" front and decent travel; the 400 XC (spoked wheels) is better.']
+    },
+    options: [
+      { id: 'new', label: 'New 2026', condition: 'new', years: '2026', price: 5595, range: [5595, 6645], testRide: 4.5,
+        note: '£5,595 OTR; the off-road-leaning 400 XC is £6,545. Demos at Peterborough Triumph and Triumph Essex.' },
+      { id: 'used-24', label: 'Used 2024–25', condition: 'used', years: '2024–25', price: 4600, range: [4000, 5300], testRide: 4.5,
+        note: 'About 55 on AutoTrader.' }
+    ],
+    search: { at: ['TRIUMPH', 'SCRAMBLER 400 X'], slug: 'triumph/scrambler-400-x', mcn: 'triumph/scrambler-400-x', q: 'Triumph Scrambler 400 X' }
+  },
+  {
+    id: 'interceptor650', make: 'Royal Enfield', model: 'Interceptor 650', style: 'Retro',
+    engine: '648cc parallel twin (270°)', hp: 47, torqueNm: 52, wetKg: 217, seatMm: 804, tankL: 13.7,
+    delivery: 'relaxed', drive: 'chain',
+    summary: 'A charming retro roadster with a sweet-sounding, relaxed twin. Cheap used, with a dealer in Girton. The low seat and lack of wind protection count against it for long motorway days.',
+    tall: '804mm seat bends a 34" leg noticeably; bars are upright and comfortable.',
+    pros: ['Lovely engine and sound', 'Cheap used', 'Dealer 2 miles away', 'Proven reliable'],
+    cons: ['Low seat for your legs', 'No wind protection', 'Soft suspension, modest brakes'],
+    scores: {
+      comfort: [3, 'Comfy seat and upright bars; legroom is short for you.'],
+      highway: [2.5, 'Smooth and happy at 70mph, but wind blast at 75 with no screen.'],
+      standing: [2, 'Not designed for it.'],
+      fun: [3.5, 'Characterful and engaging at sane speeds; soft chassis.'],
+      reliability: [4, 'The 650 twin has proved reliable since 2018. Watch for corrosion on finishes.'],
+      running: [4.5, 'Around 60mpg, cheap parts and insurance.'],
+      luggage: [3, 'Rack and soft panniers.'],
+      greenlane: [1, 'Road bike.']
+    },
+    options: [
+      { id: 'new', label: 'New 2026', condition: 'new', years: '2026', price: 7049, range: [6799, 7049], testRide: 4.5,
+        note: 'From £7,049 on Royal Enfield UK. Demo at Haywards, Girton (2 miles).' },
+      { id: 'used-19', label: 'Used 2019–24', condition: 'used', years: '2019–24', price: 3800, range: [3000, 4650], testRide: 4.5,
+        note: 'Plentiful: about 75 on AutoTrader.' }
+    ],
+    search: { at: ['ROYAL ENFIELD', 'INTERCEPTOR 650'], slug: 'royal-enfield/interceptor-650', mcn: 'enfield/interceptor-650', q: 'Royal Enfield Interceptor 650' }
+  },
+  {
+    id: 'xrv750', make: 'Honda', model: 'XRV750 Africa Twin', style: 'Adventure',
+    engine: '742cc V-twin', hp: 60, torqueNm: 62, wetKg: 234, seatMm: 880, tankL: 23,
+    delivery: 'relaxed', drive: 'chain',
+    summary: 'The original 1990–2003 Africa Twin: tall, comfortable, with a proper fairing and a 23-litre tank. A near-legendary overlander, now a rising classic; age and parts availability are the risks.',
+    tall: '880mm seat and tall bars. A great fit for a 34" inseam.',
+    pros: ['Tall rider fit', 'Good fairing', '23L tank', 'Classic, holding value'],
+    cons: ['23–36 years old', 'Heavy for 60hp', 'Parts getting scarcer'],
+    scores: {
+      comfort: [4, 'Tall, roomy and comfortable, with good wind protection.'],
+      highway: [3.5, 'Good fairing and smooth V-twin; 60hp is fine at 75mph but has little in reserve. 5 gears.'],
+      standing: [4, 'Tall bars; good standing.'],
+      fun: [3, 'Charismatic, but soft and heavy by modern standards.'],
+      reliability: [4.5, 'Famously tough. Known weak points: regulator/rectifier and fuel pump relay.'],
+      running: [3.5, 'Around 45mpg, carburettors, and some parts only through specialists.'],
+      luggage: [4.5, 'Well supported.'],
+      greenlane: [4, 'Capable, if heavy.']
+    },
+    options: [
+      { id: 'used-90', label: 'Used 1990–2003', condition: 'used', years: '1990–2003', price: 4500, range: [3500, 5800], testRide: 3, adj: { reliability: -1 },
+        note: 'Everyday usable bikes mostly sell for £3,000–4,300; the best are above £5,500. Only about 3 on AutoTrader.' }
+    ],
+    search: { at: ['HONDA', 'XRV750 AFRICA TWIN'], slug: 'honda/xrv750-africa-twin', mcn: 'honda/xrv750-africa-twin', q: 'Honda XRV750 Africa Twin' }
+  },
+  {
+    id: 'zx4rr', make: 'Kawasaki', model: 'Ninja ZX-4RR', style: 'Sport',
+    engine: '399cc inline four', hp: 77, torqueNm: 39, wetKg: 189, seatMm: 800, tankL: 15,
+    delivery: 'normal', drive: 'chain',
+    summary: 'A 399cc four that screams to 16,000rpm: huge fun when you are pushing hard, but not especially fast at road speeds, which is the appeal. It is a supersport bike, so very cramped for 6\'4", with no luggage and little comfort. (Assumed from "XZ-4R"; the UK sells the ZX-4RR.)',
+    tall: 'Clip-ons, high pegs and an 800mm seat. Very cramped for a 34" inseam.',
+    pros: ['Incredible engine sound and revs', 'Sharp handling', 'Reliable'],
+    cons: ['Very cramped for 6\'4"', 'Buzzy at motorway speeds', 'No luggage'],
+    scores: {
+      comfort: [1.5, 'Supersport riding position; very cramped for you.'],
+      highway: [2, 'Around 9,000rpm at 75mph with a small fairing. Tiring.'],
+      standing: [0.5, 'No.'],
+      fun: [5, 'Wringing out a 16,000rpm four on a B-road is the whole point.'],
+      reliability: [4.5, 'Modern Kawasaki.'],
+      running: [3, 'Around 50mpg; supersport insurance costs more.'],
+      luggage: [1.5, 'Tail pack only.'],
+      greenlane: [0, 'No.']
+    },
+    options: [
+      { id: 'new', label: 'New 2026', condition: 'new', years: '2026', price: 8799, range: [8799, 8799], testRide: 3.5,
+        note: '£8,799. Nearest dealers: Wheels, Peterborough; Orwell, Ipswich.' },
+      { id: 'used-23', label: 'Used 2023–25', condition: 'used', years: '2023–25', price: 7000, range: [6600, 7500], testRide: 4,
+        note: 'About 55 on AutoTrader.' }
+    ],
+    search: { at: ['KAWASAKI', 'NINJA ZX-4RR'], slug: 'kawasaki/ninja-zx-4rr', mcn: 'kawasaki/zx-4rr', q: 'Kawasaki ZX-4RR' }
+  },
+  {
+    id: 'vfr400', make: 'Honda', model: 'VFR400R (NC30)', style: 'Sport',
+    engine: '399cc V4', hp: 59, torqueNm: 40, wetKg: 182, seatMm: 755, tankL: 15,
+    delivery: 'normal', drive: 'chain',
+    summary: 'A 1989–93 cult classic: gear-driven V4, race-bred chassis, gorgeous. Tiny for a 6\'4" rider, over 30 years old, and parts are getting scarce. A collector\'s toy more than a touring bike.',
+    tall: '755mm seat and low clip-ons. You will be folded up.',
+    pros: ['V4 sound', 'Legendary handling', 'Classic value'],
+    cons: ['Tiny for 6\'4"', '33–37 years old', 'Parts scarcity', 'Mostly grey imports'],
+    scores: {
+      comfort: [1, 'Far too small for a tall rider.'],
+      highway: [1.5, 'Revving hard at 75mph with an old, small fairing.'],
+      standing: [0.5, 'No.'],
+      fun: [4.5, 'Gear-driven cam whine and sublime handling.'],
+      reliability: [4, 'Honda-built, but age and parts availability now dominate.'],
+      running: [3, 'Specialist parts; classic insurance can help.'],
+      luggage: [1, 'Almost none.'],
+      greenlane: [0, 'No.']
+    },
+    options: [
+      { id: 'used-89', label: 'Used 1989–93', condition: 'used', years: '1989–93', price: 4800, range: [3000, 8000], testRide: 3, adj: { reliability: -1 },
+        note: 'Tidy grey imports are £3,000–5,000; rarer UK-spec bikes (62hp) £4,000–6,000, mint up to £9,000. Few for sale.' }
+    ],
+    search: { at: ['HONDA', 'VFR400'], slug: 'honda/vfr400', mcn: 'honda/vfr400', q: 'Honda VFR400 NC30' }
+  },
+  {
     id: 'crf300l', make: 'Honda', model: 'CRF300L Rally', style: 'Dual-sport', reference: true,
     engine: '286cc single', hp: 27, torqueNm: 27, wetKg: 153, seatMm: 885, tankL: 12.8,
     delivery: 'normal', drive: 'chain',
@@ -642,6 +918,6 @@ window.MOTO_BIKES = [
     options: [
       { id: 'used-21', label: 'Used 2021–25', condition: 'used', years: '2021–25', price: 4800, range: [4200, 5500], testRide: 4.5 }
     ],
-    search: { at: ['HONDA', 'CRF300L RALLY'], slug: 'honda/crf300l-rally', q: 'Honda CRF300L Rally' }
+    search: { at: ['HONDA', 'CRF300L RALLY'], slug: 'honda/crf300-rally', mcn: 'honda/crf300l', q: 'Honda CRF300L Rally' }
   }
 ];

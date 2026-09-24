@@ -44,6 +44,12 @@ window.MOTO_DEALERS = [
   { name: 'Suffolk Triumph (Lings)', town: 'Ipswich', address: 'Bonneville Corner, Bixley Drive, Ipswich IP4 5TH', lat: 52.0492, lng: 1.2135,
     brands: ['Triumph'], phone: '', url: 'https://www.triumphmotorcycles.co.uk/dealers/uk/suffolk-triumph',
     testRide: 'Triumph demo fleet.' },
+  { name: 'Krazy Horse', town: 'Bury St Edmunds', address: 'Empire House, Lamdin Road, Bury St Edmunds IP32 6NU', lat: 52.2688, lng: 0.7047,
+    brands: ['Indian'], phone: '01284 749645', url: 'https://krazyhorse.co.uk/pages/indian-motorcycle',
+    testRide: 'Indian demo fleet. Open Tuesday to Sunday.' },
+  { name: 'Freedom Motorcycles', town: 'March', address: 'Mill View, March PE15 8SY', lat: 52.5500, lng: 0.0894,
+    brands: ['Indian'], phone: '01354 660366', url: 'https://www.freedom-motorcycles.co.uk/',
+    testRide: 'Franchised Indian dealer with 80+ bikes in stock, new and used. Call about demos.' },
   { name: 'M&M Motorcycles', town: 'Cambridge', address: 'Unit 2A The Service Station, Ely Road, Waterbeach CB25 9PG', lat: 52.2918, lng: 0.1740,
     brands: ['Used'], phone: '', url: 'https://www.m-mmotorcycles.co.uk/',
     testRide: 'Used bikes, servicing and MOTs. Useful for a pre-purchase inspection.' },
@@ -64,5 +70,6 @@ window.MOTO_LOCATORS = {
   'Moto Guzzi': 'https://www.motoguzzi.com/gb_EN/dealer-locator/',
   'Royal Enfield': 'https://www.royalenfield.com/uk/en/locate-us/dealers/',
   'KTM': 'https://www.ktm.com/en-gb/find-a-dealer.html',
-  'CFMOTO': 'https://www.cfmoto.co.uk/'
+  'CFMOTO': 'https://www.cfmoto.co.uk/',
+  'Indian': 'https://www.indianmotorcycle.co.uk/find-a-dealer/list/'
 };

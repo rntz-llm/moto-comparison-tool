@@ -92,14 +92,14 @@
     const queries = [s.q].concat(s.alt || []);
     const links = [];
     links.push({ site: 'AutoTrader', url: `https://www.autotrader.co.uk/bike-search?postcode=${pc}&radius=${r}&make=${enc(s.at[0])}&model=${enc(s.at[1])}${max ? '&price-to=' + max : ''}&sort=distance`, note: 'by distance' });
-    links.push({ site: 'AutoTrader', url: `https://www.autotrader.co.uk/bikes/motorcycles/${s.slug}`, note: 'model page' });
+    if (s.slug) links.push({ site: 'AutoTrader', url: `https://www.autotrader.co.uk/bikes/motorcycles/${s.slug}`, note: 'model page' });
     for (const q of queries) {
       links.push({ site: 'eBay', url: `https://www.ebay.co.uk/sch/422/i.html?_nkw=${enc(q)}&_stpos=${pc}&_sadis=${r}&_sop=7${max ? '&_udhi=' + max : ''}`, note: queries.length > 1 ? q.replace(bike.make, '').trim() : 'nearest first' });
       links.push({ site: 'Gumtree', url: `https://www.gumtree.com/search?search_category=motorbikes-scooters&q=${enc(q)}&search_location=${pc}&distance=${r}${max ? '&max_price=' + max : ''}`, note: queries.length > 1 ? q.replace(bike.make, '').trim() : '' });
       links.push({ site: 'Facebook', url: `https://www.facebook.com/marketplace/search/?query=${enc(q)}${max ? '&maxPrice=' + max : ''}`, note: queries.length > 1 ? q.replace(bike.make, '').trim() : '' });
     }
-    links.push({ site: 'MCN', url: `https://www.motorcyclenews.com/bikes-for-sale/${s.slug}/`, note: '' });
-    links.push({ site: 'Bikes in Stock', url: `https://www.bikesinstock.co.uk/bikes-for-sale/${s.slug}`, note: 'dealer stock' });
+    links.push({ site: 'MCN', url: `https://www.motorcyclenews.com/bikes-for-sale/${s.mcn || s.slug}/`, note: '' });
+    links.push({ site: 'Bikes in Stock', url: `https://www.bikesinstock.co.uk/bikes-for-sale/${s.mcn || s.slug}`, note: 'dealer stock' });
     return links;
   }
 
