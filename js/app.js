@@ -21,12 +21,19 @@
     { id: 'cheap', label: 'Cheap & sensible', weights: Object.assign({}, DEFAULT_WEIGHTS, { price: 10, running: 7, reliability: 9, fun: 4, power: 4, standing: 2 }) },
     { id: 'tour', label: 'Long trips', weights: Object.assign({}, DEFAULT_WEIGHTS, { comfort: 10, highway: 10, luggage: 7, fun: 5, standing: 3, weight: 4 }) },
     { id: 'twisties', label: 'Twisty roads', weights: Object.assign({}, DEFAULT_WEIGHTS, { fun: 10, power: 7, weight: 7, highway: 5, luggage: 1, greenlane: 0 }) },
-    { id: 'explore', label: 'Explorer', weights: Object.assign({}, DEFAULT_WEIGHTS, { standing: 7, greenlane: 5, luggage: 6, comfort: 9, fun: 6 }) }
+    { id: 'explore', label: 'Explorer', weights: Object.assign({}, DEFAULT_WEIGHTS, { standing: 7, greenlane: 5, luggage: 6, comfort: 9, fun: 6 }) },
+    { id: 'custom', label: 'Custom' }
   ];
+  const sameWeights = (a, b) => CRITERIA.every(c => (a[c.key] || 0) === (b[c.key] || 0));
+  const presetWeights = id => id === 'custom' ? state.customWeights : PRESETS.find(p => p.id === id).weights;
 
   const DEFAULT_STATE = {
     tab: 'compare',
     weights: DEFAULT_WEIGHTS,
+    // Which preset the sliders show. 'custom' is the user's own set, kept in
+    // customWeights; editing any slider copies the current weights into it.
+    preset: 'default',
+    customWeights: DEFAULT_WEIGHTS,
     penalty: 'mild',
     optionMode: 'best',
     usedPrivate: false,
@@ -67,6 +74,15 @@
         else s[k] = saved[k];
       }
       for (const c of CRITERIA) if (typeof s.weights[c.key] !== 'number') s.weights[c.key] = c.weight;
+      for (const c of CRITERIA) if (typeof s.customWeights[c.key] !== 'number') s.customWeights[c.key] = c.weight;
+      // Saved before presets were tracked: weights matching a preset select it;
+      // anything else becomes the custom set.
+      if (!('preset' in saved)) {
+        const match = PRESETS.find(p => p.id !== 'custom' && sameWeights(p.weights, s.weights));
+        if (match) s.preset = match.id;
+        else { s.preset = 'custom'; s.customWeights = clone(s.weights); }
+      }
+      if (!PRESETS.some(p => p.id === s.preset)) s.preset = 'custom';
       // Curves still at the old many-point defaults move to the simplified defaults.
       for (const k of Object.keys(OLD_DEFAULT_CURVES)) {
         if (JSON.stringify(s.curves[k]) === JSON.stringify(OLD_DEFAULT_CURVES[k])) s.curves[k] = clone(DEFAULT_CURVES[k]);
@@ -188,8 +204,7 @@
         <span id="w-${c.key}-help" hidden>${esc(c.help)}</span>
       </div>`;
     }).join('');
-    const active = PRESETS.find(p => CRITERIA.every(c => (p.weights[c.key] || 0) === (state.weights[c.key] || 0)));
-    $('#presets').innerHTML = PRESETS.map(p => `<button type="button" class="chip" data-preset="${p.id}" aria-pressed="${active && active.id === p.id}">${esc(p.label)}</button>`).join('');
+    $('#presets').innerHTML = PRESETS.map(p => `<button type="button" class="chip" data-preset="${p.id}" aria-pressed="${state.preset === p.id}"${p.id === 'custom' ? ' title="Your own weights. Moving any slider saves the current weights here."' : ''}>${esc(p.label)}</button>`).join('');
   }
 
   // ---------------------------------------------------------------- filters
@@ -752,7 +767,7 @@
       if (row) row.scrollIntoView({ block: 'center', behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
       return;
     }
-    if (d.preset) { state.weights = clone(PRESETS.find(p => p.id === d.preset).weights); changed({ weights: true }); return; }
+    if (d.preset) { state.preset = d.preset; state.weights = clone(presetWeights(d.preset)); changed({ weights: true }); return; }
     if (d.style) {
       const s = state.filters.styles;
       const i = s.indexOf(d.style);
@@ -802,12 +817,17 @@
   document.addEventListener('input', (e) => {
     const t = e.target, d = t.dataset;
     if (d.w) {
+      // Any edit lands in Custom: starting from a preset copies its weights first.
       state.weights[d.w] = +t.value;
+      state.customWeights = clone(state.weights);
+      if (state.preset !== 'custom') {
+        state.preset = 'custom';
+        $$('#presets .chip').forEach(c => c.setAttribute('aria-pressed', String(c.dataset.preset === 'custom')));
+      }
       const row = t.closest('.w-row');
       row.querySelector('.w-val').textContent = t.value;
       const total = CRITERIA.reduce((s, c) => s + (state.weights[c.key] || 0), 0) || 1;
       $$('.w-row').forEach((r, i) => { r.querySelector('.w-share').textContent = Math.round((state.weights[CRITERIA[i].key] || 0) / total * 100) + '%'; r.classList.toggle('zero', !state.weights[CRITERIA[i].key]); });
-      $$('#presets .chip').forEach(c => c.setAttribute('aria-pressed', 'false'));
       save(); renderTab(); if (state.tab !== 'compare') renderSign(computeRows());
       return;
     }
@@ -863,7 +883,8 @@
     }
   });
 
-  $('#weights-reset').addEventListener('click', () => { state.weights = clone(DEFAULT_WEIGHTS); state.penalty = 'mild'; renderAll(); save(); });
+  // Back to Balanced; the Custom set is kept.
+  $('#weights-reset').addEventListener('click', () => { state.preset = 'default'; state.weights = clone(DEFAULT_WEIGHTS); state.penalty = 'mild'; renderAll(); save(); });
   $('#search-setup').addEventListener('submit', (e) => { e.preventDefault(); setHome($('#home-postcode').value); });
   $('#pick-starred').addEventListener('click', () => { state.listingBikes = Object.fromEntries(Object.keys(state.starred).map(k => [k, true])); changed(); });
   $('#pick-top5').addEventListener('click', () => {
