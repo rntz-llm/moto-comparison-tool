@@ -319,6 +319,14 @@ tr.detail > td { background: var(--surface-2); padding: 0 !important; border-bot
 .curve-card .pt { fill: var(--surface); stroke: var(--accent); stroke-width: 2; }
 .curve-card .bike-dot { fill: var(--ink-2); opacity: .55; }
 .curve-card .hover-line { stroke: var(--ink-2); stroke-dasharray: 3 3; }
+.curve-card svg { user-select: none; -webkit-user-select: none; }
+.curve-card .curve-bg { fill: transparent; cursor: crosshair; }
+.curve-card .knot { cursor: grab; touch-action: none; outline: none; }
+.curve-card .knot .pt-hit { fill: transparent; }
+.curve-card .knot:hover .pt, .curve-card svg.dragging .knot:focus .pt { fill: var(--accent); }
+.curve-card .knot:focus-visible .pt { stroke: var(--focus); stroke-width: 3; }
+.curve-card svg.dragging, .curve-card svg.dragging * { cursor: grabbing; }
+.curve-card .bike-dot { pointer-events: visiblePainted; }
 .curve-points { width: 100%; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; }
 .curve-tip { font-size: 12.5px; color: var(--ink-2); min-height: 1.5em; }
 

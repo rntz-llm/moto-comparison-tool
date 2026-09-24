@@ -29,9 +29,10 @@ python3 -m http.server 8000 --bind 0.0.0.0
 | `js/data/geo.js` | Generated: coastline, postcode districts and towns (see below) |
 | `PLAN.md` | The design decisions this was built from |
 
-To add a bike, copy an entry in `bikes.js`. To change how a criterion
-scores, edit its curve in the Scoring tab (saved in your browser) or the
-defaults in `scoring.js`.
+To add a bike, copy an entry in `bikes.js`. To change how price, power or
+weight score, drag the curve's points in the Scoring tab (double-click to
+add or remove a point; saved in your browser), or edit the defaults in
+`scoring.js`.
 
 ## How scoring works
 

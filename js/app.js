@@ -47,6 +47,12 @@
     dealersPickedOnly: false
   };
 
+  const OLD_DEFAULT_CURVES = {
+    price: [[3000, 5], [4000, 4.8], [5000, 4.4], [6000, 3.9], [7000, 3.4], [8000, 2.9], [9000, 2.2], [10000, 1.6], [11000, 1.0], [12000, 0.5], [12500, 0]],
+    power: [[25, 1], [30, 2.5], [35, 4], [40, 5], [70, 5], [75, 4.5], [80, 3.8], [90, 2.5], [100, 1.5], [110, 0.8], [125, 0]],
+    weight: [[140, 2], [155, 3], [170, 4.2], [185, 5], [230, 5], [245, 4.3], [260, 3.4], [272, 2.5], [290, 1.2], [310, 0]]
+  };
+
   function loadState() {
     let saved = null;
     try { saved = JSON.parse(localStorage.getItem(STORE_KEY) || 'null'); } catch (e) { saved = null; }
@@ -61,6 +67,10 @@
         else s[k] = saved[k];
       }
       for (const c of CRITERIA) if (typeof s.weights[c.key] !== 'number') s.weights[c.key] = c.weight;
+      // Curves still at the old many-point defaults move to the simplified defaults.
+      for (const k of Object.keys(OLD_DEFAULT_CURVES)) {
+        if (JSON.stringify(s.curves[k]) === JSON.stringify(OLD_DEFAULT_CURVES[k])) s.curves[k] = clone(DEFAULT_CURVES[k]);
+      }
     }
     return s;
   }
@@ -350,13 +360,32 @@
   }
 
   const CURVE_META = {
-    price: { title: 'Price → score', unit: '£', xLabel: v => v >= 1000 ? '£' + (v / 1000) + 'k' : '£' + v, min: 2000, max: 13000,
+    price: { title: 'Price → score', unit: '£', xLabel: v => v >= 1000 ? '£' + (v / 1000) + 'k' : '£' + v, min: 2000, max: 13000, step: 100,
+      ticks: [2000, 4000, 6000, 8000, 10000, 12000],
       desc: 'Flat below £4k, where price matters less. Steady from £4–8k. Steep from £8–12k, where a bike has to earn it.' },
-    power: { title: 'Power → score', unit: 'bhp', xLabel: v => v + '', min: 20, max: 130,
+    power: { title: 'Power → score', unit: 'bhp', xLabel: v => v + '', min: 20, max: 130, step: 1,
+      ticks: [20, 40, 60, 80, 100, 120],
       desc: 'Sweet spot 40–70bhp. Below 35 it struggles at 75mph; above 80 it gets more than you want. Dots show each bike after the delivery adjustment.' },
-    weight: { title: 'Wet weight → score', unit: 'kg', xLabel: v => v + '', min: 130, max: 320,
+    weight: { title: 'Wet weight → score', unit: 'kg', xLabel: v => v + '', min: 130, max: 320, step: 1,
+      ticks: [140, 170, 200, 230, 260, 290, 320],
       desc: 'Light bikes feel nervous at speed; 185–230kg is ideal; 272kg (600lb) is where drops start to worry you.' }
   };
+  const SCORE_STEP = 0.1;
+
+  // Chart geometry in viewBox units (0 0 320 180).
+  function curveGeom(key) {
+    const m = CURVE_META[key];
+    const X0 = 34, X1 = 310, Y0 = 150, Y1 = 12;
+    return {
+      X0, X1, Y0, Y1,
+      sx: v => X0 + (Math.max(m.min, Math.min(m.max, v)) - m.min) / (m.max - m.min) * (X1 - X0),
+      sy: s => Y0 - s / 5 * (Y0 - Y1),
+      vx: x => m.min + (x - X0) / (X1 - X0) * (m.max - m.min),
+      vy: y => (Y0 - y) / (Y0 - Y1) * 5
+    };
+  }
+  const fmtX = (key, v) => key === 'price' ? gbp(v) : v + ' ' + CURVE_META[key].unit;
+  const pointsText = pts => pts.map(p => p[0] + ':' + p[1]).join(', ');
 
   function renderCurves() {
     const rows = computeRows().filter(r => !r.bike.reference);
@@ -366,67 +395,206 @@
       return `<div class="curve-card" data-curve="${key}">
         <h3>${m.title}</h3>
         <p class="hint">${m.desc}</p>
-        <svg viewBox="0 0 320 180" role="img" aria-label="${m.title} curve">${curveSvg(key, pts, rows)}</svg>
+        <svg viewBox="0 0 320 180" role="group" aria-label="${m.title} curve editor">${curveSvg(key, pts, rows)}</svg>
         <div class="curve-tip" aria-live="polite"></div>
-        <label class="field"><span class="field-label">Curve points (${m.unit}: score), editable</span>
-          <input type="text" class="curve-points" data-curve-input="${key}" value="${esc(pts.map(p => p[0] + ':' + p[1]).join(', '))}" spellcheck="false"></label>
+        <p class="hint">Drag a point to reshape the curve. Double-click the chart to add a point, or a point to remove it. Focused points also move with the arrow keys (Shift for bigger steps) and Delete removes them.</p>
+        <label class="field"><span class="field-label">Points (${m.unit}: score)</span>
+          <input type="text" class="curve-points" data-curve-input="${key}" value="${esc(pointsText(pts))}" spellcheck="false"></label>
         <div class="btn-row"><button type="button" class="link-btn" data-curve-reset="${key}">Reset this curve</button><span class="hint" data-curve-status="${key}"></span></div>
       </div>`;
     }).join('');
-    $$('.curve-card svg').forEach(svg => attachCurveHover(svg));
+    $$('.curve-card').forEach(card => attachCurveEditor(card));
+  }
+
+  function curvePaths(key, pts) {
+    const m = CURVE_META[key], g = curveGeom(key);
+    // Straight segments between knots, flat beyond the ends.
+    const xs = [m.min].concat(pts.map(p => p[0]).filter(x => x > m.min && x < m.max), [m.max]);
+    const line = xs.map((v, i) => (i ? 'L' : 'M') + g.sx(v).toFixed(1) + ' ' + g.sy(interp(pts, v)).toFixed(1)).join('');
+    return { line, area: line + `L${g.X1} ${g.Y0}L${g.X0} ${g.Y0}Z` };
   }
 
   function curveSvg(key, pts, rows) {
-    const m = CURVE_META[key];
-    const X0 = 34, X1 = 310, Y0 = 150, Y1 = 12;
-    const sx = v => X0 + (v - m.min) / (m.max - m.min) * (X1 - X0);
-    const sy = s => Y0 - s / 5 * (Y0 - Y1);
-    const ticksX = key === 'price' ? [2000, 4000, 6000, 8000, 10000, 12000] : key === 'power' ? [20, 40, 60, 80, 100, 120] : [140, 170, 200, 230, 260, 290, 320];
-    let g = '<g class="grid">';
-    for (let s = 0; s <= 5; s++) g += `<line x1="${X0}" x2="${X1}" y1="${sy(s)}" y2="${sy(s)}"></line>`;
-    g += '</g><g class="axis">';
-    for (let s = 0; s <= 5; s++) g += `<text x="${X0 - 8}" y="${sy(s) + 4}" text-anchor="end">${s}</text>`;
-    for (const t of ticksX) g += `<text x="${sx(t)}" y="${Y0 + 18}" text-anchor="middle">${m.xLabel(t)}</text>`;
-    g += '</g>';
-    const samples = [];
-    for (let i = 0; i <= 120; i++) {
-      const v = m.min + (m.max - m.min) * i / 120;
-      samples.push([sx(v), sy(interp(pts, v))]);
-    }
-    const line = samples.map((p, i) => (i ? 'L' : 'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1)).join('');
-    const area = line + `L${X1} ${Y0}L${X0} ${Y0}Z`;
-    let dots = '';
+    const m = CURVE_META[key], g = curveGeom(key);
+    let out = '<g class="grid">';
+    for (let s = 0; s <= 5; s++) out += `<line x1="${g.X0}" x2="${g.X1}" y1="${g.sy(s)}" y2="${g.sy(s)}"></line>`;
+    out += '</g><g class="axis">';
+    for (let s = 0; s <= 5; s++) out += `<text x="${g.X0 - 8}" y="${g.sy(s) + 4}" text-anchor="end">${s}</text>`;
+    for (const t of m.ticks) out += `<text x="${g.sx(t)}" y="${g.Y0 + 18}" text-anchor="middle">${m.xLabel(t)}</text>`;
+    out += '</g>';
+    const { line, area } = curvePaths(key, pts);
+    out += `<path class="curve-area" d="${area}"></path><path class="curve" d="${line}"></path>`;
+    out += `<rect class="curve-bg" x="${g.X0}" y="${g.Y1 - 6}" width="${g.X1 - g.X0}" height="${g.Y0 - g.Y1 + 12}"></rect>`;
+    out += `<line class="hover-line" x1="0" x2="0" y1="${g.Y1}" y2="${g.Y0}" visibility="hidden"></line>`;
     for (const r of rows) {
       const v = key === 'price' ? r.ev.price : key === 'power' ? r.ev.effHp : r.ev.specs.wetKg;
       if (v < m.min || v > m.max) continue;
-      dots += `<circle class="bike-dot" cx="${sx(v).toFixed(1)}" cy="${sy(interp(pts, v)).toFixed(1)}" r="3"><title>${esc(r.bike.make + ' ' + r.bike.model)}</title></circle>`;
+      out += `<circle class="bike-dot" data-v="${v}" cx="${g.sx(v).toFixed(1)}" cy="${g.sy(interp(pts, v)).toFixed(1)}" r="3"><title>${esc(r.bike.make + ' ' + r.bike.model)}</title></circle>`;
     }
-    const knots = pts.filter(p => p[0] >= m.min && p[0] <= m.max).map(p => `<circle class="pt" cx="${sx(p[0]).toFixed(1)}" cy="${sy(p[1]).toFixed(1)}" r="3.5"></circle>`).join('');
-    return `${g}<path class="curve-area" d="${area}"></path><path class="curve" d="${line}"></path>${dots}${knots}
-      <line class="hover-line" x1="0" x2="0" y1="${Y1}" y2="${Y0}" visibility="hidden"></line>
-      <rect x="${X0}" y="${Y1}" width="${X1 - X0}" height="${Y0 - Y1}" fill="transparent" class="hover-rect" data-key="${key}" data-x0="${X0}" data-x1="${X1}"></rect>`;
+    pts.forEach((p, i) => {
+      out += `<g class="knot" data-i="${i}" tabindex="0" role="slider" aria-valuemin="0" aria-valuemax="5" aria-valuenow="${p[1]}"
+        aria-label="Point ${i + 1} of ${pts.length}" aria-valuetext="${esc(fmtX(key, p[0]))} scores ${fmt1(p[1])}" transform="translate(${g.sx(p[0]).toFixed(1)} ${g.sy(p[1]).toFixed(1)})">
+        <circle class="pt-hit" r="11"></circle><circle class="pt" r="4.5"></circle></g>`;
+    });
+    return out;
   }
 
-  function attachCurveHover(svg) {
-    const rect = svg.querySelector('.hover-rect');
-    const lineEl = svg.querySelector('.hover-line');
-    const card = svg.closest('.curve-card');
+  // Redraw the moving parts of one chart without rebuilding it, so a drag keeps its pointer capture.
+  function updateCurveGraphics(card, key) {
+    const pts = state.curves[key], g = curveGeom(key);
+    const { line, area } = curvePaths(key, pts);
+    card.querySelector('.curve').setAttribute('d', line);
+    card.querySelector('.curve-area').setAttribute('d', area);
+    card.querySelectorAll('.knot').forEach(k => {
+      const p = pts[+k.dataset.i];
+      k.setAttribute('transform', `translate(${g.sx(p[0]).toFixed(1)} ${g.sy(p[1]).toFixed(1)})`);
+      k.setAttribute('aria-valuenow', p[1]);
+      k.setAttribute('aria-valuetext', `${fmtX(key, p[0])} scores ${fmt1(p[1])}`);
+    });
+    card.querySelectorAll('.bike-dot').forEach(d => d.setAttribute('cy', g.sy(interp(pts, +d.dataset.v)).toFixed(1)));
+    card.querySelector('[data-curve-input]').value = pointsText(pts);
+  }
+
+  // Keep point i inside the chart and strictly between its neighbours.
+  function placePoint(key, i, v, s) {
+    const m = CURVE_META[key], pts = state.curves[key];
+    const lo = i > 0 ? pts[i - 1][0] + m.step : m.min;
+    const hi = i < pts.length - 1 ? pts[i + 1][0] - m.step : m.max;
+    v = Math.round(v / m.step) * m.step;
+    v = Math.max(lo, Math.min(hi, v));
+    s = Math.round(Math.max(0, Math.min(5, s)) / SCORE_STEP) * SCORE_STEP;
+    pts[i] = [v, +s.toFixed(2)];
+  }
+
+  let signFrame = 0;
+  function liveSign() {
+    if (signFrame) return;
+    signFrame = requestAnimationFrame(() => { signFrame = 0; renderSign(computeRows()); });
+  }
+
+  function commitCurve(key, focusIndex) {
+    save();
+    renderSign(computeRows());
+    renderCurves();
+    if (focusIndex != null) {
+      const k = document.querySelector(`.curve-card[data-curve="${key}"] .knot[data-i="${focusIndex}"]`);
+      if (k) k.focus();
+    }
+  }
+
+  function attachCurveEditor(card) {
+    const key = card.dataset.curve;
+    const m = CURVE_META[key], g = curveGeom(key);
+    const svg = card.querySelector('svg');
     const tip = card.querySelector('.curve-tip');
-    const key = rect.dataset.key;
-    const m = CURVE_META[key];
-    const X0 = +rect.dataset.x0, X1 = +rect.dataset.x1;
-    const move = (evt) => {
+    const hoverLine = svg.querySelector('.hover-line');
+    const toChart = (evt) => {
       const pt = svg.createSVGPoint();
       pt.x = evt.clientX; pt.y = evt.clientY;
-      const loc = pt.matrixTransform(svg.getScreenCTM().inverse());
-      const x = Math.max(X0, Math.min(X1, loc.x));
-      let v = m.min + (x - X0) / (X1 - X0) * (m.max - m.min);
-      v = key === 'price' ? Math.round(v / 100) * 100 : Math.round(v);
-      lineEl.setAttribute('x1', x); lineEl.setAttribute('x2', x); lineEl.setAttribute('visibility', 'visible');
-      tip.textContent = `${key === 'price' ? gbp(v) : v + ' ' + m.unit} → ${fmt1(interp(state.curves[key], v))}`;
+      return pt.matrixTransform(svg.getScreenCTM().inverse());
     };
-    rect.addEventListener('pointermove', move);
-    rect.addEventListener('pointerleave', () => { lineEl.setAttribute('visibility', 'hidden'); tip.textContent = ''; });
+    const showAt = (x) => {
+      x = Math.max(g.X0, Math.min(g.X1, x));
+      const v = Math.round(g.vx(x) / m.step) * m.step;
+      hoverLine.setAttribute('x1', x); hoverLine.setAttribute('x2', x); hoverLine.setAttribute('visibility', 'visible');
+      tip.textContent = `${fmtX(key, v)} → ${fmt1(interp(state.curves[key], v))}`;
+    };
+    let drag = null;
+    let lastPress = null;
+    let suppressDblUntil = 0;
+
+    svg.addEventListener('pointermove', (evt) => {
+      const loc = toChart(evt);
+      if (drag) {
+        drag.moved = true;
+        lastPress = null;
+        placePoint(key, drag.i, g.vx(loc.x - drag.dx), g.vy(loc.y - drag.dy));
+        updateCurveGraphics(card, key);
+        const p = state.curves[key][drag.i];
+        hoverLine.setAttribute('visibility', 'hidden');
+        tip.textContent = `Point ${drag.i + 1}: ${fmtX(key, p[0])} → ${fmt1(p[1])}`;
+        liveSign();
+        return;
+      }
+      if (evt.target.closest('.knot')) {
+        const p = state.curves[key][+evt.target.closest('.knot').dataset.i];
+        hoverLine.setAttribute('visibility', 'hidden');
+        tip.textContent = `${fmtX(key, p[0])} → ${fmt1(p[1])}. Drag to move, double-click to remove.`;
+      } else showAt(loc.x);
+    });
+    svg.addEventListener('pointerleave', () => { if (!drag) { hoverLine.setAttribute('visibility', 'hidden'); tip.textContent = ''; } });
+
+    svg.addEventListener('pointerdown', (evt) => {
+      const knot = evt.target.closest('.knot');
+      if (!knot || evt.button !== 0) return;
+      evt.preventDefault();
+      knot.focus({ preventScroll: true });
+      const i = +knot.dataset.i, p = state.curves[key][i], loc = toChart(evt);
+      // Remember where on the point it was grabbed so it doesn't jump under the cursor.
+      // Pointer capture retargets the browser's dblclick to the svg, so a
+      // double-press on a point is detected here instead.
+      const now = performance.now();
+      if (lastPress && lastPress.i === i && now - lastPress.t < 450) {
+        lastPress = null;
+        suppressDblUntil = now + 600;
+        const pts = state.curves[key];
+        if (pts.length <= 2) { tip.textContent = 'A curve needs at least two points.'; return; }
+        pts.splice(i, 1);
+        commitCurve(key);
+        return;
+      }
+      lastPress = { i, t: now };
+      drag = { i, dx: loc.x - g.sx(p[0]), dy: loc.y - g.sy(p[1]), moved: false, pointerId: evt.pointerId };
+      svg.setPointerCapture(evt.pointerId);
+      svg.classList.add('dragging');
+    });
+    const endDrag = () => {
+      if (!drag) return;
+      const { i, moved, pointerId } = drag;
+      drag = null;
+      svg.classList.remove('dragging');
+      try { svg.releasePointerCapture(pointerId); } catch (e) { /* already released */ }
+      if (moved) commitCurve(key, i);
+    };
+    svg.addEventListener('pointerup', endDrag);
+    svg.addEventListener('pointercancel', endDrag);
+
+    svg.addEventListener('dblclick', (evt) => {
+      if (performance.now() < suppressDblUntil || evt.target.closest('.knot')) return;
+      const pts = state.curves[key];
+      const loc = toChart(evt);
+      const v = Math.round(g.vx(Math.max(g.X0, Math.min(g.X1, loc.x))) / m.step) * m.step;
+      if (pts.some(p => Math.abs(p[0] - v) < m.step)) return;
+      const s = Math.round(Math.max(0, Math.min(5, g.vy(loc.y))) / SCORE_STEP) * SCORE_STEP;
+      pts.push([v, +s.toFixed(2)]);
+      pts.sort((a, b) => a[0] - b[0]);
+      commitCurve(key, pts.findIndex(p => p[0] === v));
+    });
+
+    svg.addEventListener('keydown', (evt) => {
+      const knot = evt.target.closest('.knot');
+      if (!knot) return;
+      const i = +knot.dataset.i, pts = state.curves[key], p = pts[i];
+      const big = evt.shiftKey ? 10 : 1;
+      let v = p[0], s = p[1];
+      switch (evt.key) {
+        case 'ArrowLeft': v -= m.step * big; break;
+        case 'ArrowRight': v += m.step * big; break;
+        case 'ArrowUp': s += SCORE_STEP * (evt.shiftKey ? 5 : 1); break;
+        case 'ArrowDown': s -= SCORE_STEP * (evt.shiftKey ? 5 : 1); break;
+        case 'Delete': case 'Backspace':
+          evt.preventDefault();
+          if (pts.length > 2) { pts.splice(i, 1); commitCurve(key, Math.max(0, i - 1)); }
+          return;
+        default: return;
+      }
+      evt.preventDefault();
+      placePoint(key, i, v, s);
+      updateCurveGraphics(card, key);
+      tip.textContent = `Point ${i + 1}: ${fmtX(key, pts[i][0])} → ${fmt1(pts[i][1])}`;
+      save();
+      liveSign();
+    });
   }
 
   // ---------------------------------------------------------------- listings tab
