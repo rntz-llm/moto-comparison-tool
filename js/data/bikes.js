@@ -52,7 +52,7 @@ window.MOTO_BIKES = [
       standing: [5, 'You rated it great: tall bars and a narrow waist.'],
       fun: [5, 'Revs out like a sportsbike, with a sweet chassis and cornering electronics. The most fun-per-pound in the class.'],
       reliability: [3, 'The engine is robust, but owners report electrical and software niggles and there have been recalls. Parts and dealer support are thinner than for the Japanese brands.'],
-      running: [3.5, 'Around 55mpg. Services every 6,200 miles (10,000km). Parts cost more and there are fewer independent specialists.'],
+      running: [3.5, 'Around 55mpg. Services every 6,200 miles (10,000km). Parts cost more than for the Japanese brands.'],
       luggage: [4.5, 'OEM aluminium panniers and racks, plus growing aftermarket support.'],
       greenlane: [5, 'Excellent off-road for its size.']
     },
@@ -182,7 +182,7 @@ window.MOTO_BIKES = [
     pros: ['Power in your sweet spot', 'Fun, revvy engine', 'Huge range', 'Good value used'],
     cons: ['Some buzz through bars and pegs', 'Road-only', 'Styling divides opinion'],
     scores: {
-      comfort: [3.5, 'Good seat, roomy riding position, long range.'],
+      comfort: [3.5, 'Good seat and a roomy riding position.'],
       highway: [3.5, 'Adjustable screen and stable, with some high-frequency vibration at 75mph.'],
       standing: [2.5, 'Bars are a little low for standing.'],
       fun: [4, 'Rev-happy twin with a zingy top end and sharp handling. Lots of fun on B-roads and not scary.'],
@@ -208,7 +208,7 @@ window.MOTO_BIKES = [
     pros: ['Very comfortable', 'Nearly unkillable', 'Cheap', 'Huge aftermarket'],
     cons: ['Stock screen buffets tall riders', 'Dated and soft', 'No longer sold new'],
     scores: {
-      comfort: [4, 'Roomy, well-padded, 20L tank. A proven long-distance bike.'],
+      comfort: [4, 'Roomy and well-padded. A proven long-distance bike.'],
       highway: [3.5, 'Smooth, stable V-twin at 75mph. The stock screen buffets a 6\'4" rider; a taller aftermarket screen is the usual fix.'],
       standing: [3, 'Acceptable. The XT version has slightly better bars.'],
       fun: [3, 'Characterful V-twin with good midrange, but soft suspension and a dated chassis.'],
@@ -313,15 +313,16 @@ window.MOTO_BIKES = [
       highway: [4.5, 'Turbine-smooth at 75mph and very stable.'],
       standing: [3.5, 'XC bars work reasonably standing.'],
       fun: [4, 'The triple whine is addictive and it handles well, but it is heavy-ish.'],
-      reliability: [3.5, 'Generally good, with known regulator/rectifier and switchgear issues. Age-related wear on used bikes.'],
-      running: [3.5, 'Around 50mpg. 6,000-mile services before 2018, 10,000 after.'],
+      reliability: [3.5, 'Generally good, with known regulator/rectifier and switchgear issues.'],
+      running: [4, 'Around 50mpg with 10,000-mile services (2018 on).'],
       luggage: [4.5, 'OEM and aftermarket panniers.'],
       greenlane: [3, 'XC with 21" spoked front is decent; XR is road-only.']
     },
     options: [
       { id: 'used-18', label: 'Used 2018–20', condition: 'used', years: '2018–20', price: 6200, range: [5600, 6800], testRide: 4.5,
         note: 'Gen 2 update: better screen, electronics and 10,000-mile services.' },
-      { id: 'used-15', label: 'Used 2015–17', condition: 'used', years: '2015–17', price: 4700, range: [4100, 5500], testRide: 4.5, adj: { reliability: -0.25, running: -0.25 } }
+      { id: 'used-15', label: 'Used 2015–17', condition: 'used', years: '2015–17', price: 4700, range: [4100, 5500], testRide: 4.5, adj: { reliability: -0.25, running: -0.5 },
+        note: 'Services every 6,000 miles on these earlier bikes.' }
     ],
     search: { at: ['TRIUMPH', 'TIGER 800'], slug: 'triumph/tiger-800', q: 'Triumph Tiger 800 XC' }
   },
@@ -338,7 +339,7 @@ window.MOTO_BIKES = [
       highway: [3.5, 'Stable, with some vibration from the twin and a small screen.'],
       standing: [3.5, 'Reasonable bar height.'],
       fun: [3, 'Torquey and easy, but not rev-happy or playful.'],
-      reliability: [3.5, 'Mostly fine; some early engine and electrical complaints. Parts and labour are pricey.'],
+      reliability: [3.5, 'Mostly fine; some early engine and electrical complaints.'],
       running: [3, 'Around 55mpg; BMW dealer servicing costs more.'],
       luggage: [5, 'Excellent OEM Vario luggage and everything aftermarket.'],
       greenlane: [3, '19" front. Light green lanes only.']
@@ -382,7 +383,7 @@ window.MOTO_BIKES = [
     pros: ['Unique character and sound', 'Shaft drive, no chain', '23L tank', 'Relaxed power'],
     cons: ['Few dealers', 'Heavy-ish', 'Expensive new'],
     scores: {
-      comfort: [3.5, 'Plush seat, relaxed riding position, and a long range.'],
+      comfort: [3.5, 'Plush seat and a relaxed riding position.'],
       highway: [3.5, 'Pleasant, mild vibration at 75mph. Stable. The TT Travel has a taller screen.'],
       standing: [3.5, 'Reasonable.'],
       fun: [4.5, 'Most character on the list. Not quick, but it makes every ride feel like an occasion.'],
@@ -412,7 +413,7 @@ window.MOTO_BIKES = [
       highway: [3, 'Cruises at 70–75mph without fuss. Single-cylinder vibes build up on long stints.'],
       standing: [4, 'Tall bars, good standing position.'],
       fun: [3.5, 'You can thrash it everywhere. Charming character.'],
-      reliability: [3, 'The new Sherpa 450 engine had several recalls and teething issues in 2024. Improving, and parts are cheap.'],
+      reliability: [3, 'The new Sherpa 450 engine had several recalls and teething issues in 2024. Improving.'],
       running: [5, 'Around 70mpg, low insurance, cheap parts.'],
       luggage: [4.5, 'OEM racks and panniers.'],
       greenlane: [4.5, 'Very capable on UK byways.']
@@ -509,7 +510,7 @@ window.MOTO_BIKES = [
     pros: ['Huge spec for the money', 'Roomy', 'Long range', 'Cruise control'],
     cons: ['90hp, delivered with KTM-style punch', 'Young brand, few dealers', 'Resale values uncertain'],
     scores: {
-      comfort: [4, 'Tall seat, roomy riding position, adjustable screen, cruise control.'],
+      comfort: [4, 'Tall seat and a roomy riding position.'],
       highway: [4, 'Cruise control and an adjustable screen. Stable.'],
       standing: [4, 'Wide bars, rally-ish stance.'],
       fun: [4, 'Revvy, strong twin in a well-sorted chassis.'],
@@ -543,7 +544,7 @@ window.MOTO_BIKES = [
       reliability: [4.5, 'Very solid.'],
       running: [3.5, 'Around 50mpg; tyres and chains cost more on a bigger bike.'],
       luggage: [5, 'Everything is available.'],
-      greenlane: [4.5, 'Very capable, though heavy if you drop it.']
+      greenlane: [4.5, 'Very capable for its size.']
     },
     options: [
       { id: 'used-16', label: 'Used 2016–19', condition: 'used', years: '2016–19', price: 6800, range: [5800, 8000], testRide: 4.5, adj: { reliability: -0.25 } }
@@ -563,8 +564,8 @@ window.MOTO_BIKES = [
       highway: [3.5, 'Smooth V-twin and a decent screen; comfortable at 75mph.'],
       standing: [3, 'OK.'],
       fun: [2.5, 'Soft and gentle.'],
-      reliability: [4, 'Engine is famously tough, but age brings corrosion, fork seals and electrical wear.'],
-      running: [4, 'Around 55mpg, cheap parts, but expect age-related repairs.'],
+      reliability: [4.5, 'Engine is famously tough. Corrosion, fork seals and electrics are the usual weak points.'],
+      running: [4.5, 'Around 55mpg and cheap parts.'],
       luggage: [4.5, 'Racks and panniers are easy to find.'],
       greenlane: [3, '21" front; fine on easy byways.']
     },
@@ -583,11 +584,11 @@ window.MOTO_BIKES = [
     pros: ['Tall rider fit', '23L tank', 'Tough', 'Cheap'],
     cons: ['Vibey at 75mph', 'Old', 'Plank seat'],
     scores: {
-      comfort: [3.5, 'Great legroom; the seat and vibration tire you on long days.'],
+      comfort: [4, 'Great legroom; the plank seat tires you on long days.'],
       highway: [2, 'Big single thumps at 75mph; buzzy mirrors and tingly hands.'],
       standing: [4.5, 'Tall bars, made for standing.'],
       fun: [3, 'Torquey thumper; fun on back roads.'],
-      reliability: [4, 'Tough engine, but these are 10–18 years old.'],
+      reliability: [4.5, 'Tough, simple engine.'],
       running: [4.5, 'Around 60mpg, simple to maintain.'],
       luggage: [4.5, 'Overland favourite; lots of racks.'],
       greenlane: [4.5, 'Very capable.']
@@ -606,7 +607,7 @@ window.MOTO_BIKES = [
     pros: ['Cheap for the performance', 'Light and fun', 'Honda reliability'],
     cons: ['No wind protection', 'Cramped for tall riders', '91hp in a light bike'],
     scores: {
-      comfort: [2, 'Cramped legroom and no protection from the wind.'],
+      comfort: [2.5, 'Cramped legroom for a 34" inseam.'],
       highway: [2, 'Stable, but wind blast at 75mph is tiring.'],
       standing: [1.5, 'Not designed for it.'],
       fun: [4.5, 'Rev-happy engine, light chassis. Great on twisty roads.'],
@@ -635,8 +636,8 @@ window.MOTO_BIKES = [
       highway: [3.5, 'Smooth, balanced twin and stable at 75mph. The small screen buffets a tall rider.'],
       standing: [2.5, 'Wide bars, but a road bike.'],
       fun: [4, 'Grunty 270° twin, light steering, loves B-roads.'],
-      reliability: [4, 'The engine is tough and simple; age is the bigger risk now.'],
-      running: [3.5, 'Around 50mpg and 6,000-mile services. Parts are cheap, but expect age-related jobs.'],
+      reliability: [4.5, 'Tough, simple engine and chassis.'],
+      running: [4, 'Around 50mpg and 6,000-mile services. Parts are cheap.'],
       luggage: [4, 'Givi and Yamaha racks and panniers are common on used bikes.'],
       greenlane: [1.5, 'Road bike with 18/17" wheels.']
     },
@@ -655,11 +656,11 @@ window.MOTO_BIKES = [
     pros: ['Very smooth triple', 'Shaft drive', 'Long-lived engine', 'Cheap classic'],
     cons: ['30–40 years old', 'Dated brakes and suspension', 'Parts via specialists'],
     scores: {
-      comfort: [3.5, 'Upright and comfortable; the K75RT and K75S add wind protection.'],
+      comfort: [3.5, 'Upright and comfortable, with a slight knee bend.'],
       highway: [3.5, 'Smooth and stable at 75mph. Wind protection depends on the variant (RT best, base K75 minimal).'],
       standing: [1.5, 'Not designed for it.'],
       fun: [3, 'Charming triple, but heavy with period brakes and suspension.'],
-      reliability: [4, 'The engine and shaft drive are famously durable; the rest is old.'],
+      reliability: [4.5, 'The engine and shaft drive are famously durable.'],
       running: [3.5, 'Shaft drive and around 50mpg, but specialist parts and labour. Classic insurance can be cheap with a mileage limit.'],
       luggage: [4.5, 'BMW and Krauser panniers are common.'],
       greenlane: [0.5, 'No.']
@@ -679,7 +680,7 @@ window.MOTO_BIKES = [
     pros: ['Tall rider fit', 'Very cheap', 'Frugal', 'Capable off-road'],
     cons: ['Buzzy at 75mph', 'Water pump and swingarm bearing issues', '18–25 years old'],
     scores: {
-      comfort: [3.5, 'Great legroom; the seat and single-cylinder vibes tire you on long days.'],
+      comfort: [4, 'Great legroom; the seat gets tiring on long days.'],
       highway: [2.5, 'Holds 75mph, but single-cylinder vibes wear on you.'],
       standing: [4, 'Tall, with decent bars for standing.'],
       fun: [3, 'Light-ish and thumpy.'],
@@ -707,10 +708,10 @@ window.MOTO_BIKES = [
       highway: [4, 'Planted and smooth at 75mph with a decent screen.'],
       standing: [3.5, 'OK; the cylinders sit close to your shins.'],
       fun: [3.5, 'Torquey and surprisingly agile, but heavy and not rev-happy.'],
-      reliability: [3.5, 'Mostly durable. Air-cooled bikes had final drive failures; early water-cooled (2013–14) bikes had some teething issues. Parts and labour are expensive.'],
+      reliability: [3.5, 'Mostly durable. Air-cooled bikes had final drive failures; early water-cooled (2013–14) bikes had some teething issues.'],
       running: [3, 'Around 45–50mpg, pricey BMW servicing and big tyres.'],
       luggage: [5, 'Everything exists for it.'],
-      greenlane: [3.5, 'Capable, but heavy to pick up.']
+      greenlane: [3.5, 'Capable, but hard work on loose surfaces.']
     },
     options: [
       { id: 'used-04', label: 'Used 2004–09 (air-cooled)', condition: 'used', years: '2004–09', price: 4500, range: [3500, 5500], testRide: 4.5, adj: { reliability: -0.25 }, specs: { hp: 100, wetKg: 229 },
@@ -737,7 +738,7 @@ window.MOTO_BIKES = [
       reliability: [3.5, 'Generally rugged; known issues are servo ABS brakes, final drive, clutch splines and fuel pump controller.'],
       running: [3, 'Around 45mpg; specialist servicing.'],
       luggage: [5, 'Everything exists for it.'],
-      greenlane: [3.5, 'Capable, but very heavy to pick up.']
+      greenlane: [3.5, 'Capable, but hard work on loose surfaces.']
     },
     options: [
       { id: 'used-99', label: 'Used 1999–2004', condition: 'used', years: '1999–2004', price: 3300, range: [2200, 4500], testRide: 3.5, adj: { reliability: -0.5 },
@@ -755,12 +756,12 @@ window.MOTO_BIKES = [
     cons: ['Cramped for 6\'4"', 'Little lean angle', 'No wind protection', 'Small tank'],
     scores: {
       comfort: [1.5, 'Very low seat, cramped legroom for a 34" inseam, short-travel rear shocks.'],
-      highway: [2, 'Stable, but wind blast and harsh rear suspension at 75mph. 12.5L tank limits range.'],
+      highway: [2.5, 'Stable, but full wind blast at 75mph.'],
       standing: [0.5, 'No.'],
       fun: [2.5, 'Nice engine and sound, but pegs scrape early on twisty roads.'],
       reliability: [4, 'Liquid-cooled engine has a good record.'],
       running: [3.5, 'Belt drive is low-maintenance; around 45–50mpg.'],
-      luggage: [2.5, 'Saddlebags available; limited capacity.'],
+      luggage: [2.5, 'Saddlebags available; limited capacity, and the 12.5L tank limits range.'],
       greenlane: [0, 'No.']
     },
     options: [
@@ -832,12 +833,12 @@ window.MOTO_BIKES = [
     pros: ['Tall rider fit', 'Good fairing', '23L tank', 'Classic, holding value'],
     cons: ['23–36 years old', 'Heavy for 60hp', 'Parts getting scarcer'],
     scores: {
-      comfort: [4, 'Tall, roomy and comfortable, with good wind protection.'],
+      comfort: [4, 'Tall, roomy and comfortable.'],
       highway: [3.5, 'Good fairing and smooth V-twin; relaxed at 75mph.'],
       standing: [4, 'Tall bars; good standing.'],
       fun: [3, 'Charismatic, but soft and heavy by modern standards.'],
       reliability: [4.5, 'Famously tough. Known weak points: regulator/rectifier and fuel pump relay.'],
-      running: [3.5, 'Around 45mpg, carburettors, and some parts only through specialists.'],
+      running: [3.5, 'Around 45mpg, and carburettors need looking after.'],
       luggage: [4.5, 'Well supported.'],
       greenlane: [4, 'Capable, if heavy.']
     },
@@ -886,14 +887,14 @@ window.MOTO_BIKES = [
       highway: [1.5, 'Revving hard at 75mph with an old, small fairing.'],
       standing: [0.5, 'No.'],
       fun: [4.5, 'Gear-driven cam whine and sublime handling.'],
-      reliability: [4, 'Honda-built, but age and parts availability now dominate.'],
-      running: [3, 'Specialist parts; classic insurance can help.'],
+      reliability: [4.5, 'Honda-built and robust.'],
+      running: [3, 'Parts are expensive; classic insurance can help.'],
       luggage: [1, 'Almost none.'],
       greenlane: [0, 'No.']
     },
     options: [
       { id: 'used-89', label: 'Used 1989–93', condition: 'used', years: '1989–93', price: 4800, range: [3000, 8000], testRide: 3, adj: { reliability: -1 },
-        note: 'Tidy grey imports are £3,000–5,000; rarer UK-spec bikes (62hp) £4,000–6,000, mint up to £9,000. Few for sale.' }
+        note: 'Tidy grey imports are £3,000–5,000; rarer UK-spec bikes (62hp) £4,000–6,000, mint up to £9,000. Few for sale, and parts are getting scarce.' }
     ],
     search: { at: ['HONDA', 'VFR400'], slug: 'honda/vfr400', mcn: 'honda/vfr400', q: 'Honda VFR400 NC30' }
   },

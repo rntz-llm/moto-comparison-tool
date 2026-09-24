@@ -223,6 +223,9 @@ input[type="checkbox"], input[type="radio"] { accent-color: var(--accent); }
 
 /* ---------- main table ---------- */
 .table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
+/* The bikes table scrolls inside a viewport-high box so its header row can stay
+   pinned: a horizontally scrolling wrapper would otherwise stop the sticky header. */
+#table-wrap { overflow: auto; max-height: calc(100vh - 24px); max-height: calc(100dvh - 24px); }
 table { border-collapse: separate; border-spacing: 0; width: 100%; }
 .bikes { font-size: 13px; }
 .bikes th, .bikes td { padding: 7px 8px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: middle; }

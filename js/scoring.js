@@ -9,11 +9,11 @@
     { key: 'price', label: 'Price', short: 'Price', kind: 'computed', weight: 8,
       help: 'On-the-road price through the price curve. Flat below about £4k, steady £4–8k, steep £8–12k, zero above £12.5k.' },
     { key: 'running', label: 'Running costs', short: 'Running', kind: 'researched', weight: 4,
-      help: 'Fuel economy, service intervals and cost, insurance, consumables.' },
+      help: 'Routine costs: fuel economy, insurance, service intervals and prices, parts prices, tyres and chains.' },
     { key: 'power', label: 'Power', short: 'Power', kind: 'computed', weight: 6,
       help: 'Peak bhp through the power curve (sweet spot 40–70). Above 70bhp, relaxed engines count as less powerful and punchy ones as more.' },
     { key: 'comfort', label: 'Tall-rider comfort', short: 'Comfort', kind: 'researched', weight: 9,
-      help: 'Ergonomics for 6\'4" and a 34" inseam; seat and riding position over 2+ hours.' },
+      help: 'Ergonomics for 6\'4" and a 34" inseam: legroom, bar reach and seat over 2+ hours. Vibration and wind count under Motorway manners.' },
     { key: 'highway', label: 'Motorway manners', short: 'Motorway', kind: 'researched', weight: 7,
       help: 'Stability, vibration and wind protection at 75mph. Power is judged under Power, not here.' },
     { key: 'standing', label: 'Standing position', short: 'Standing', kind: 'researched', weight: 4,
@@ -21,15 +21,15 @@
     { key: 'fun', label: 'Fun factor', short: 'Fun', kind: 'researched', weight: 7,
       help: 'Twisty-road ability, rev-happiness, character and sound (not loudness).' },
     { key: 'reliability', label: 'Reliability', short: 'Reliable', kind: 'researched', weight: 7,
-      help: 'Reputation, maintenance burden, parts and dealer support. Adjusted for the age of a used option.' },
+      help: 'How likely it is to go wrong, and how easily it gets fixed (parts availability, dealer support). Age is deducted per used option; costs count under Running costs.' },
     { key: 'weight', label: 'Weight & confidence', short: 'Weight', kind: 'computed', weight: 5,
       help: 'Wet weight through the weight curve: under 170kg feels nervous, 185–230kg is ideal, over 272kg (600lb) is worrying.' },
     { key: 'luggage', label: 'Luggage & touring', short: 'Luggage', kind: 'researched', weight: 3,
-      help: 'Racks, panniers and touring capacity.' },
+      help: 'Racks, panniers and touring capacity, including fuel range.' },
     { key: 'testride', label: 'Test-ride access', short: 'Test ride', kind: 'option', weight: 3,
       help: 'How easy it is to test-ride the option you picked: nearby dealer demo fleets for new bikes, how common the bike is for used.' },
     { key: 'greenlane', label: 'Green-laning', short: 'Green lane', kind: 'researched', weight: 1,
-      help: 'Ability on UK byways and gravel.' }
+      help: 'Ability on UK byways and gravel. The worry of dropping a heavy bike counts under Weight.' }
   ];
 
   // Curves are [x, score] points, linearly interpolated and flat beyond the ends.
