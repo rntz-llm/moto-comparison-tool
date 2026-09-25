@@ -55,11 +55,20 @@
     dealersPickedOnly: false
   };
 
-  const OLD_DEFAULT_CURVES = {
-    price: [[3000, 5], [4000, 4.8], [5000, 4.4], [6000, 3.9], [7000, 3.4], [8000, 2.9], [9000, 2.2], [10000, 1.6], [11000, 1.0], [12000, 0.5], [12500, 0]],
-    power: [[25, 1], [30, 2.5], [35, 4], [40, 5], [70, 5], [75, 4.5], [80, 3.8], [90, 2.5], [100, 1.5], [110, 0.8], [125, 0]],
-    weight: [[140, 2], [155, 3], [170, 4.2], [185, 5], [230, 5], [245, 4.3], [260, 3.4], [272, 2.5], [290, 1.2], [310, 0]]
-  };
+  // Earlier default curves. A saved curve still equal to one of these moves to
+  // the current default; curves you've edited are kept.
+  const OLD_DEFAULT_CURVES = [
+    {
+      price: [[3000, 5], [4000, 4.8], [5000, 4.4], [6000, 3.9], [7000, 3.4], [8000, 2.9], [9000, 2.2], [10000, 1.6], [11000, 1.0], [12000, 0.5], [12500, 0]],
+      power: [[25, 1], [30, 2.5], [35, 4], [40, 5], [70, 5], [75, 4.5], [80, 3.8], [90, 2.5], [100, 1.5], [110, 0.8], [125, 0]],
+      weight: [[140, 2], [155, 3], [170, 4.2], [185, 5], [230, 5], [245, 4.3], [260, 3.4], [272, 2.5], [290, 1.2], [310, 0]]
+    },
+    {
+      price: [[3000, 5], [4000, 4.8], [8000, 2.9], [12000, 0.5], [12500, 0]],
+      power: [[25, 1], [35, 4], [40, 5], [70, 5], [90, 2.5], [100, 1.5], [125, 0]],
+      weight: [[140, 2], [170, 4.2], [185, 5], [230, 5], [260, 3.4], [290, 1.2], [310, 0]]
+    }
+  ];
 
   function loadState() {
     let saved = null;
@@ -85,9 +94,8 @@
         else { s.preset = 'custom'; s.customWeights = clone(s.weights); }
       }
       if (!PRESETS.some(p => p.id === s.preset)) s.preset = 'custom';
-      // Curves still at the old many-point defaults move to the simplified defaults.
-      for (const k of Object.keys(OLD_DEFAULT_CURVES)) {
-        if (JSON.stringify(s.curves[k]) === JSON.stringify(OLD_DEFAULT_CURVES[k])) s.curves[k] = clone(DEFAULT_CURVES[k]);
+      for (const k of Object.keys(DEFAULT_CURVES)) {
+        if (OLD_DEFAULT_CURVES.some(old => JSON.stringify(s.curves[k]) === JSON.stringify(old[k]))) s.curves[k] = clone(DEFAULT_CURVES[k]);
       }
     }
     return s;
@@ -395,13 +403,13 @@
   const CURVE_META = {
     price: { title: 'Price → score', unit: '£', xLabel: v => v >= 1000 ? '£' + (v / 1000) + 'k' : '£' + v, min: 2000, max: 13000, step: 100,
       ticks: [2000, 4000, 6000, 8000, 10000, 12000],
-      desc: 'Flat below £4k, where price matters less. Steady from £4–8k. Steep from £8–12k, where a bike has to earn it.' },
+      desc: 'Gentle below £4.5k, where price matters less. Steeper from £4.5–8k. Steep from £8k to zero at £11k, where a bike has to earn it.' },
     power: { title: 'Power → score', unit: 'bhp', xLabel: v => v + '', min: 20, max: 130, step: 1,
       ticks: [20, 40, 60, 80, 100, 120],
-      desc: 'Sweet spot 40–70bhp. Below 35 it struggles at 75mph; above 80 it gets more than you want. Dots show each bike after the delivery adjustment.' },
+      desc: 'Sweet spot 40–60bhp. Less than that struggles at 75mph; above 60 it gets more than you want, reaching zero at 100. Dots show each bike after the delivery adjustment.' },
     weight: { title: 'Wet weight → score', unit: 'kg', xLabel: v => v + '', min: 130, max: 320, step: 1,
       ticks: [140, 170, 200, 230, 260, 290, 320],
-      desc: 'Light bikes feel nervous at speed; 185–230kg is ideal; 272kg (600lb) is where drops start to worry you.' }
+      desc: 'Light bikes feel nervous at speed; 180–200kg is ideal; heavier bikes lose points steadily, reaching zero at 300kg.' }
   };
   const SCORE_STEP = 0.1;
 

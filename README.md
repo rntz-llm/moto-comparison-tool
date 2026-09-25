@@ -36,11 +36,12 @@ add or remove a point; saved in your browser), or edit the defaults in
 
 ## How scoring works
 
-- **Price, power, weight** are computed through curves. Price is flat below
-  about £4k, steady from £4–8k and steep from £8–12k. Power peaks at
-  40–70bhp; above 70, a relaxed engine counts as less powerful and a punchy
-  one as more. Weight peaks at 185–230kg and falls away towards 272kg
-  (600lb).
+- **Price, power, weight** are computed through curves (points are
+  value:score):
+  - Price: £2,000:5, £4,500:4.5, £8,000:3, £11,000:0
+  - Power: 20:2, 40:5, 60:5, 80:3.5, 100:0 (bhp). Above 70bhp, a relaxed
+    engine counts as less powerful and a punchy one as more.
+  - Wet weight: 140:2.5, 180:5, 200:5, 300:0 (kg)
 - **Comfort, motorway manners, standing position, fun, reliability, running
   costs, luggage, green-laning** are researched judgements with a one-line
   reason each. Override any of them per bike after a test ride.

@@ -7,11 +7,11 @@
   //       'option' (depends on the new/used option picked)
   const CRITERIA = [
     { key: 'price', label: 'Price', short: 'Price', kind: 'computed', weight: 8,
-      help: 'On-the-road price through the price curve. Flat below about £4k, steady £4–8k, steep £8–12k, zero above £12.5k.' },
+      help: 'On-the-road price through the price curve: gentle below £4.5k, steeper £4.5–8k, steep £8–11k, zero from £11k.' },
     { key: 'running', label: 'Running costs', short: 'Running', kind: 'researched', weight: 4,
       help: 'Routine costs: fuel economy, insurance, service intervals and prices, parts prices, tyres and chains.' },
     { key: 'power', label: 'Power', short: 'Power', kind: 'computed', weight: 6,
-      help: 'Peak bhp through the power curve (sweet spot 40–70). Above 70bhp, relaxed engines count as less powerful and punchy ones as more.' },
+      help: 'Peak bhp through the power curve (sweet spot 40–60, zero from 100). Above 70bhp, relaxed engines count as less powerful and punchy ones as more.' },
     { key: 'comfort', label: 'Tall-rider comfort', short: 'Comfort', kind: 'researched', weight: 9,
       help: 'Ergonomics for 6\'4" and a 34" inseam: legroom, bar reach and seat over 2+ hours. Vibration and wind count under Motorway manners.' },
     { key: 'highway', label: 'Motorway manners', short: 'Motorway', kind: 'researched', weight: 7,
@@ -23,7 +23,7 @@
     { key: 'reliability', label: 'Reliability', short: 'Reliable', kind: 'researched', weight: 7,
       help: 'How likely it is to go wrong, and how easily it gets fixed (parts availability, dealer support). Age is deducted per used option; costs count under Running costs.' },
     { key: 'weight', label: 'Weight & confidence', short: 'Weight', kind: 'computed', weight: 5,
-      help: 'Wet weight through the weight curve: under 170kg feels nervous, 185–230kg is ideal, over 272kg (600lb) is worrying.' },
+      help: 'Wet weight through the weight curve: light bikes feel nervous, 180–200kg is ideal, falling to zero at 300kg.' },
     { key: 'luggage', label: 'Luggage & touring', short: 'Luggage', kind: 'researched', weight: 3,
       help: 'Racks, panniers and touring capacity, including fuel range.' },
     { key: 'testride', label: 'Test-ride access', short: 'Test ride', kind: 'option', weight: 3,
@@ -36,9 +36,9 @@
 
   // Curves are [x, score] points, linearly interpolated and flat beyond the ends.
   const DEFAULT_CURVES = {
-    price: [[3000, 5], [4000, 4.8], [8000, 2.9], [12000, 0.5], [12500, 0]],
-    power: [[25, 1], [35, 4], [40, 5], [70, 5], [90, 2.5], [100, 1.5], [125, 0]],
-    weight: [[140, 2], [170, 4.2], [185, 5], [230, 5], [260, 3.4], [290, 1.2], [310, 0]]
+    price: [[2000, 5], [4500, 4.5], [8000, 3], [11000, 0]],
+    power: [[20, 2], [40, 5], [60, 5], [80, 3.5], [100, 0]],
+    weight: [[140, 2.5], [180, 5], [200, 5], [300, 0]]
   };
 
   // Above 70bhp, the excess counts for less (relaxed) or more (punchy).
