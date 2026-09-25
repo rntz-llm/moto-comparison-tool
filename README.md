@@ -39,7 +39,8 @@ add or remove a point; saved in your browser), or edit the defaults in
 - **Price, power, weight** are computed through curves (points are
   value:score):
   - Price: £2,000:5, £4,500:4.5, £8,000:3, £11,000:0
-  - Power: 20:2, 40:5, 60:5, 80:3.5, 100:0 (bhp). Above 70bhp, a relaxed
+  - Power: 20:2, 40:5, 60:5, 80:3.5, 100:0 (bhp). Above 70bhp (adjustable
+    on the Scoring tab), a relaxed
     engine counts as less powerful and a punchy one as more.
   - Wet weight: 140:5, 200:5, 300:0 (kg). Only heaviness counts here
     (unwieldy, a drop worry); nervousness at speed is under road manners.

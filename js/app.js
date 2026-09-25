@@ -58,7 +58,8 @@
     listingBikes: {},
     listings: [],
     mapRange: 60,
-    dealersPickedOnly: false
+    dealersPickedOnly: false,
+    powerKnee: POWER_KNEE
   };
 
   // Earlier default curves. A saved curve still equal to one of these moves to
@@ -132,7 +133,7 @@
   const expanded = {};
 
   // ---------------------------------------------------------------- scoring
-  function settings() { return { usedPrivate: state.usedPrivate, curves: state.curves }; }
+  function settings() { return { usedPrivate: state.usedPrivate, curves: state.curves, powerKnee: state.powerKnee }; }
 
   function evalOption(bike, opt) {
     const ev = evaluate(bike, opt, settings(), state.overrides[bike.id]);
@@ -349,7 +350,7 @@
       const s = ev.scores[c.key];
       let note;
       if (c.key === 'price') note = `${gbp(ev.price)} on the road for “${ev.option.label}”.`;
-      else if (c.key === 'power') note = `${ev.specs.hp}bhp with ${ev.delivery} delivery${ev.specs.hp > POWER_KNEE ? `, counted as ${Math.round(ev.effHp)}bhp` : ''}.`;
+      else if (c.key === 'power') note = `${ev.specs.hp}bhp with ${ev.delivery} delivery${ev.specs.hp > state.powerKnee ? `, counted as ${Math.round(ev.effHp)}bhp` : ''}.`;
       else if (c.key === 'weight') note = `${ev.specs.wetKg}kg wet (${Math.round(ev.specs.wetKg * 2.2046)}lb).`;
       else if (c.key === 'testride') note = ev.option.condition === 'new' ? 'New: based on the nearest dealer and the brand’s demo fleet.' : 'Used: based on how many are for sale nearby.';
       else if (c.key === 'abs') note = absNote(ev);
@@ -428,7 +429,7 @@
           : `overall  = 2 × ( Σ(w_i × score_i^${p}) / Σ w_i )^(1/${p})        (weak-spot penalty: ${state.penalty})`,
       '           so the overall score runs 0–10',
       '',
-      `Power above ${POWER_KNEE}bhp counts as ${POWER_KNEE} + (bhp − ${POWER_KNEE}) × factor,`,
+      `Power above ${state.powerKnee}bhp counts as ${state.powerKnee} + (bhp − ${state.powerKnee}) × factor,`,
       `where factor = ${DELIVERY_FACTOR.relaxed} relaxed, ${DELIVERY_FACTOR.normal.toFixed(1)} normal, ${DELIVERY_FACTOR.punchy} punchy delivery.`,
       '',
       `Fit = knee-angle curve − ${FIT_PENALTY.perHipDegree} per degree of hip angle under ${FIT_PENALTY.hipBelow}°`,
@@ -481,6 +482,9 @@
         <p class="hint">Drag a point to reshape the curve. Double-click the chart to add a point, or a point to remove it. Focused points also move with the arrow keys (Shift for bigger steps) and Delete removes them.</p>
         <label class="field"><span class="field-label">Points (${m.unit}: score)</span>
           <input type="text" class="curve-points" data-curve-input="${key}" value="${esc(pointsText(pts))}" spellcheck="false"></label>
+        ${key === 'power' ? `<label class="field"><span class="field-label">Delivery adjustment starts at <output id="power-knee-out">${state.powerKnee} bhp</output></span>
+          <input type="range" id="power-knee" min="40" max="110" step="5" value="${state.powerKnee}">
+          <span class="hint">Above this, relaxed engines count as less powerful (×${DELIVERY_FACTOR.relaxed}) and punchy ones as more (×${DELIVERY_FACTOR.punchy}). Default ${POWER_KNEE} bhp.</span></label>` : ''}
         <div class="btn-row"><button type="button" class="link-btn" data-curve-reset="${key}">Reset this curve</button><span class="hint" data-curve-status="${key}"></span></div>
       </div>`;
     }).join('');
@@ -876,6 +880,12 @@
 
   document.addEventListener('input', (e) => {
     const t = e.target, d = t.dataset;
+    if (t.id === 'power-knee') {
+      state.powerKnee = +t.value;
+      $('#power-knee-out').textContent = t.value + ' bhp';
+      renderFormula(); liveSign(); save();
+      return;
+    }
     if (d.w) {
       // Any edit lands in Custom: starting from a preset copies its weights first.
       state.weights[d.w] = +t.value;
@@ -939,6 +949,7 @@
       case 'f-private': state.usedPrivate = t.checked; changed(); break;
       case 'radius': state.radius = +t.value; changed(); break;
       case 'search-maxprice': state.searchMaxPrice = +t.value || 0; changed(); break;
+      case 'power-knee': state.powerKnee = +t.value; changed(); break;
       case 'dealers-picked-only': state.dealersPickedOnly = t.checked; changed(); break;
       case 'home-postcode': setHome(t.value); break;
     }

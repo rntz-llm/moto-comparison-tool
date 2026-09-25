@@ -84,9 +84,11 @@
     return points[points.length - 1][1];
   }
 
-  function effectiveHp(hp, delivery) {
-    if (hp <= POWER_KNEE) return hp;
-    return POWER_KNEE + (hp - POWER_KNEE) * (DELIVERY_FACTOR[delivery] || 1);
+  // knee: where the adjustment starts (bhp); defaults to POWER_KNEE, adjustable in the UI.
+  function effectiveHp(hp, delivery, knee) {
+    if (typeof knee !== 'number') knee = POWER_KNEE;
+    if (hp <= knee) return hp;
+    return knee + (hp - knee) * (DELIVERY_FACTOR[delivery] || 1);
   }
 
   const clamp5 = v => Math.max(0, Math.min(5, v));
@@ -109,7 +111,7 @@
     for (const c of CRITERIA) {
       let s, src = 'data';
       if (c.key === 'price') s = interp(curves.price, price);
-      else if (c.key === 'power') s = interp(curves.power, effectiveHp(specs.hp, delivery));
+      else if (c.key === 'power') s = interp(curves.power, effectiveHp(specs.hp, delivery, settings.powerKnee));
       else if (c.key === 'weight') s = interp(curves.weight, specs.wetKg);
       else if (c.key === 'testride') s = option.testRide;
       else if (c.key === 'abs') s = ABS_SCORE[option.abs || bike.abs || 'yes'];
@@ -121,7 +123,7 @@
       source[c.key] = src;
     }
     if (priceOverridden) source.price = 'you';
-    return { specs, delivery, price, scores, source, geo, effHp: effectiveHp(specs.hp, delivery) };
+    return { specs, delivery, price, scores, source, geo, effHp: effectiveHp(specs.hp, delivery, settings.powerKnee) };
   }
 
   // Weighted power mean of the 0–5 criterion scores, doubled so the overall
