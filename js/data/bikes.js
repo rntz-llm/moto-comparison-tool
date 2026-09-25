@@ -900,6 +900,140 @@ window.MOTO_BIKES = [
     search: { at: ['HONDA', 'VFR400'], slug: 'honda/vfr400', mcn: 'honda/vfr400', q: 'Honda VFR400 NC30' }
   },
   {
+    id: 'f800gsold', make: 'BMW', model: 'F 800 GS (2008–18)', style: 'Adventure',
+    engine: '798cc parallel twin', hp: 85, torqueNm: 83, wetKg: 214, seatMm: 880, tankL: 16,
+    delivery: 'normal', drive: 'chain',
+    summary: 'The previous-generation mid-size GS: tall, light for its class, built to be ridden standing and genuinely good off-road. Cheap used. Its parallel twin buzzes at motorway speeds, and the stock seat is hard. The F 700 GS is the lower, 75hp road version.',
+    tall: '880mm seat, one of the tallest in the class. A 34" inseam fits well; tall bars.',
+    pros: ['Tall rider fit', 'Excellent standing position', 'Capable off-road', 'Cheap used'],
+    cons: ['Buzzy at 75mph', 'Hard stock seat', 'Fuel pump and ABS-unit quirks'],
+    scores: {
+      comfort: [3.5, 'Great legroom and tall bars, but the stock seat is hard and narrow on long days.'],
+      highway: [2.5, 'Stable, but the twin buzzes through bars and pegs at 75mph and the small screen buffets tall riders.'],
+      standing: [4.5, 'Tall bars and a slim waist; designed to be ridden standing.'],
+      fun: [4, 'Eager engine in a light, agile chassis; good on B-roads and trails.'],
+      reliability: [3.5, 'Known issues: fuel pump cutting out in heat, battery and immobiliser niggles, and ABS pumps damaged by old brake fluid.'],
+      running: [3.5, 'Around 55–60mpg; BMW servicing and parts cost more than Japanese.'],
+      luggage: [4.5, 'BMW and aftermarket panniers and racks are easy to find.'],
+      greenlane: [4.5, '21" front and long-travel suspension; very capable.']
+    },
+    options: [
+      { id: 'used-13', label: 'Used F 800 GS 2013–18', condition: 'used', years: '2013–18', price: 4700, range: [4000, 5500], testRide: 4,
+        note: 'Many are the Adventure version (24L tank, bigger screen). Check brake fluid condition and fuel pump behaviour.' },
+      { id: 'used-08', label: 'Used F 800 GS 2008–12', condition: 'used', years: '2008–12', price: 3600, range: [2800, 4300], testRide: 4, adj: { reliability: -0.25 },
+        abs: 'some', absNote: 'ABS was optional before 2013. Check the listing.' },
+      { id: 'used-700', label: 'Used F 700 GS 2013–17', condition: 'used', years: '2013–17', price: 4200, range: [3500, 5000], testRide: 4,
+        specs: { hp: 75, wetKg: 209, seatMm: 820 }, adj: { comfort: -0.5, standing: -1, greenlane: -1.5 },
+        note: 'Lower, road-biased version: 75hp, 19" cast front wheel, 820mm seat. Look for one with the high seat.' }
+    ],
+    search: { at: ['BMW', 'F 800 GS'], slug: 'bmw/f-800-gs', mcn: 'bmw/f800gs', q: 'BMW F800GS' }
+  },
+  {
+    id: 'f850gs', make: 'BMW', model: 'F 850 GS', style: 'Adventure',
+    engine: '853cc parallel twin (270°)', hp: 95, torqueNm: 92, wetKg: 229, seatMm: 860, tankL: 15,
+    delivery: 'relaxed', drive: 'chain',
+    summary: 'The taller, off-road sibling of the F 750 GS: 21" front, longer suspension, and 95hp delivered with a strong, easy midrange. A better fit for your legs than the F 750. Well equipped, but not cheap to run.',
+    tall: '860mm standard seat, with factory options up to about 890mm. Roomy for a 34" inseam.',
+    pros: ['Tall seat options', 'Strong, easy midrange', 'Capable off-road', 'Excellent luggage'],
+    cons: ['95hp', 'Some vibration', 'Pricey BMW servicing'],
+    scores: {
+      comfort: [4, 'Tall seat and roomy riding position; comfortable for full days.'],
+      highway: [3.5, 'Stable, with some vibration from the twin and a small screen.'],
+      standing: [4, 'Tall bars; good standing position.'],
+      fun: [3.5, 'Punchy midrange and competent handling, but not playful.'],
+      reliability: [3.5, 'Mostly fine; some early engine and electrical complaints, as with the F 750 GS.'],
+      running: [3, 'Around 55mpg; BMW dealer servicing costs more.'],
+      luggage: [5, 'Excellent OEM Vario luggage and everything aftermarket.'],
+      greenlane: [4, '21" front and long travel.']
+    },
+    options: [
+      { id: 'used-21', label: 'Used 2021–23', condition: 'used', years: '2021–23', price: 7800, range: [7000, 9300], testRide: 4,
+        note: 'Euro 5 bikes, mostly TE spec (riding modes, electronic suspension on some).' },
+      { id: 'used-18', label: 'Used 2018–20', condition: 'used', years: '2018–20', price: 6200, range: [5500, 7000], testRide: 4 }
+    ],
+    search: { at: ['BMW', 'F 850 GS'], slug: 'bmw/f-850-gs', mcn: 'bmw/f850gs', q: 'BMW F850GS' }
+  },
+  {
+    id: 'tiger900', make: 'Triumph', model: 'Tiger 900 GT / Rally (2020–23)', style: 'Adventure',
+    engine: '888cc inline triple (T-plane)', hp: 94, torqueNm: 87, wetKg: 219, seatMm: 820, tankL: 20,
+    delivery: 'relaxed', drive: 'chain',
+    summary: 'The full-power version of the Tiger 850 Sport: smooth, torquey T-plane triple, planted at speed, well equipped. The Rally versions add a taller seat, spoked wheels and long-travel suspension, which suit your legs and standing. From 2024 it went to about 106hp.',
+    tall: 'GT: 810–830mm seat, low for a 34" inseam. Rally: 860–880mm, a much better fit.',
+    pros: ['Superb at 75mph', 'Characterful triple', 'Rally suits tall riders', 'Plentiful used'],
+    cons: ['94hp', 'GT seat is low', 'Early-bike niggles and recalls'],
+    scores: {
+      comfort: [3.5, 'GT: comfortable and roomy up top, but short on legroom for you. Rally is better (see its option).'],
+      highway: [4.5, 'Smooth, planted and quiet at 75mph with an adjustable screen.'],
+      standing: [3, 'GT: acceptable. The Rally is much better.'],
+      fun: [4, 'Torquey triple with a great sound; handles well.'],
+      reliability: [3.5, 'Some electrical and quality niggles on 2020–21 bikes, and a few recalls. Check the recall history.'],
+      running: [4, 'Around 50mpg with 10,000-mile service intervals.'],
+      luggage: [4.5, 'OEM panniers and top box.'],
+      greenlane: [2.5, 'GT: 19" cast front, gravel only.']
+    },
+    options: [
+      { id: 'used-gt', label: 'Used GT 2020–23', condition: 'used', years: '2020–23', price: 7600, range: [6250, 9400], testRide: 4.5,
+        note: 'GT, GT Pro and GT Low. Over 200 Tiger 900s on AutoTrader.' },
+      { id: 'used-rally', label: 'Used Rally 2020–23', condition: 'used', years: '2020–23', price: 8400, range: [7500, 9300], testRide: 4.5,
+        specs: { wetKg: 222, seatMm: 860 }, adj: { comfort: 0.5, standing: 1, greenlane: 1.5 },
+        note: 'Rally and Rally Pro: 860–880mm seat, 21" spoked front, long-travel Showa suspension.' }
+    ],
+    search: { at: ['TRIUMPH', 'TIGER 900'], slug: 'triumph/tiger-900', mcn: 'triumph/tiger-900', q: 'Triumph Tiger 900' }
+  },
+  {
+    id: 'vstrom1000', make: 'Suzuki', model: 'V-Strom 1000 (2014–19)', style: 'Adventure-tourer',
+    engine: '1037cc V-twin', hp: 99, torqueNm: 103, wetKg: 228, seatMm: 850, tankL: 20,
+    delivery: 'relaxed', drive: 'chain',
+    summary: 'The big V-Strom: roomy, smooth, very reliable, and cheap used. Its 99hp is over your range on paper, but the V-twin is lazy and torquey rather than urgent. "Worthy rather than thrilling."',
+    tall: '850mm seat, long reach to the bars and plenty of legroom. A tall-rider favourite.',
+    pros: ['Very roomy', 'Relaxed, torquey engine', 'Suzuki reliability', 'Cheap used'],
+    cons: ['99hp', 'Not exciting', 'Some buffeting from the screen'],
+    scores: {
+      comfort: [4.5, 'Roomy, well-padded and comfortable all day.'],
+      highway: [4, 'Smooth and stable at 75mph; the adjustable screen still buffets some tall riders.'],
+      standing: [3.5, 'Tall, wide bars; acceptable standing.'],
+      fun: [3.5, 'Torquey V-twin with character, but more competent than thrilling.'],
+      reliability: [4.5, 'Very solid engine and electrics.'],
+      running: [3.5, 'Around 45–50mpg and bigger tyres than the 650.'],
+      luggage: [5, 'OEM panniers were fitted to many; everything is available.'],
+      greenlane: [2.5, '19" cast front (spoked on the XT). Gravel tracks.']
+    },
+    options: [
+      { id: 'used-14', label: 'Used 2014–19', condition: 'used', years: '2014–19', price: 4900, range: [3400, 6100], testRide: 4.5,
+        note: 'ABS and traction control as standard. The XT has spoked wheels.' }
+    ],
+    search: { at: ['SUZUKI', 'V-STROM 1000'], slug: 'suzuki/v-strom-1000', mcn: 'suzuki/dl1000-v-strom', q: 'Suzuki V-Strom 1000' }
+  },
+  {
+    id: 'scrambler1200', make: 'Triumph', model: 'Scrambler 1200 XE / XC', style: 'Retro',
+    engine: '1200cc parallel twin (270°)', hp: 89, torqueNm: 110, wetKg: 230, seatMm: 870, tankL: 16,
+    delivery: 'relaxed', drive: 'chain',
+    summary: 'A big-torque retro scrambler with real off-road suspension: lots of character and fun, tall-rider friendly in XE form. No wind protection, and luggage is limited by the high exhausts.',
+    tall: 'XE: 870mm seat and wide, high bars suit a 34" inseam. XC: 840mm.',
+    pros: ['Huge character and torque', 'Tall seat (XE)', 'Great standing position', 'Long-travel suspension'],
+    cons: ['No screen', 'Limited luggage', 'Pricey'],
+    scores: {
+      comfort: [3.5, 'Great legroom and upright bars; the seat is firm on long days.'],
+      highway: [2.5, 'Relaxed engine, but full wind blast at 75mph with no screen.'],
+      standing: [4.5, 'Wide, high bars and long travel; made to be ridden standing.'],
+      fun: [4.5, 'Big torque, a lovely twin sound and a sweet chassis.'],
+      reliability: [4, 'The 1200 twin has a good record.'],
+      running: [3.5, 'Around 50mpg with 10,000-mile service intervals.'],
+      luggage: [2.5, 'The high exhausts limit right-side luggage; soft bags and racks only.'],
+      greenlane: [4.5, 'XE: 21" front and about 250mm of travel.']
+    },
+    options: [
+      { id: 'used-19', label: 'Used XE / XC 2019–23', condition: 'used', years: '2019–23', price: 8500, range: [6300, 10100], testRide: 4,
+        note: 'XE is the tall, long-travel version; XC is 30mm lower with shorter travel.' },
+      { id: 'used-x', label: 'Used X 2024–25', condition: 'used', years: '2024–25', price: 8900, range: [8500, 9500], testRide: 4,
+        specs: { seatMm: 820, wetKg: 228 }, adj: { comfort: -0.5, standing: -1, greenlane: -1 },
+        note: 'The lower-spec 2024-on X: 820mm seat, shorter travel.' },
+      { id: 'new-xe', label: 'New XE 2026', condition: 'new', years: '2026', price: 13895, range: [13895, 13895], testRide: 4.5,
+        note: '£13,895 OTR, over your budget. 2026 gets Showa forks and Öhlins shocks. Demos at Peterborough Triumph and Triumph Essex.' }
+    ],
+    search: { at: ['TRIUMPH', 'SCRAMBLER 1200'], slug: 'triumph/scrambler-1200', mcn: 'triumph/scrambler-1200', q: 'Triumph Scrambler 1200' }
+  },
+  {
     id: 'crf300l', make: 'Honda', model: 'CRF300L Rally', style: 'Dual-sport', reference: true,
     engine: '286cc single', hp: 27, torqueNm: 27, wetKg: 153, seatMm: 885, tankL: 12.8,
     delivery: 'normal', drive: 'chain',

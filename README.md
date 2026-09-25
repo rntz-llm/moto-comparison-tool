@@ -1,6 +1,6 @@
 # Next Bike Shortlist
 
-A static site for choosing a motorbike: 35 candidate bikes in a sortable,
+A static site for choosing a motorbike: 40 candidate bikes in a sortable,
 filterable table, scored 0–5 on twelve criteria plus ABS (yes/no), with an overall score
 out of 10 from weights you set. It also builds listing searches and shows dealers
 and saved listings on a map, sorted by distance from home (Cambridge by
