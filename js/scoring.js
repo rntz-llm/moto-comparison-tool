@@ -11,7 +11,7 @@
     { key: 'running', label: 'Running costs', short: 'Running', kind: 'researched', weight: 4,
       help: 'Routine costs: fuel economy, insurance, service intervals and prices, parts prices, tyres and chains.' },
     { key: 'power', label: 'Power', short: 'Power', kind: 'computed', weight: 6,
-      help: 'Peak bhp through the power curve (sweet spot 40–60, zero from 100). Above 70bhp, relaxed engines count as less powerful and punchy ones as more.' },
+      help: 'Peak bhp through the power curve (sweet spot 40–60, zero from 100). Above 60bhp, relaxed engines count as less powerful and punchy ones as more.' },
     { key: 'comfort', label: 'Tall-rider comfort', short: 'Comfort', kind: 'researched', weight: 9,
       help: 'Ergonomics for 6\'4" and a 34" inseam: legroom, bar reach and seat over 2+ hours. Vibration and wind count under Motorway manners.' },
     { key: 'highway', label: 'Motorway manners', short: 'Motorway', kind: 'researched', weight: 7,
@@ -41,9 +41,10 @@
     weight: [[140, 2.5], [180, 5], [200, 5], [300, 0]]
   };
 
-  // Above 70bhp, the excess counts for less (relaxed) or more (punchy).
+  // Above 60bhp (where the power curve starts to fall), the excess counts for
+  // less (relaxed) or more (punchy).
   const DELIVERY_FACTOR = { relaxed: 0.6, normal: 1, punchy: 1.3 };
-  const POWER_KNEE = 70;
+  const POWER_KNEE = 60;
 
   // ABS is yes/no. 'some' is an option where it was an extra on some bikes.
   // Every new bike over 125cc registered in the EU/UK since 2017 has it, so
@@ -127,5 +128,5 @@
     return 2 * mean;
   }
 
-  window.MotoScoring = { CRITERIA, DEFAULT_CURVES, DELIVERY_FACTOR, PENALTY, ABS_SCORE, ABS_LABEL, interp, effectiveHp, evaluate, overall };
+  window.MotoScoring = { CRITERIA, DEFAULT_CURVES, DELIVERY_FACTOR, POWER_KNEE, PENALTY, ABS_SCORE, ABS_LABEL, interp, effectiveHp, evaluate, overall };
 })();

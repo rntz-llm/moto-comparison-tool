@@ -3,7 +3,7 @@
   'use strict';
   const BIKES = window.MOTO_BIKES;
   const DEALERS = window.MOTO_DEALERS;
-  const { CRITERIA, DEFAULT_CURVES, PENALTY, ABS_LABEL, evaluate, overall, interp, effectiveHp } = window.MotoScoring;
+  const { CRITERIA, DEFAULT_CURVES, POWER_KNEE, DELIVERY_FACTOR, PENALTY, ABS_LABEL, evaluate, overall, interp, effectiveHp } = window.MotoScoring;
   const L = window.MotoListings;
   const esc = L.esc;
   const $ = (sel, root) => (root || document).querySelector(sel);
@@ -317,7 +317,7 @@
       const s = ev.scores[c.key];
       let note;
       if (c.key === 'price') note = `${gbp(ev.price)} on the road for “${ev.option.label}”.`;
-      else if (c.key === 'power') note = `${ev.specs.hp}bhp with ${ev.delivery} delivery${ev.specs.hp > 70 ? `, counted as ${Math.round(ev.effHp)}bhp` : ''}.`;
+      else if (c.key === 'power') note = `${ev.specs.hp}bhp with ${ev.delivery} delivery${ev.specs.hp > POWER_KNEE ? `, counted as ${Math.round(ev.effHp)}bhp` : ''}.`;
       else if (c.key === 'weight') note = `${ev.specs.wetKg}kg wet (${Math.round(ev.specs.wetKg * 2.2046)}lb).`;
       else if (c.key === 'testride') note = ev.option.condition === 'new' ? 'New: based on the nearest dealer and the brand’s demo fleet.' : 'Used: based on how many are for sale nearby.';
       else if (c.key === 'abs') note = absNote(ev);
@@ -394,8 +394,8 @@
           : `overall  = 2 × ( Σ(w_i × score_i^${p}) / Σ w_i )^(1/${p})        (weak-spot penalty: ${state.penalty})`,
       '           so the overall score runs 0–10',
       '',
-      'Power above 70bhp counts as 70 + (bhp − 70) × factor,',
-      'where factor = 0.6 relaxed, 1.0 normal, 1.3 punchy delivery.'
+      `Power above ${POWER_KNEE}bhp counts as ${POWER_KNEE} + (bhp − ${POWER_KNEE}) × factor,`,
+      `where factor = ${DELIVERY_FACTOR.relaxed} relaxed, ${DELIVERY_FACTOR.normal.toFixed(1)} normal, ${DELIVERY_FACTOR.punchy} punchy delivery.`
     ];
     $('#formula').textContent = lines.join('\n');
   }
