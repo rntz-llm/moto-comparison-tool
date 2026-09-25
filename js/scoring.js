@@ -13,7 +13,7 @@
     { key: 'fun', label: 'Fun factor', short: 'Fun', kind: 'researched', weight: 7,
       help: 'Twisty-road ability, rev-happiness, character and sound (not loudness).' },
     { key: 'power', label: 'Power', short: 'Power', kind: 'computed', weight: 6,
-      help: 'Peak bhp through the power curve (sweet spot 40–60, zero from 100). Above 70bhp, relaxed engines count as less powerful and punchy ones as more.' },
+      help: 'Peak bhp through the power curve (sweet spot 40–60, zero from 100). Above 70bhp, engines that make their power high in the revs (more hp per Nm of torque) count as more powerful, and torquey ones as less.' },
     { key: 'weight', label: 'Weight', short: 'Weight', kind: 'computed', weight: 5,
       help: 'Wet weight through the weight curve: full marks up to 200kg, then heavier bikes get more unwieldy and worrying to drop, reaching zero at 300kg. Feeling nervous at speed counts under Road manners.' },
     { key: 'highway', label: 'Road manners', short: 'Road', kind: 'researched', weight: 8,
@@ -54,9 +54,20 @@
     return s;
   }
 
-  // Above 70bhp, the excess counts for less (relaxed) or more (punchy).
-  const DELIVERY_FACTOR = { relaxed: 0.6, normal: 1, punchy: 1.3 };
+  // Rev-happiness adjustment. hp per Nm is roughly the rpm of peak power / 7121, so it
+  // measures how high an engine revs to make its power. Above POWER_KNEE bhp, the excess
+  // power is scaled by (hp per Nm / typical hp per Nm) ^ REV_K, capped to REV_CAP: a
+  // rev-happy *and* powerful engine counts as more powerful, a torquey one as less.
   const POWER_KNEE = 70;
+  const REV_K = 2;
+  const REV_CAP = [0.5, 2];
+  function median(xs) { const a = xs.slice().sort((x, y) => x - y); return a[Math.floor(a.length / 2)]; }
+  // The typical hp per Nm across the candidate bikes (their base specs).
+  function revReference(bikes) { return median(bikes.filter(b => !b.reference).map(b => b.hp / b.torqueNm)); }
+  function revFactor(hpPerNm, ref, k) {
+    if (!ref || !k) return 1;
+    return Math.min(REV_CAP[1], Math.max(REV_CAP[0], Math.pow(hpPerNm / ref, k)));
+  }
 
   // ABS is yes/no. 'some' is an option where it was an extra on some bikes.
   // Every new bike over 125cc registered in the EU/UK since 2017 has it, so
@@ -85,10 +96,10 @@
   }
 
   // knee: where the adjustment starts (bhp); defaults to POWER_KNEE, adjustable in the UI.
-  function effectiveHp(hp, delivery, knee) {
+  function effectiveHp(hp, factor, knee) {
     if (typeof knee !== 'number') knee = POWER_KNEE;
     if (hp <= knee) return hp;
-    return knee + (hp - knee) * (DELIVERY_FACTOR[delivery] || 1);
+    return knee + (hp - knee) * factor;
   }
 
   const clamp5 = v => Math.max(0, Math.min(5, v));
@@ -97,8 +108,10 @@
   // overrides: { [criterionKey]: number, price: number } from the user.
   function evaluate(bike, option, settings, overrides) {
     overrides = overrides || {};
-    const specs = Object.assign({ hp: bike.hp, wetKg: bike.wetKg, seatMm: bike.seatMm }, option.specs || {});
-    const delivery = option.delivery || bike.delivery;
+    const specs = Object.assign({ hp: bike.hp, torqueNm: bike.torqueNm, wetKg: bike.wetKg, seatMm: bike.seatMm }, option.specs || {});
+    const hpPerNm = specs.hp / specs.torqueNm;
+    const rev = revFactor(hpPerNm, settings.revRef, typeof settings.revK === 'number' ? settings.revK : REV_K);
+    const effHp = effectiveHp(specs.hp, rev, settings.powerKnee);
     let price = option.price;
     if (option.condition === 'used' && settings.usedPrivate) price = Math.round(price * 0.92 / 50) * 50;
     const priceOverridden = typeof overrides.price === 'number';
@@ -111,7 +124,7 @@
     for (const c of CRITERIA) {
       let s, src = 'data';
       if (c.key === 'price') s = interp(curves.price, price);
-      else if (c.key === 'power') s = interp(curves.power, effectiveHp(specs.hp, delivery, settings.powerKnee));
+      else if (c.key === 'power') s = interp(curves.power, effHp);
       else if (c.key === 'weight') s = interp(curves.weight, specs.wetKg);
       else if (c.key === 'testride') s = option.testRide;
       else if (c.key === 'abs') s = ABS_SCORE[option.abs || bike.abs || 'yes'];
@@ -123,7 +136,7 @@
       source[c.key] = src;
     }
     if (priceOverridden) source.price = 'you';
-    return { specs, delivery, price, scores, source, geo, effHp: effectiveHp(specs.hp, delivery, settings.powerKnee) };
+    return { specs, price, scores, source, geo, hpPerNm, rev, effHp };
   }
 
   // Weighted power mean of the 0–5 criterion scores, doubled so the overall
@@ -144,5 +157,5 @@
     return 2 * mean;
   }
 
-  window.MotoScoring = { CRITERIA, DEFAULT_CURVES, DELIVERY_FACTOR, POWER_KNEE, FIT_PENALTY, fitScore, PENALTY, ABS_SCORE, ABS_LABEL, interp, effectiveHp, evaluate, overall };
+  window.MotoScoring = { CRITERIA, DEFAULT_CURVES, POWER_KNEE, REV_K, REV_CAP, revReference, revFactor, FIT_PENALTY, fitScore, PENALTY, ABS_SCORE, ABS_LABEL, interp, effectiveHp, evaluate, overall };
 })();

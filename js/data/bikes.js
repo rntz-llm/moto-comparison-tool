@@ -2,7 +2,8 @@
 //
 // Per model:
 //   hp / wetKg / seatMm / tankL : manufacturer figures (an option may override them)
-//   delivery : 'relaxed' | 'normal' | 'punchy'  (how the power arrives; feeds the Power score)
+//   hp / torqueNm : peak figures; their ratio (hp per Nm) measures how rev-happy the engine is
+//              and feeds the Power score above the adjustment threshold
 //   geo      : rider posture for 6'4" / 34" inseam from the bike's seat, peg and bar positions:
 //              knee, hip and forward-lean angles in degrees (Motonomics simulator, or cycle-ergo.com
 //              converted to the same scale). Feeds Tall-rider fit. An option may carry its own geo.
@@ -17,7 +18,7 @@ window.MOTO_BIKES = [
   {
     id: 'tenere700', make: 'Yamaha', model: 'Ténéré 700', style: 'Adventure',
     engine: '689cc parallel twin (CP2)', hp: 72, torqueNm: 68, wetKg: 205, seatMm: 875, tankL: 16,
-    delivery: 'normal', drive: 'chain',
+    drive: 'chain',
     geo: { knee: 79.5, hip: 116.7, lean: 0, src: 'Motonomics', model: 'Ténéré 700 (2019–)' },
     summary: 'The rally-bred middleweight benchmark. Simple, tough, brilliant to stand up on, and the closest thing on this list to the Tuareg you liked, with a less revvy but very characterful engine.',
     tall: '875mm seat and a long seat-to-peg distance suit a 34" inseam. Bars are tall and wide. The stock seat is narrow and firm; a comfort seat is a common first upgrade.',
@@ -45,7 +46,7 @@ window.MOTO_BIKES = [
   {
     id: 'tuareg660', make: 'Aprilia', model: 'Tuareg 660', style: 'Adventure',
     engine: '659cc parallel twin', hp: 80, torqueNm: 70, wetKg: 204, seatMm: 860, tankL: 18,
-    delivery: 'normal', drive: 'chain',
+    drive: 'chain',
     geo: { knee: 78.5, hip: 119.5, lean: 0, src: 'Motonomics', model: 'Tuareg 660 (2022–)' },
     summary: 'The bike you test-rode and loved. The most rev-happy, best-handling bike in the class, with good wind protection. It is also the priciest new, and its dealer network near Cambridge is thin.',
     tall: 'You found it comfortable. 860mm seat, upright and roomy, with tall bars that work standing up.',
@@ -73,7 +74,7 @@ window.MOTO_BIKES = [
   {
     id: 'transalp750', make: 'Honda', model: 'XL750 Transalp', style: 'Adventure',
     engine: '755cc parallel twin (270°)', hp: 91, torqueNm: 75, wetKg: 208, seatMm: 850, tankL: 16.9,
-    delivery: 'normal', drive: 'chain',
+    drive: 'chain',
     geo: { knee: 80.4, hip: 112.2, lean: 0, src: 'Motonomics', model: 'XL750 Transalp (2023–)' },
     summary: 'A light, road-biased all-rounder with Honda reliability and a rev-happy engine. Its 91hp is at the top of your range, though it builds progressively and is mostly at the top end.',
     tall: '850mm seat, upright and roomy. The bars are a touch low when standing; bar risers are a common £60 fix.',
@@ -99,7 +100,7 @@ window.MOTO_BIKES = [
   {
     id: 'vstrom800de', make: 'Suzuki', model: 'V-Strom 800DE', style: 'Adventure',
     engine: '776cc parallel twin (270°)', hp: 83, torqueNm: 78, wetKg: 230, seatMm: 855, tankL: 20,
-    delivery: 'relaxed', drive: 'chain',
+    drive: 'chain',
     geo: { knee: 83.7, hip: 116.4, lean: 0.3, src: 'Motonomics', model: 'V-Strom 800DE (2023–)' },
     summary: 'Roomy, smooth and unfussy, with a 20-litre tank. Its power is soft and linear, so the 83hp is less intimidating than the number suggests. Heavier than the Ténéré or Tuareg.',
     tall: 'One of the roomiest cockpits here: wide bars, long seat, good legroom for a 34" inseam.',
@@ -125,7 +126,7 @@ window.MOTO_BIKES = [
   {
     id: 'nc750x', make: 'Honda', model: 'NC750X', style: 'Adventure-tourer',
     engine: '745cc parallel twin (low-revving)', hp: 58, torqueNm: 69, wetKg: 214, seatMm: 800, tankL: 14.1,
-    delivery: 'relaxed', drive: 'chain',
+    drive: 'chain',
     geo: { knee: 75.4, hip: 110.6, lean: 5.0, src: 'Motonomics', model: 'NC750X (2021–)' },
     summary: 'The sensible choice: extremely reliable, 70–80mpg, a lockable 23-litre "frunk", and optional DCT. The engine runs out of revs at 7,000rpm, so it is relaxing rather than exciting, and the 800mm seat is low for your legs.',
     tall: 'The low 800mm seat bends a 34" leg sharply. Tall owners fit the accessory high seat or lowered pegs.',
@@ -154,7 +155,7 @@ window.MOTO_BIKES = [
   {
     id: 'nx500', make: 'Honda', model: 'NX500 / CB500X', style: 'Adventure-tourer',
     engine: '471cc parallel twin', hp: 47, torqueNm: 43, wetKg: 196, seatMm: 830, tankL: 17.5,
-    delivery: 'normal', drive: 'chain',
+    drive: 'chain',
     geo: { knee: 74.2, hip: 114.0, lean: 1.5, src: 'Motonomics', model: 'CB500X (2016–)' },
     summary: 'Cheap, light and indestructible. You can wring its neck without doing anything silly, which suits your "push it to the limit" itch. It is small for a 6\'4" rider and working hard at 75mph.',
     tall: 'The cockpit is compact. Your knees will be bent and the bars close; fine for an hour, tiring on all-day rides.',
@@ -181,7 +182,7 @@ window.MOTO_BIKES = [
   {
     id: 'versys650', make: 'Kawasaki', model: 'Versys 650', style: 'Adventure-tourer',
     engine: '649cc parallel twin', hp: 66, torqueNm: 61, wetKg: 219, seatMm: 845, tankL: 21,
-    delivery: 'normal', drive: 'chain',
+    drive: 'chain',
     geo: { knee: 77.2, hip: 112.7, lean: 0.8, src: 'Motonomics', model: 'Versys 650' },
     summary: 'An underrated road-going all-rounder: revvy twin, sharp handling, adjustable screen and a 21-litre tank. Squarely in your power sweet spot and good value used.',
     tall: 'Upright and roomy with wide bars. Knees are bent a bit for a 34" inseam but it is well liked by tall riders.',
@@ -207,7 +208,7 @@ window.MOTO_BIKES = [
   {
     id: 'vstrom650', make: 'Suzuki', model: 'V-Strom 650 / XT', style: 'Adventure-tourer',
     engine: '645cc V-twin', hp: 70, torqueNm: 62, wetKg: 213, seatMm: 835, tankL: 20,
-    delivery: 'relaxed', drive: 'chain',
+    drive: 'chain',
     geo: { knee: 78.6, hip: 107.8, lean: 4.2, src: 'Motonomics', model: 'V-Strom 650 (2012–)' },
     summary: 'The used-market hero: comfortable, reliable, cheap and endlessly accessorised. Its SV650-derived V-twin is smooth and characterful. No longer sold new in the UK.',
     tall: 'Famously roomy. A long seat, tall bars and good legroom; most tall owners only swap the screen.',
@@ -231,7 +232,7 @@ window.MOTO_BIKES = [
   {
     id: 'tracer7', make: 'Yamaha', model: 'Tracer 7 / GT', style: 'Sport-tourer',
     engine: '689cc parallel twin (CP2)', hp: 72, torqueNm: 67, wetKg: 196, seatMm: 835, tankL: 17,
-    delivery: 'normal', drive: 'chain',
+    drive: 'chain',
     geo: { knee: 71.1, hip: 112.4, lean: 1.6, src: 'Motonomics', model: 'Tracer 7 / GT (2021–)' },
     summary: 'An MT-07 with a fairing and upright bars: light, flickable and huge fun on twisty roads. The GT adds panniers and a comfier seat. Sportier and less roomy than the adventure bikes.',
     tall: 'Upright bars, but the seat-to-peg distance is sporty. Tall riders report cramped knees after an hour or two.',
@@ -250,7 +251,7 @@ window.MOTO_BIKES = [
       { id: 'new', label: 'New Tracer 7 2026', condition: 'new', years: '2026', price: 8600, range: [8250, 8908], testRide: 4.5,
         note: 'RRP £8,908 OTR; dealers are advertising from about £8,250. Demo at Lind Yamaha, Newmarket.' },
       { id: 'used-20', label: 'Used Tracer 7/GT 2020–25', condition: 'used', years: '2020–25', price: 6300, range: [5200, 7300], testRide: 4.5 },
-      { id: 'used-16', label: 'Used Tracer 700 2016–19', condition: 'used', years: '2016–19', price: 4500, range: [3900, 5200], testRide: 4.5, adj: { highway: -0.5 }, specs: { hp: 74 },
+      { id: 'used-16', label: 'Used Tracer 700 2016–19', condition: 'used', years: '2016–19', price: 4500, range: [3900, 5200], testRide: 4.5, adj: { highway: -0.5 }, specs: { hp: 74, torqueNm: 68 },
         geo: { knee: 74.4, hip: 117.5, lean: 0.9, src: 'Motonomics', model: 'Tracer 700 (2016–19)' },
         note: 'Earlier Tracer 700 has a poorer screen.' }
     ],
@@ -259,7 +260,7 @@ window.MOTO_BIKES = [
   {
     id: 'tigersport660', make: 'Triumph', model: 'Tiger Sport 660', style: 'Sport-tourer',
     engine: '660cc inline triple', hp: 80, torqueNm: 64, wetKg: 206, seatMm: 835, tankL: 17.2,
-    delivery: 'normal', drive: 'chain',
+    drive: 'chain',
     geo: { knee: 77.3, hip: 115.9, lean: 1.1, src: 'Motonomics', model: 'Tiger Sport 660 (2022–)' },
     summary: 'Revvy, great-sounding triple in a light, easy chassis. The used 80hp bikes sit near your sweet spot. The 2026 update jumped to 94hp with a 12,650rpm redline, which is more than you want.',
     tall: 'Upright, but the seat-to-peg distance is compact; tall riders report tight knees.',
@@ -275,7 +276,7 @@ window.MOTO_BIKES = [
       greenlane: [1, 'Road bike.']
     },
     options: [
-      { id: 'new', label: 'New 2026', condition: 'new', years: '2026', price: 9295, range: [9295, 9295], testRide: 4.5, specs: { hp: 94, wetKg: 211 }, delivery: 'punchy',
+      { id: 'new', label: 'New 2026', condition: 'new', years: '2026', price: 9295, range: [9295, 9295], testRide: 4.5, specs: { hp: 94, torqueNm: 68, wetKg: 211 },
         note: '£9,295 OTR. New engine: 94hp at 11,250rpm, 12,650rpm redline. Demos at Peterborough Triumph and Triumph Essex (Dunmow).' },
       { id: 'used-22', label: 'Used 2022–25', condition: 'used', years: '2022–25', price: 6300, range: [5500, 7200], testRide: 4.5,
         note: '80hp original engine. About 100 on AutoTrader.' }
@@ -285,7 +286,7 @@ window.MOTO_BIKES = [
   {
     id: 'tiger850', make: 'Triumph', model: 'Tiger 850 Sport', style: 'Adventure-tourer',
     engine: '888cc inline triple (T-plane)', hp: 84, torqueNm: 82, wetKg: 213, seatMm: 830, tankL: 20,
-    delivery: 'relaxed', drive: 'chain',
+    drive: 'chain',
     geo: { knee: 80.8, hip: 103.9, lean: 5.9, src: 'Motonomics', model: 'Tiger 850 Sport (2021–)' },
     summary: 'A detuned Tiger 900: a smooth, grunty triple with a lazy delivery, a planted chassis and adjustable seat. A strong long-distance bike that is fun without being frantic.',
     tall: 'Adjustable 810–830mm seat. Roomy upper body; a 34" inseam will want the accessory high seat.',
@@ -309,7 +310,7 @@ window.MOTO_BIKES = [
   {
     id: 'tiger800', make: 'Triumph', model: 'Tiger 800 XC / XR', style: 'Adventure-tourer',
     engine: '800cc inline triple', hp: 94, torqueNm: 79, wetKg: 215, seatMm: 845, tankL: 19,
-    delivery: 'relaxed', drive: 'chain',
+    drive: 'chain',
     geo: { knee: 80.6, hip: 109.5, lean: 5.3, src: 'Motonomics', model: 'Tiger 800 XR (2015–); the XC sits a little taller' },
     summary: 'The previous-generation Tiger: silky triple, very linear power and a roomy XC chassis. Lots of bike for the money used, but getting old, and 94hp is on paper more than you want (it is gentle in practice).',
     tall: 'XC versions have an 840–860mm seat and tall bars, which suit a 34" inseam. XR versions are lower.',
@@ -335,7 +336,7 @@ window.MOTO_BIKES = [
   {
     id: 'f750gs', make: 'BMW', model: 'F 750 GS', style: 'Adventure',
     engine: '853cc parallel twin (270°)', hp: 77, torqueNm: 83, wetKg: 224, seatMm: 815, tankL: 15,
-    delivery: 'relaxed', drive: 'chain',
+    drive: 'chain',
     geo: { knee: 82.9, hip: 117.0, lean: 1.1, src: 'Motonomics', model: 'F 750 GS (2018–)' },
     summary: 'The softer, cheaper sibling of the F 850 GS. Good value used, very well equipped with luggage, and the power is easy. Look for one with the high seat.',
     tall: 'Stock 815mm seat is low for you. The optional high seat (850mm) is common on used bikes and makes it much better.',
@@ -358,7 +359,7 @@ window.MOTO_BIKES = [
   {
     id: 'f800gs', make: 'BMW', model: 'F 800 GS (2024+)', style: 'Adventure',
     engine: '895cc parallel twin (270°)', hp: 87, torqueNm: 92, wetKg: 227, seatMm: 815, tankL: 15,
-    delivery: 'relaxed', drive: 'chain',
+    drive: 'chain',
     summary: 'The current mid-size GS, replacing the F 750 GS: more torque, better suspension and a smoother engine. Well equipped, but pricey and heavy for the class.',
     tall: 'Base seat is 815mm; high-seat options raise it substantially and are worth specifying.',
     pros: ['Refined and torquey', 'Excellent luggage options', 'Strong BMW demo network'],
@@ -383,7 +384,7 @@ window.MOTO_BIKES = [
   {
     id: 'v85tt', make: 'Moto Guzzi', model: 'V85 TT', style: 'Adventure',
     engine: '853cc transverse V-twin', hp: 76, torqueNm: 82, wetKg: 229, seatMm: 830, tankL: 23,
-    delivery: 'relaxed', drive: 'shaft',
+    drive: 'shaft',
     geo: { knee: 83.4, hip: 117.3, lean: 0, src: 'Motonomics', model: 'V85 TT (2019–)' },
     summary: 'The characterful one: transverse V-twin with its torque rock, shaft drive, a 23-litre tank and beautiful styling. Relaxed rather than fast, and a joy to ride. Dealer support is sparse.',
     tall: 'Upright and relaxed with a plush seat. Legroom is reasonable for a 34" inseam; a higher accessory seat exists.',
@@ -409,7 +410,7 @@ window.MOTO_BIKES = [
   {
     id: 'himalayan450', make: 'Royal Enfield', model: 'Himalayan 450', style: 'Adventure',
     engine: '452cc single', hp: 40, torqueNm: 40, wetKg: 196, seatMm: 845, tankL: 17,
-    delivery: 'normal', drive: 'chain',
+    drive: 'chain',
     geo: { knee: 75.7, hip: 118.0, lean: 0, src: 'Motonomics', model: 'Himalayan 450 (2024–)' },
     summary: 'Cheap, charming and genuinely capable on byways, with a dealer 2 miles from central Cambridge. Long motorway stints are its weak spot: single-cylinder vibes build up.',
     tall: 'Adjustable 825–845mm seat with tall bars. Surprisingly roomy; a tall-seat accessory exists.',
@@ -435,7 +436,7 @@ window.MOTO_BIKES = [
   {
     id: 'kle500', make: 'Kawasaki', model: 'KLE500 (2026)', style: 'Adventure',
     engine: '451cc parallel twin', hp: 44, torqueNm: 43, wetKg: 194, seatMm: 860, tankL: 16,
-    delivery: 'normal', drive: 'chain',
+    drive: 'chain',
     geo: { knee: 81.6, hip: 114.7, lean: 0, src: 'Motonomics', model: 'KLE500 SE (2026)' },
     summary: 'New for 2026: Ninja 500 engine in a tall, off-road-leaning chassis with a 21" front. A smoother twin than the singles in this class. Very new, so long-term reports are thin.',
     tall: '860mm seat and standing-oriented bars. Promising for a tall rider, but try one.',
@@ -459,7 +460,7 @@ window.MOTO_BIKES = [
   {
     id: 'ktm390adv', make: 'KTM', model: '390 Adventure R', style: 'Adventure',
     engine: '399cc single', hp: 44, torqueNm: 39, wetKg: 178, seatMm: 870, tankL: 14,
-    delivery: 'punchy', drive: 'chain',
+    drive: 'chain',
     geo: { knee: 72.1, hip: 117.0, lean: 0, src: 'Motonomics', model: '390 Adventure (2020–24); the 2025 R has a taller seat' },
     summary: 'Light, revvy and brilliant off-road, with the best electronics in its class. It is a KTM, which you are wary of, and a single at 75mph is tiring.',
     tall: '870mm seat and narrow body give plenty of legroom, but it is a small bike under a 6\'4" rider.',
@@ -485,7 +486,7 @@ window.MOTO_BIKES = [
   {
     id: 'cf450mt', make: 'CFMOTO', model: '450MT', style: 'Adventure',
     engine: '449cc parallel twin', hp: 44, torqueNm: 44, wetKg: 190, seatMm: 820, tankL: 17.5,
-    delivery: 'normal', drive: 'chain',
+    drive: 'chain',
     geo: { knee: 77.2, hip: 110.9, lean: 3.5, src: 'Motonomics', model: '450MT (2024–)' },
     summary: 'Excellent value small adventure bike with a smooth twin and good off-road chops. Compact for your size, and a young brand with a small dealer network.',
     tall: 'Low 820mm seat and compact cockpit. Probably cramped for 6\'4".',
@@ -510,7 +511,7 @@ window.MOTO_BIKES = [
   {
     id: 'cf800mtx', make: 'CFMOTO', model: '800MT-X', style: 'Adventure',
     engine: '799cc parallel twin (KTM LC8c-derived)', hp: 90, torqueNm: 86, wetKg: 220, seatMm: 870, tankL: 22.5,
-    delivery: 'punchy', drive: 'chain',
+    drive: 'chain',
     geo: { knee: 76.4, hip: 110.2, lean: 0, src: 'Motonomics', model: 'road-going 800MT (2022–)' },
     summary: 'KTM 790 Adventure-style engine and spec (cruise control, cornering ABS, 870mm seat, 22.5L tank) for a lot less money. Punchy 90hp, so above your comfort band, and brand support is the unknown.',
     tall: 'Tall 870mm seat with low pegs and wide bars. Reviews call it roomy.',
@@ -529,7 +530,7 @@ window.MOTO_BIKES = [
       { id: 'new', label: 'New 2026', condition: 'new', years: '2026', price: 7200, range: [7198, 8199], testRide: 3, adj: { fit: 1 },
         note: 'List £7,999; currently offered at £6,999 plus about £200 on-the-road charges. Dealer: Jim Aim, Braintree (35 miles). Fit +1: the geometry is the road 800MT, and the MT-X seat is 45mm taller.' },
       { id: 'used-mt', label: 'Used 800MT Touring 2022–24', condition: 'used', years: '2022–24', price: 5600, range: [4900, 6500], testRide: 3.5,
-        specs: { hp: 95, wetKg: 231, seatMm: 825 }, adj: { greenlane: -2, standing: -0.5 },
+        specs: { hp: 95, torqueNm: 77, wetKg: 231, seatMm: 825 }, adj: { greenlane: -2, standing: -0.5 },
         note: 'The road-oriented 800MT with 19" wheels: heavier, lower, 95hp.' }
     ],
     search: { at: ['CFMOTO', '800MT'], slug: 'cfmoto/800mt-x', q: 'CFMOTO 800MT' }
@@ -537,7 +538,7 @@ window.MOTO_BIKES = [
   {
     id: 'africatwin1000', make: 'Honda', model: 'CRF1000L Africa Twin', style: 'Adventure',
     engine: '998cc parallel twin (270°)', hp: 94, torqueNm: 98, wetKg: 232, seatMm: 860, tankL: 18.8,
-    delivery: 'relaxed', drive: 'chain',
+    drive: 'chain',
     geo: { knee: 78.1, hip: 119.5, lean: 0, src: 'Motonomics', model: 'CRF1000L Africa Twin (2016–19)' },
     summary: 'A stretch option: big, tall, comfortable and tractable, with a soulful twin. Its power is gentle and torquey, but 94hp and 232kg are at the edge of what you asked for.',
     tall: 'Adjustable 850/870mm seat, tall bars. A very good fit for a 6\'4" rider.',
@@ -560,7 +561,7 @@ window.MOTO_BIKES = [
   {
     id: 'xl700v', make: 'Honda', model: 'XL700V Transalp', style: 'Adventure-tourer',
     engine: '680cc V-twin', hp: 59, torqueNm: 60, wetKg: 214, seatMm: 841, tankL: 17.5,
-    delivery: 'relaxed', drive: 'chain',
+    drive: 'chain',
     geo: { knee: 75.9, hip: 104.4, lean: 1, src: 'cycle-ergo, converted', model: 'XL700V Transalp (2008–)' },
     summary: 'The budget classic: a smooth, unburstable V-twin tourer for about £3,500. Old (2008–12) and soft, but cheap to buy, cheap to fix, and comfortable.',
     tall: 'Upright and fairly roomy; 841mm seat.',
@@ -584,7 +585,7 @@ window.MOTO_BIKES = [
   {
     id: 'xt660z', make: 'Yamaha', model: 'XT660Z Ténéré', style: 'Dual-sport',
     engine: '660cc single', hp: 48, torqueNm: 58, wetKg: 206, seatMm: 895, tankL: 23,
-    delivery: 'normal', drive: 'chain',
+    drive: 'chain',
     geo: { knee: 81.5, hip: 121.3, lean: 0, src: 'Motonomics', model: 'XT660Z Ténéré (2008–16)' },
     summary: 'A tall, tough big single with a 23-litre tank, built for overland travel. Fits a tall rider well, but the single-cylinder vibes make long motorway stints hard work.',
     tall: '895mm seat: one of the few bikes where a 34" inseam feels at home.',
@@ -607,7 +608,7 @@ window.MOTO_BIKES = [
   {
     id: 'hornet750', make: 'Honda', model: 'CB750 Hornet', style: 'Naked',
     engine: '755cc parallel twin (270°)', hp: 91, torqueNm: 75, wetKg: 190, seatMm: 795, tankL: 15.2,
-    delivery: 'punchy', drive: 'chain',
+    drive: 'chain',
     geo: { knee: 67.6, hip: 114.3, lean: 6.9, src: 'Motonomics', model: 'CB750 Hornet (2023–)' },
     summary: 'Included as a naked-bike benchmark: the Transalp engine in a light roadster. Hugely fun and cheap, but no wind protection and cramped for 6\'4".',
     tall: '795mm seat. Cramped for a 34" inseam.',
@@ -632,7 +633,7 @@ window.MOTO_BIKES = [
   {
     id: 'tdm900', make: 'Yamaha', model: 'TDM900', style: 'Adventure-tourer',
     engine: '897cc parallel twin (270°)', hp: 86, torqueNm: 89, wetKg: 223, seatMm: 825, tankL: 20,
-    delivery: 'relaxed', drive: 'chain',
+    drive: 'chain',
     geo: { knee: 76.9, hip: 106.4, lean: 5, src: 'cycle-ergo, converted', model: 'TDM900 (2002–)' },
     summary: 'A tall, long-travel road all-rounder with a torquey 270° twin, famous for being fun on twisty roads. Cheap now, but getting old (2002–2014) and scarce: only a handful are listed at any time.',
     tall: 'Upright, with long-travel suspension, a roomy seat-to-peg distance and wide bars. Popular with tall riders.',
@@ -656,7 +657,7 @@ window.MOTO_BIKES = [
   {
     id: 'k75', make: 'BMW', model: 'K75', style: 'Sport-tourer',
     engine: '740cc inline triple', hp: 75, torqueNm: 68, wetKg: 228, seatMm: 810, tankL: 21,
-    delivery: 'relaxed', drive: 'shaft',
+    drive: 'shaft',
     geo: { knee: 66.9, hip: 107.4, lean: 0, src: 'cycle-ergo, converted', model: 'K75 (1985–95)' },
     summary: 'A 1985–96 classic: smooth "flying brick" triple, shaft drive and a big tank, with engines known to run past 150,000 miles. Comfortable and understated, but 30–40 years old, with dated brakes and suspension.',
     tall: '810mm seat and upright bars; roomy enough, with a slight knee bend for a 34" inseam. The K75RT adds a full touring fairing (and weight).',
@@ -680,7 +681,7 @@ window.MOTO_BIKES = [
   {
     id: 'f650dakar', make: 'BMW', model: 'F650GS Dakar', style: 'Adventure',
     engine: '652cc single (Rotax)', hp: 50, torqueNm: 60, wetKg: 192, seatMm: 890, tankL: 17.3,
-    delivery: 'normal', drive: 'chain',
+    drive: 'chain',
     geo: { knee: 78.9, hip: 117.4, lean: 0, src: 'cycle-ergo, converted', model: 'F650GS Dakar (2000–07)' },
     summary: 'The tall version of BMW\'s 2000–07 single: 21" front, long travel, 890mm seat. Cheap, frugal and a good fit for long legs, but a single is buzzy at 75mph. (The 2008+ "F650GS" is a different, 800cc twin.)',
     tall: '890mm seat, one of the tallest here, suits a 34" inseam.',
@@ -704,7 +705,7 @@ window.MOTO_BIKES = [
   {
     id: 'r1200gs', make: 'BMW', model: 'R1200GS', style: 'Adventure',
     engine: '1170cc boxer twin', hp: 100, torqueNm: 115, wetKg: 229, seatMm: 850, tankL: 20,
-    delivery: 'relaxed', drive: 'shaft',
+    drive: 'shaft',
     geo: { knee: 80.3, hip: 121.2, lean: 1.5, src: 'Motonomics', model: 'R 1200 GS (2013–18)' },
     summary: 'The default big adventure tourer: supremely comfortable, stable and torquey, with shaft drive. Its 100–125hp is well beyond your comfort band on paper, though a boxer delivers it very lazily.',
     tall: 'Adjustable 850/870mm seat and a roomy riding position. An excellent tall-rider bike.',
@@ -722,8 +723,8 @@ window.MOTO_BIKES = [
     options: [
       { id: 'used-04', label: 'Used 2004–09 (air-cooled)', condition: 'used', years: '2004–09', price: 4500, abs: 'some', absNote: 'ABS was optional on 2004–12 bikes. Check the listing.', range: [3500, 5500], testRide: 4.5, adj: { reliability: -0.25 }, specs: { hp: 100, wetKg: 229 },
         note: 'Check final drive for play or leaks, and service history.' },
-      { id: 'used-10', label: 'Used 2010–12 (DOHC)', condition: 'used', years: '2010–12', price: 5600, abs: 'some', absNote: 'ABS was optional on 2004–12 bikes. Check the listing.', range: [4800, 6500], testRide: 4.5, specs: { hp: 110, wetKg: 229 } },
-      { id: 'used-13', label: 'Used 2013–18 (water-cooled)', condition: 'used', years: '2013–18', price: 7600, range: [6000, 9500], testRide: 4.5, adj: { highway: 0.5, fun: 0.25 }, specs: { hp: 125, wetKg: 244 },
+      { id: 'used-10', label: 'Used 2010–12 (DOHC)', condition: 'used', years: '2010–12', price: 5600, abs: 'some', absNote: 'ABS was optional on 2004–12 bikes. Check the listing.', range: [4800, 6500], testRide: 4.5, specs: { hp: 110, torqueNm: 120, wetKg: 229 } },
+      { id: 'used-13', label: 'Used 2013–18 (water-cooled)', condition: 'used', years: '2013–18', price: 7600, range: [6000, 9500], testRide: 4.5, adj: { highway: 0.5, fun: 0.25 }, specs: { hp: 125, torqueNm: 125, wetKg: 244 },
         note: 'Smoother, stronger and better equipped. 2013–14 bikes: check recall work.' }
     ],
     search: { at: ['BMW', 'R 1200 GS'], slug: 'bmw/r-1200-gs', mcn: 'bmw/r1200gs', q: 'BMW R1200GS' }
@@ -731,7 +732,7 @@ window.MOTO_BIKES = [
   {
     id: 'r1150gs', make: 'BMW', model: 'R1150GS', style: 'Adventure',
     engine: '1130cc boxer twin', hp: 85, torqueNm: 98, wetKg: 249, seatMm: 840, tankL: 22,
-    delivery: 'relaxed', drive: 'shaft',
+    drive: 'shaft',
     geo: { knee: 73.9, hip: 105.4, lean: 3, src: 'cycle-ergo, converted', model: 'R1150GS (1999–2004)' },
     summary: 'The 1999–2004 predecessor of the R1200GS: 85hp, lazy and very comfortable, with shaft drive and a 22L tank (30L on the Adventure). Heavy at 249kg, and the servo brakes and final drive need checking.',
     tall: 'Adjustable 840/860mm seat and a roomy riding position.',
@@ -755,7 +756,7 @@ window.MOTO_BIKES = [
   {
     id: 'scoutsixty', make: 'Indian', model: 'Scout Sixty', style: 'Cruiser',
     engine: '999cc V-twin', hp: 78, torqueNm: 88, wetKg: 254, seatMm: 643, tankL: 12.5,
-    delivery: 'relaxed', drive: 'belt',
+    drive: 'belt',
     geo: { knee: 128.0, hip: 94.5, lean: 5.6, src: 'Motonomics', model: 'Scout (2015–)' },
     summary: 'A well-made, good-looking cruiser with a smooth V-twin and belt drive. For a 6\'4" rider who wants long days and twisty roads it is a poor fit: very low seat, feet forward, little lean angle and no wind protection.',
     tall: '643mm seat puts your knees high. Tall owners fit extended-reach kits for bars, seat and pegs.',
@@ -781,7 +782,7 @@ window.MOTO_BIKES = [
   {
     id: 'scrambler400x', make: 'Triumph', model: 'Scrambler 400 X', style: 'Retro',
     engine: '398cc single', hp: 40, torqueNm: 38, wetKg: 185, seatMm: 835, tankL: 13,
-    delivery: 'normal', drive: 'chain',
+    drive: 'chain',
     geo: { knee: 81.6, hip: 105.0, lean: 5.8, src: 'Motonomics', model: 'Scrambler 400 X (2023–)' },
     summary: 'A light, punchy retro scrambler: great fun on B-roads and gravel, cheap, with 10,000-mile services. Small for a 6\'4" rider and working hard at 75mph with no screen.',
     tall: '835mm seat and wide bars, but a compact bike overall. Fine for an hour; cramped for all-day rides.',
@@ -807,7 +808,7 @@ window.MOTO_BIKES = [
   {
     id: 'interceptor650', make: 'Royal Enfield', model: 'Interceptor 650', style: 'Retro',
     engine: '648cc parallel twin (270°)', hp: 47, torqueNm: 52, wetKg: 217, seatMm: 804, tankL: 13.7,
-    delivery: 'relaxed', drive: 'chain',
+    drive: 'chain',
     geo: { knee: 74.7, hip: 106.7, lean: 7.6, src: 'Motonomics', model: 'Interceptor 650 (2018–)' },
     summary: 'A charming retro roadster with a sweet-sounding, relaxed twin. Cheap used, with a dealer in Girton. The low seat and lack of wind protection count against it for long motorway days.',
     tall: '804mm seat bends a 34" leg noticeably; bars are upright and comfortable.',
@@ -833,7 +834,7 @@ window.MOTO_BIKES = [
   {
     id: 'xrv750', make: 'Honda', model: 'XRV750 Africa Twin', style: 'Adventure',
     engine: '742cc V-twin', hp: 60, torqueNm: 62, wetKg: 234, seatMm: 880, tankL: 23,
-    delivery: 'relaxed', drive: 'chain',
+    drive: 'chain',
     geo: { knee: 78.9, hip: 111.4, lean: 0, src: 'cycle-ergo, converted', model: 'XRV750 Africa Twin (1996–2002)' },
     summary: 'The original 1990–2003 Africa Twin: tall, comfortable, with a proper fairing and a 23-litre tank. A near-legendary overlander, now a rising classic; age and parts availability are the risks.',
     tall: '880mm seat and tall bars. A great fit for a 34" inseam.',
@@ -857,7 +858,7 @@ window.MOTO_BIKES = [
   {
     id: 'zx4rr', make: 'Kawasaki', model: 'Ninja ZX-4RR', style: 'Sport',
     engine: '399cc inline four', hp: 77, torqueNm: 39, wetKg: 189, seatMm: 800, tankL: 15,
-    delivery: 'normal', drive: 'chain',
+    drive: 'chain',
     geo: { knee: 65.4, hip: 93.9, lean: 22.6, src: 'Motonomics', model: 'Ninja ZX-4RR (2024–)' },
     summary: 'A 399cc four that screams to 16,000rpm: huge fun when you are pushing hard, but not especially fast at road speeds, which is the appeal. It is a supersport bike, so very cramped for 6\'4", with no luggage and little comfort. (Assumed from "XZ-4R"; the UK sells the ZX-4RR.)',
     tall: 'Clip-ons, high pegs and an 800mm seat. Very cramped for a 34" inseam.',
@@ -883,7 +884,7 @@ window.MOTO_BIKES = [
   {
     id: 'vfr400', make: 'Honda', model: 'VFR400R (NC30)', style: 'Sport',
     engine: '399cc V4', hp: 59, torqueNm: 40, wetKg: 182, seatMm: 755, tankL: 15,
-    delivery: 'normal', drive: 'chain',
+    drive: 'chain',
     geo: { knee: 59.9, hip: 75.4, lean: 34, src: 'cycle-ergo, converted', model: 'VFR400R (1989–90)' },
     summary: 'A 1989–93 cult classic: gear-driven V4, race-bred chassis, gorgeous. Tiny for a 6\'4" rider, over 30 years old, and parts are getting scarce. A collector\'s toy more than a touring bike.',
     tall: '755mm seat and low clip-ons. You will be folded up.',
@@ -907,7 +908,7 @@ window.MOTO_BIKES = [
   {
     id: 'f800gsold', make: 'BMW', model: 'F 800 GS (2008–18)', style: 'Adventure',
     engine: '798cc parallel twin', hp: 85, torqueNm: 83, wetKg: 214, seatMm: 880, tankL: 16,
-    delivery: 'normal', drive: 'chain',
+    drive: 'chain',
     geo: { knee: 86.8, hip: 117.4, lean: 1.5, src: 'Motonomics', model: 'F 800 GS Adventure (2016–18)' },
     summary: 'The previous-generation mid-size GS: tall, light for its class, built to be ridden standing and genuinely good off-road. Cheap used. Its parallel twin buzzes at motorway speeds, and the stock seat is hard. The F 700 GS is the lower, 75hp road version.',
     tall: '880mm seat, one of the tallest in the class. A 34" inseam fits well; tall bars.',
@@ -928,7 +929,7 @@ window.MOTO_BIKES = [
       { id: 'used-08', label: 'Used F 800 GS 2008–12', condition: 'used', years: '2008–12', price: 3600, range: [2800, 4300], testRide: 4, adj: { reliability: -0.25 },
         abs: 'some', absNote: 'ABS was optional before 2013. Check the listing.' },
       { id: 'used-700', label: 'Used F 700 GS 2013–17', condition: 'used', years: '2013–17', price: 4200, range: [3500, 5000], testRide: 4,
-        specs: { hp: 75, wetKg: 209, seatMm: 820 }, adj: { fit: -1, standing: -1, greenlane: -1.5 },
+        specs: { hp: 75, torqueNm: 77, wetKg: 209, seatMm: 820 }, adj: { fit: -1, standing: -1, greenlane: -1.5 },
         note: 'Lower, road-biased version: 75hp, 19" cast front wheel, 820mm seat. Look for one with the high seat.' }
     ],
     search: { at: ['BMW', 'F 800 GS'], slug: 'bmw/f-800-gs', mcn: 'bmw/f800gs', q: 'BMW F800GS' }
@@ -936,7 +937,7 @@ window.MOTO_BIKES = [
   {
     id: 'f850gs', make: 'BMW', model: 'F 850 GS', style: 'Adventure',
     engine: '853cc parallel twin (270°)', hp: 95, torqueNm: 92, wetKg: 229, seatMm: 860, tankL: 15,
-    delivery: 'relaxed', drive: 'chain',
+    drive: 'chain',
     geo: { knee: 83.0, hip: 110.4, lean: 3.8, src: 'Motonomics', model: 'F 850 GS (2018–)' },
     summary: 'The taller, off-road sibling of the F 750 GS: 21" front, longer suspension, and 95hp delivered with a strong, easy midrange. A better fit for your legs than the F 750. Well equipped, but not cheap to run.',
     tall: '860mm standard seat, with factory options up to about 890mm. Roomy for a 34" inseam.',
@@ -961,7 +962,7 @@ window.MOTO_BIKES = [
   {
     id: 'tiger900', make: 'Triumph', model: 'Tiger 900 GT / Rally (2020–23)', style: 'Adventure',
     engine: '888cc inline triple (T-plane)', hp: 94, torqueNm: 87, wetKg: 219, seatMm: 820, tankL: 20,
-    delivery: 'relaxed', drive: 'chain',
+    drive: 'chain',
     geo: { knee: 87.1, hip: 98.8, lean: 10.0, src: 'Motonomics', model: 'Tiger 900 (2020–)' },
     summary: 'The full-power version of the Tiger 850 Sport: smooth, torquey T-plane triple, planted at speed, well equipped. The Rally versions add a taller seat, spoked wheels and long-travel suspension, which suit your legs and standing. From 2024 it went to about 106hp.',
     tall: 'GT: 810–830mm seat, low for a 34" inseam. Rally: 860–880mm, a much better fit.',
@@ -988,7 +989,7 @@ window.MOTO_BIKES = [
   {
     id: 'vstrom1000', make: 'Suzuki', model: 'V-Strom 1000 (2014–19)', style: 'Adventure-tourer',
     engine: '1037cc V-twin', hp: 99, torqueNm: 103, wetKg: 228, seatMm: 850, tankL: 20,
-    delivery: 'relaxed', drive: 'chain',
+    drive: 'chain',
     geo: { knee: 77.3, hip: 110.1, lean: 3.2, src: 'Motonomics', model: 'V-Strom 1000 (2014–19)' },
     summary: 'The big V-Strom: roomy, smooth, very reliable, and cheap used. Its 99hp is over your range on paper, but the V-twin is lazy and torquey rather than urgent. "Worthy rather than thrilling."',
     tall: '850mm seat, long reach to the bars and plenty of legroom. A tall-rider favourite.',
@@ -1012,7 +1013,7 @@ window.MOTO_BIKES = [
   {
     id: 'scrambler1200', make: 'Triumph', model: 'Scrambler 1200 XE / XC', style: 'Retro',
     engine: '1200cc parallel twin (270°)', hp: 89, torqueNm: 110, wetKg: 230, seatMm: 870, tankL: 16,
-    delivery: 'relaxed', drive: 'chain',
+    drive: 'chain',
     geo: { knee: 82.6, hip: 113.9, lean: 0.2, src: 'Motonomics', model: 'Scrambler 1200 XE (2019–)' },
     summary: 'A big-torque retro scrambler with real off-road suspension: lots of character and fun, tall-rider friendly in XE form. No wind protection, and luggage is limited by the high exhausts.',
     tall: 'XE: 870mm seat and wide, high bars suit a 34" inseam. XC: 840mm.',
@@ -1041,7 +1042,7 @@ window.MOTO_BIKES = [
   {
     id: 'crf300l', make: 'Honda', model: 'CRF300L Rally', style: 'Dual-sport', reference: true,
     engine: '286cc single', hp: 27, torqueNm: 27, wetKg: 153, seatMm: 885, tankL: 12.8,
-    delivery: 'normal', drive: 'chain',
+    drive: 'chain',
     geo: { knee: 78.2, hip: 119.1, lean: 0, src: 'Motonomics', model: 'CRF300L Rally (2021–)' },
     summary: 'Your current bike, included as a reference point for the scores. Scored from what you described: bars too low and close, nervous at motorway speeds, squishy suspension.',
     tall: 'Good legroom; bars too low and close when standing.',

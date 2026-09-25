@@ -3,7 +3,7 @@
   'use strict';
   const BIKES = window.MOTO_BIKES;
   const DEALERS = window.MOTO_DEALERS;
-  const { CRITERIA, DEFAULT_CURVES, POWER_KNEE, DELIVERY_FACTOR, FIT_PENALTY, PENALTY, ABS_LABEL, evaluate, overall, interp, effectiveHp } = window.MotoScoring;
+  const { CRITERIA, DEFAULT_CURVES, POWER_KNEE, REV_K, REV_CAP, revReference, FIT_PENALTY, PENALTY, ABS_LABEL, evaluate, overall, interp, effectiveHp } = window.MotoScoring;
   const L = window.MotoListings;
   const esc = L.esc;
   const $ = (sel, root) => (root || document).querySelector(sel);
@@ -59,8 +59,11 @@
     listings: [],
     mapRange: 60,
     dealersPickedOnly: false,
-    powerKnee: POWER_KNEE
+    powerKnee: POWER_KNEE,
+    revK: REV_K
   };
+  const REV_REF = revReference(BIKES);
+  const rpmEquiv = hpPerNm => Math.round(hpPerNm * 7121 / 100) * 100;
 
   // Earlier default curves. A saved curve still equal to one of these moves to
   // the current default; curves you've edited are kept.
@@ -133,7 +136,7 @@
   const expanded = {};
 
   // ---------------------------------------------------------------- scoring
-  function settings() { return { usedPrivate: state.usedPrivate, curves: state.curves, powerKnee: state.powerKnee }; }
+  function settings() { return { usedPrivate: state.usedPrivate, curves: state.curves, powerKnee: state.powerKnee, revK: state.revK, revRef: REV_REF }; }
 
   function evalOption(bike, opt) {
     const ev = evaluate(bike, opt, settings(), state.overrides[bike.id]);
@@ -207,6 +210,12 @@
   }
 
   const absText = s => s >= 5 ? 'Yes' : s <= 0 ? 'No' : 'Some';
+  function powerNote(ev) {
+    const rev = `${ev.specs.hp}bhp and ${ev.specs.torqueNm}Nm: ${ev.hpPerNm.toFixed(2)} hp per Nm (about ${rpmEquiv(ev.hpPerNm).toLocaleString('en-GB')}rpm-equivalent; typical ${REV_REF.toFixed(2)})`;
+    if (ev.specs.hp <= state.powerKnee) return `${rev}. Below ${state.powerKnee}bhp, so no rev-happiness adjustment.`;
+    const kind = ev.rev > 1.02 ? 'rev-happy' : ev.rev < 0.98 ? 'torquey' : 'typical';
+    return `${rev}. ${kind[0].toUpperCase() + kind.slice(1)}: power over ${state.powerKnee}bhp ×${ev.rev.toFixed(2)}, counted as ${Math.round(ev.effHp)}bhp.`;
+  }
   function fitNote(g) {
     const parts = [`Knee ${Math.round(g.knee)}°, hip ${Math.round(g.hip)}°, forward lean ${Math.round(g.lean)}° for a 6′4″ rider with a 34″ inseam`];
     const cuts = [];
@@ -334,7 +343,7 @@
       ${crits.map(c => {
         const s = ev.scores[c.key];
         const src = ev.source[c.key];
-        const title = c.key === 'power' ? `${ev.specs.hp}bhp, ${ev.delivery} delivery → counts as ${Math.round(ev.effHp)}bhp` : (b.scores[c.key] ? b.scores[c.key][1] : c.help);
+        const title = c.key === 'power' ? powerNote(ev) : (b.scores[c.key] ? b.scores[c.key][1] : c.help);
         const text = c.binary ? absText(s) : fmt1(s);
         return `<td class="score"><span class="score-chip${src === 'you' ? ' you' : ''}" style="${scoreStyle(s)}" title="${esc(c.binary ? absNote(ev) : title)}">${text}</span></td>`;
       }).join('')}
@@ -350,7 +359,7 @@
       const s = ev.scores[c.key];
       let note;
       if (c.key === 'price') note = `${gbp(ev.price)} on the road for “${ev.option.label}”.`;
-      else if (c.key === 'power') note = `${ev.specs.hp}bhp with ${ev.delivery} delivery${ev.specs.hp > state.powerKnee ? `, counted as ${Math.round(ev.effHp)}bhp` : ''}.`;
+      else if (c.key === 'power') note = powerNote(ev);
       else if (c.key === 'weight') note = `${ev.specs.wetKg}kg wet (${Math.round(ev.specs.wetKg * 2.2046)}lb).`;
       else if (c.key === 'testride') note = ev.option.condition === 'new' ? 'New: based on the nearest dealer and the brand’s demo fleet.' : 'Used: based on how many are for sale nearby.';
       else if (c.key === 'abs') note = absNote(ev);
@@ -430,7 +439,8 @@
       '           so the overall score runs 0–10',
       '',
       `Power above ${state.powerKnee}bhp counts as ${state.powerKnee} + (bhp − ${state.powerKnee}) × factor,`,
-      `where factor = ${DELIVERY_FACTOR.relaxed} relaxed, ${DELIVERY_FACTOR.normal.toFixed(1)} normal, ${DELIVERY_FACTOR.punchy} punchy delivery.`,
+      `where factor = (hp per Nm ÷ ${REV_REF.toFixed(2)})^${state.revK}, kept between ${REV_CAP[0]} and ${REV_CAP[1]}.`,
+      `(${REV_REF.toFixed(2)} hp per Nm is the typical engine here; hp per Nm × 7121 ≈ rpm of peak power.)`,
       '',
       `Fit = knee-angle curve − ${FIT_PENALTY.perHipDegree} per degree of hip angle under ${FIT_PENALTY.hipBelow}°`,
       `                        − ${FIT_PENALTY.perLeanDegree} per degree of forward lean over ${FIT_PENALTY.leanAbove}°`
@@ -444,7 +454,7 @@
       desc: 'Gentle below £4.5k, where price matters less. Steeper from £4.5–8k. Steep from £8k to zero at £11k, where a bike has to earn it.' },
     power: { title: 'Power → score', unit: 'bhp', xLabel: v => v + '', min: 20, max: 130, step: 1,
       ticks: [20, 40, 60, 80, 100, 120],
-      desc: 'Sweet spot 40–60bhp. Less than that struggles at 75mph; above 60 it gets more than you want, reaching zero at 100. Dots show each bike after the delivery adjustment.' },
+      desc: 'Sweet spot 40–60bhp. Less than that struggles at 75mph; above 60 it gets more than you want, reaching zero at 100. Dots show each bike after the rev-happiness adjustment.' },
     weight: { title: 'Wet weight → score', unit: 'kg', xLabel: v => v + '', min: 130, max: 320, step: 1,
       ticks: [140, 170, 200, 230, 260, 290, 320],
       desc: 'Full marks up to 200kg; heavier bikes get more unwieldy and worrying to drop, reaching zero at 300kg. Nervousness at speed is scored under Road manners, not here.' },
@@ -482,9 +492,12 @@
         <p class="hint">Drag a point to reshape the curve. Double-click the chart to add a point, or a point to remove it. Focused points also move with the arrow keys (Shift for bigger steps) and Delete removes them.</p>
         <label class="field"><span class="field-label">Points (${m.unit}: score)</span>
           <input type="text" class="curve-points" data-curve-input="${key}" value="${esc(pointsText(pts))}" spellcheck="false"></label>
-        ${key === 'power' ? `<label class="field"><span class="field-label">Delivery adjustment starts at <output id="power-knee-out">${state.powerKnee} bhp</output></span>
+        ${key === 'power' ? `<label class="field"><span class="field-label">Rev-happiness adjustment starts at <output id="power-knee-out">${state.powerKnee} bhp</output></span>
           <input type="range" id="power-knee" min="40" max="110" step="5" value="${state.powerKnee}">
-          <span class="hint">Above this, relaxed engines count as less powerful (×${DELIVERY_FACTOR.relaxed}) and punchy ones as more (×${DELIVERY_FACTOR.punchy}). Default ${POWER_KNEE} bhp.</span></label>` : ''}
+          <span class="hint">Default ${POWER_KNEE} bhp. Above this, engines that make their power high in the revs count as more powerful, and torquey ones as less.</span></label>
+        <label class="field"><span class="field-label">Rev-happiness adjustment strength <output id="rev-k-out">${state.revK}</output></span>
+          <input type="range" id="rev-k" min="0" max="3" step="0.25" value="${state.revK}">
+          <span class="hint">0 turns it off. Default ${REV_K}: a bike revving 20% higher than typical (in hp per Nm) has its power over the threshold counted ×1.44.</span></label>` : ''}
         <div class="btn-row"><button type="button" class="link-btn" data-curve-reset="${key}">Reset this curve</button><span class="hint" data-curve-status="${key}"></span></div>
       </div>`;
     }).join('');
@@ -880,9 +893,9 @@
 
   document.addEventListener('input', (e) => {
     const t = e.target, d = t.dataset;
-    if (t.id === 'power-knee') {
-      state.powerKnee = +t.value;
-      $('#power-knee-out').textContent = t.value + ' bhp';
+    if (t.id === 'power-knee' || t.id === 'rev-k') {
+      if (t.id === 'power-knee') { state.powerKnee = +t.value; $('#power-knee-out').textContent = t.value + ' bhp'; }
+      else { state.revK = +t.value; $('#rev-k-out').textContent = t.value; }
       renderFormula(); liveSign(); save();
       return;
     }
@@ -950,6 +963,7 @@
       case 'radius': state.radius = +t.value; changed(); break;
       case 'search-maxprice': state.searchMaxPrice = +t.value || 0; changed(); break;
       case 'power-knee': state.powerKnee = +t.value; changed(); break;
+      case 'rev-k': state.revK = +t.value; changed(); break;
       case 'dealers-picked-only': state.dealersPickedOnly = t.checked; changed(); break;
       case 'home-postcode': setHome(t.value); break;
     }
