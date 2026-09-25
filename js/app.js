@@ -67,7 +67,8 @@
       price: [[3000, 5], [4000, 4.8], [8000, 2.9], [12000, 0.5], [12500, 0]],
       power: [[25, 1], [35, 4], [40, 5], [70, 5], [90, 2.5], [100, 1.5], [125, 0]],
       weight: [[140, 2], [170, 4.2], [185, 5], [230, 5], [260, 3.4], [290, 1.2], [310, 0]]
-    }
+    },
+    { weight: [[140, 2.5], [180, 5], [200, 5], [300, 0]] }
   ];
 
   function loadState() {
@@ -436,7 +437,7 @@
       desc: 'Sweet spot 40–60bhp. Less than that struggles at 75mph; above 60 it gets more than you want, reaching zero at 100. Dots show each bike after the delivery adjustment.' },
     weight: { title: 'Wet weight → score', unit: 'kg', xLabel: v => v + '', min: 130, max: 320, step: 1,
       ticks: [140, 170, 200, 230, 260, 290, 320],
-      desc: 'Light bikes feel nervous at speed; 180–200kg is ideal; heavier bikes lose points steadily, reaching zero at 300kg.' },
+      desc: 'Full marks up to 200kg; heavier bikes get more unwieldy and worrying to drop, reaching zero at 300kg. Nervousness at speed is scored under Motorway manners, not here.' },
     fit: { title: 'Knee angle → fit', unit: '°', xLabel: v => v + '°', min: 55, max: 135, step: 1,
       ticks: [60, 70, 80, 90, 100, 110, 120, 130],
       desc: 'Knee angle for a 6′4″ rider with a 34″ inseam; smaller means more bent. 78° is your CRF300L Rally. Above 100° means feet-forward cruiser controls. Dots are the bikes before hip and lean deductions.' }

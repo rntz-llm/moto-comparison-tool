@@ -24,8 +24,8 @@
       help: 'Twisty-road ability, rev-happiness, character and sound (not loudness).' },
     { key: 'reliability', label: 'Reliability', short: 'Reliable', kind: 'researched', weight: 7,
       help: 'How likely it is to go wrong, and how easily it gets fixed (parts availability, dealer support). Age is deducted per used option; costs count under Running costs.' },
-    { key: 'weight', label: 'Weight & confidence', short: 'Weight', kind: 'computed', weight: 5,
-      help: 'Wet weight through the weight curve: light bikes feel nervous, 180–200kg is ideal, falling to zero at 300kg.' },
+    { key: 'weight', label: 'Weight', short: 'Weight', kind: 'computed', weight: 5,
+      help: 'Wet weight through the weight curve: full marks up to 200kg, then heavier bikes get more unwieldy and worrying to drop, reaching zero at 300kg. Feeling nervous at speed counts under Motorway manners.' },
     { key: 'luggage', label: 'Luggage & touring', short: 'Luggage', kind: 'researched', weight: 3,
       help: 'Racks, panniers and touring capacity, including fuel range.' },
     { key: 'testride', label: 'Test-ride access', short: 'Test ride', kind: 'option', weight: 3,
@@ -40,7 +40,8 @@
   const DEFAULT_CURVES = {
     price: [[2000, 5], [4500, 4.5], [8000, 3], [11000, 0]],
     power: [[20, 2], [40, 5], [60, 5], [80, 3.5], [100, 0]],
-    weight: [[140, 2.5], [180, 5], [200, 5], [300, 0]],
+    // Flat at the light end: feeling nervous at speed is scored under Motorway manners.
+    weight: [[140, 5], [200, 5], [300, 0]],
     // Knee angle (degrees) for a 6'4" / 34" rider. 78° is your CRF300L Rally, whose
     // legroom you called reasonable. Above 100° means feet-forward cruiser controls.
     fit: [[60, 0], [68, 1.5], [74, 3], [78, 4], [84, 5], [100, 5], [115, 3], [130, 1.5]]

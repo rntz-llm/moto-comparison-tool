@@ -41,7 +41,8 @@ add or remove a point; saved in your browser), or edit the defaults in
   - Price: £2,000:5, £4,500:4.5, £8,000:3, £11,000:0
   - Power: 20:2, 40:5, 60:5, 80:3.5, 100:0 (bhp). Above 70bhp, a relaxed
     engine counts as less powerful and a punchy one as more.
-  - Wet weight: 140:2.5, 180:5, 200:5, 300:0 (kg)
+  - Wet weight: 140:5, 200:5, 300:0 (kg). Only heaviness counts here
+    (unwieldy, a drop worry); nervousness at speed is under motorway manners.
 - **Tall-rider fit** is computed from the knee angle a 6′4″ rider with a 34″
   inseam gets on each bike (from its seat, peg and bar positions), through an
   editable curve: 60°:0, 68°:1.5, 74°:3, 78°:4, 84–100°:5, 115°:3, 130°:1.5.
