@@ -10,7 +10,6 @@
   const $$ = (sel, root) => Array.from((root || document).querySelectorAll(sel));
   const STORE_KEY = 'next-bike-shortlist-v1';
   const BIKE_BY_ID = Object.fromEntries(BIKES.map(b => [b.id, b]));
-  const STYLES = Array.from(new Set(BIKES.map(b => b.style)));
   const clone = o => JSON.parse(JSON.stringify(o));
   const gbp = n => '£' + Math.round(n).toLocaleString('en-GB');
   const fmt1 = n => (Math.round(n * 10) / 10).toFixed(1);
@@ -45,7 +44,7 @@
     notes: {},
     starred: {},
     hidden: {},
-    filters: { q: '', styles: [], maxPrice: 12000, maxHp: 100, cond: 'any', starredOnly: false, showHidden: false, showRef: false, mins: {} },
+    filters: { q: '', maxPrice: 12000, maxHp: 100, cond: 'any', starredOnly: false, showHidden: false, showRef: false, mins: {} },
     sort: { key: 'overall', dir: -1 },
     home: { postcode: 'CB2 1TN', lat: 52.2051, lng: 0.1162, label: 'Cambridge CB2 1TN' },
     radius: 50,
@@ -77,6 +76,7 @@
       }
       for (const c of CRITERIA) if (typeof s.weights[c.key] !== 'number') s.weights[c.key] = c.weight;
       for (const c of CRITERIA) if (typeof s.customWeights[c.key] !== 'number') s.customWeights[c.key] = c.weight;
+      delete s.filters.styles; // style filter was removed
       // Saved before presets were tracked: weights matching a preset select it;
       // anything else becomes the custom set.
       if (!('preset' in saved)) {
@@ -142,7 +142,6 @@
     if (b.reference && !f.showRef) return false;
     if (state.hidden[b.id] && !f.showHidden) return false;
     if (f.starredOnly && !state.starred[b.id]) return false;
-    if (f.styles.length && !f.styles.includes(b.style)) return false;
     if (ev.price > f.maxPrice) return false;
     if (f.maxHp < 100 && ev.specs.hp > f.maxHp) return false;
     if (f.cond !== 'any' && !b.options.some(o => o.condition === f.cond)) return false;
@@ -231,7 +230,6 @@
     $('#f-showhidden').checked = f.showHidden;
     $('#f-showref').checked = f.showRef;
     $('#f-private').checked = state.usedPrivate;
-    $('#f-styles').innerHTML = STYLES.map(s => `<button type="button" class="chip" data-style="${esc(s)}" aria-pressed="${f.styles.includes(s)}">${esc(s)}</button>`).join('');
     $('#f-mins').innerHTML = CRITERIA.map(c => {
       const v = f.mins[c.key] || 0;
       if (c.binary) return `<label class="field"><span class="field-label">${esc(c.label)}</span>
@@ -788,12 +786,6 @@
       return;
     }
     if (d.preset) { state.preset = d.preset; state.weights = clone(presetWeights(d.preset)); changed({ weights: true }); return; }
-    if (d.style) {
-      const s = state.filters.styles;
-      const i = s.indexOf(d.style);
-      if (i >= 0) s.splice(i, 1); else s.push(d.style);
-      changed({ filters: true }); return;
-    }
     if (d.sort) {
       if (state.sort.key === d.sort) state.sort.dir *= -1;
       else state.sort = { key: d.sort, dir: d.sort === 'name' || d.sort === 'price' || d.sort === 'kg' ? 1 : -1 };
