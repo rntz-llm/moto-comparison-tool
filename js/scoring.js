@@ -12,12 +12,10 @@
       help: 'Routine costs: fuel economy, insurance, service intervals and prices, parts prices, tyres and chains.' },
     { key: 'power', label: 'Power', short: 'Power', kind: 'computed', weight: 6,
       help: 'Peak bhp through the power curve (sweet spot 40–60, zero from 100). Above 70bhp, relaxed engines count as less powerful and punchy ones as more.' },
-    { key: 'fit', label: 'Tall-rider fit', short: 'Fit', kind: 'geometry', weight: 6,
+    { key: 'fit', label: 'Tall-rider fit', short: 'Fit', kind: 'geometry', weight: 8,
       help: 'Knee angle for a 6\'4" rider with a 34" inseam, from the bike\'s seat, peg and bar positions, through the fit curve. A crouched hip (under 105°) or forward lean over 8° takes points off.' },
-    { key: 'comfort', label: 'Seat & ride comfort', short: 'Comfort', kind: 'researched', weight: 4,
-      help: 'Seat padding and shape, and how plush the suspension is, over 2+ hours. Legroom and reach count under Tall-rider fit; vibration and wind under Motorway manners.' },
-    { key: 'highway', label: 'Motorway manners', short: 'Motorway', kind: 'researched', weight: 7,
-      help: 'Stability, vibration and wind protection at 75mph. Power is judged under Power, not here.' },
+    { key: 'highway', label: 'Road manners', short: 'Road', kind: 'researched', weight: 8,
+      help: 'Stability and nervousness at speed, vibration and wind protection at 75mph, and how well the suspension soaks up bumps. Power is judged under Power, heaviness under Weight.' },
     { key: 'standing', label: 'Standing position', short: 'Standing', kind: 'researched', weight: 4,
       help: 'Bar height and reach when standing on the pegs.' },
     { key: 'fun', label: 'Fun factor', short: 'Fun', kind: 'researched', weight: 7,
@@ -25,7 +23,7 @@
     { key: 'reliability', label: 'Reliability', short: 'Reliable', kind: 'researched', weight: 7,
       help: 'How likely it is to go wrong, and how easily it gets fixed (parts availability, dealer support). Age is deducted per used option; costs count under Running costs.' },
     { key: 'weight', label: 'Weight', short: 'Weight', kind: 'computed', weight: 5,
-      help: 'Wet weight through the weight curve: full marks up to 200kg, then heavier bikes get more unwieldy and worrying to drop, reaching zero at 300kg. Feeling nervous at speed counts under Motorway manners.' },
+      help: 'Wet weight through the weight curve: full marks up to 200kg, then heavier bikes get more unwieldy and worrying to drop, reaching zero at 300kg. Feeling nervous at speed counts under Road manners.' },
     { key: 'luggage', label: 'Luggage & touring', short: 'Luggage', kind: 'researched', weight: 3,
       help: 'Racks, panniers and touring capacity, including fuel range.' },
     { key: 'testride', label: 'Test-ride access', short: 'Test ride', kind: 'option', weight: 3,
@@ -40,7 +38,7 @@
   const DEFAULT_CURVES = {
     price: [[2000, 5], [4500, 4.5], [8000, 3], [11000, 0]],
     power: [[20, 2], [40, 5], [60, 5], [80, 3.5], [100, 0]],
-    // Flat at the light end: feeling nervous at speed is scored under Motorway manners.
+    // Flat at the light end: feeling nervous at speed is scored under Road manners.
     weight: [[140, 5], [200, 5], [300, 0]],
     // Knee angle (degrees) for a 6'4" / 34" rider. 78° is your CRF300L Rally, whose
     // legroom you called reasonable. Above 100° means feet-forward cruiser controls.

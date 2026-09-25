@@ -1,7 +1,7 @@
 # Next Bike Shortlist
 
 A static site for choosing a motorbike: 40 candidate bikes in a sortable,
-filterable table, scored 0–5 on thirteen criteria plus ABS (yes/no), with an overall score
+filterable table, scored 0–5 on twelve criteria plus ABS (yes/no), with an overall score
 out of 10 from weights you set. It also builds listing searches and shows dealers
 and saved listings on a map, sorted by distance from home (Cambridge by
 default).
@@ -42,14 +42,16 @@ add or remove a point; saved in your browser), or edit the defaults in
   - Power: 20:2, 40:5, 60:5, 80:3.5, 100:0 (bhp). Above 70bhp, a relaxed
     engine counts as less powerful and a punchy one as more.
   - Wet weight: 140:5, 200:5, 300:0 (kg). Only heaviness counts here
-    (unwieldy, a drop worry); nervousness at speed is under motorway manners.
+    (unwieldy, a drop worry); nervousness at speed is under road manners.
 - **Tall-rider fit** is computed from the knee angle a 6′4″ rider with a 34″
   inseam gets on each bike (from its seat, peg and bar positions), through an
   editable curve: 60°:0, 68°:1.5, 74°:3, 78°:4, 84–100°:5, 115°:3, 130°:1.5.
   A hip angle under 105° costs 0.15 per degree and forward lean over 8° costs
   0.1 per degree.
-- **Seat & ride comfort, motorway manners, standing position, fun,
-  reliability, running costs, luggage, green-laning** are researched judgements with a one-line
+- **Road manners** (stability and nervousness at speed, vibration, wind
+  protection at 75mph, and how well the suspension soaks up bumps),
+  **standing position, fun, reliability, running costs, luggage,
+  green-laning** are researched judgements with a one-line
   reason each. Override any of them per bike after a test ride.
 - **ABS** is yes/no per buying option (5 or 0), with 2.5 where it was an
   optional extra; mark the bike you find in its detail panel. It has a

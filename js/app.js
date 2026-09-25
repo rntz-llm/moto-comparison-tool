@@ -18,12 +18,18 @@
 
   const DEFAULT_WEIGHTS = Object.fromEntries(CRITERIA.map(c => [c.key, c.weight]));
   const PRESETS = [
-    { id: 'default', label: 'Balanced', weights: DEFAULT_WEIGHTS },
-    { id: 'cheap', label: 'Cheap & sensible', weights: Object.assign({}, DEFAULT_WEIGHTS, { price: 10, running: 7, reliability: 9, fun: 4, power: 4, standing: 2 }) },
-    { id: 'tour', label: 'Long trips', weights: Object.assign({}, DEFAULT_WEIGHTS, { fit: 10, comfort: 8, highway: 10, luggage: 7, fun: 5, standing: 3, weight: 4 }) },
-    { id: 'twisties', label: 'Twisty roads', weights: Object.assign({}, DEFAULT_WEIGHTS, { fun: 10, power: 7, weight: 7, highway: 5, luggage: 1, greenlane: 0 }) },
-    { id: 'explore', label: 'Explorer', weights: Object.assign({}, DEFAULT_WEIGHTS, { standing: 7, greenlane: 5, luggage: 6, fit: 8, fun: 6 }) },
-    { id: 'custom', label: 'Custom' }
+    // Every preset keeps tall-rider fit high; each shifts emphasis for one kind of riding.
+    { id: 'default', label: 'Balanced', weights: DEFAULT_WEIGHTS,
+      desc: 'Your brief as a whole: price, fit and road manners first, then fun and reliability.' },
+    { id: 'cheap', label: 'Cheap & sensible', weights: Object.assign({}, DEFAULT_WEIGHTS, { price: 10, running: 7, reliability: 9, fun: 4, power: 4, standing: 2 }),
+      desc: 'Low cost to buy and run, and nothing to worry about.' },
+    { id: 'tour', label: 'Long trips', weights: Object.assign({}, DEFAULT_WEIGHTS, { fit: 10, highway: 10, luggage: 8, reliability: 8, price: 5, power: 4, weight: 3, fun: 5, standing: 3, greenlane: 0 }),
+      desc: 'Multi-day trips: all-day fit, calm at 75mph, room for luggage, and reliable far from home.' },
+    { id: 'twisties', label: 'Twisty roads', weights: Object.assign({}, DEFAULT_WEIGHTS, { fun: 10, power: 7, weight: 7, highway: 4, price: 7, standing: 2, luggage: 1, greenlane: 0 }),
+      desc: 'B-road fun: rev-happy, agile and not too heavy. Motorway comfort matters less.' },
+    { id: 'explore', label: 'Explorer', weights: Object.assign({}, DEFAULT_WEIGHTS, { standing: 7, greenlane: 5, luggage: 6, highway: 6, weight: 6, fun: 6 }),
+      desc: 'Back roads, byways and camping: good standing position, some green-lane ability, luggage.' },
+    { id: 'custom', label: 'Custom', desc: 'Your own weights. Moving any slider saves the current weights here.' }
   ];
   const sameWeights = (a, b) => CRITERIA.every(c => (a[c.key] || 0) === (b[c.key] || 0));
   const presetWeights = id => id === 'custom' ? state.customWeights : PRESETS.find(p => p.id === id).weights;
@@ -84,18 +90,21 @@
         if (s[k] && typeof s[k] === 'object' && !Array.isArray(s[k])) s[k] = Object.assign(s[k], saved[k]);
         else s[k] = saved[k];
       }
-      // Comfort was split into Tall-rider fit and Seat & ride comfort. Your old
-      // comfort weight carries over to fit; seat & ride starts at its default.
+      // Saves from before Tall-rider fit existed had one comfort weight covering
+      // legroom; it carries over to fit.
       for (const k of ['weights', 'customWeights']) {
         const old = saved[k];
         if (old && typeof old === 'object' && !('fit' in old) && typeof old.comfort === 'number') {
           s[k].fit = old.comfort;
-          s[k].comfort = DEFAULT_WEIGHTS.comfort;
         }
       }
       for (const c of CRITERIA) if (typeof s.weights[c.key] !== 'number') s.weights[c.key] = c.weight;
       for (const c of CRITERIA) if (typeof s.customWeights[c.key] !== 'number') s.customWeights[c.key] = c.weight;
       delete s.filters.styles; // style filter was removed
+      // Seat & ride comfort was removed; its ride half is now part of Road manners.
+      delete s.weights.comfort; delete s.customWeights.comfort; delete s.filters.mins.comfort;
+      for (const ov of Object.values(s.overrides)) delete ov.comfort;
+      if (s.sort.key === 'comfort') s.sort = { key: 'overall', dir: -1 };
       // Saved before presets were tracked: weights matching a preset select it;
       // anything else becomes the custom set.
       if (!('preset' in saved)) {
@@ -242,7 +251,7 @@
         <span id="w-${c.key}-help" hidden>${esc(c.help)}</span>
       </div>`;
     }).join('');
-    $('#presets').innerHTML = PRESETS.map(p => `<button type="button" class="chip" data-preset="${p.id}" aria-pressed="${state.preset === p.id}"${p.id === 'custom' ? ' title="Your own weights. Moving any slider saves the current weights here."' : ''}>${esc(p.label)}</button>`).join('');
+    $('#presets').innerHTML = PRESETS.map(p => `<button type="button" class="chip" data-preset="${p.id}" aria-pressed="${state.preset === p.id}" title="${esc(p.desc)}">${esc(p.label)}</button>`).join('');
   }
 
   // ---------------------------------------------------------------- filters
@@ -437,7 +446,7 @@
       desc: 'Sweet spot 40–60bhp. Less than that struggles at 75mph; above 60 it gets more than you want, reaching zero at 100. Dots show each bike after the delivery adjustment.' },
     weight: { title: 'Wet weight → score', unit: 'kg', xLabel: v => v + '', min: 130, max: 320, step: 1,
       ticks: [140, 170, 200, 230, 260, 290, 320],
-      desc: 'Full marks up to 200kg; heavier bikes get more unwieldy and worrying to drop, reaching zero at 300kg. Nervousness at speed is scored under Motorway manners, not here.' },
+      desc: 'Full marks up to 200kg; heavier bikes get more unwieldy and worrying to drop, reaching zero at 300kg. Nervousness at speed is scored under Road manners, not here.' },
     fit: { title: 'Knee angle → fit', unit: '°', xLabel: v => v + '°', min: 55, max: 135, step: 1,
       ticks: [60, 70, 80, 90, 100, 110, 120, 130],
       desc: 'Knee angle for a 6′4″ rider with a 34″ inseam; smaller means more bent. 78° is your CRF300L Rally. Above 100° means feet-forward cruiser controls. Dots are the bikes before hip and lean deductions.' }

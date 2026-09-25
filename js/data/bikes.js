@@ -22,9 +22,8 @@ window.MOTO_BIKES = [
     summary: 'The rally-bred middleweight benchmark. Simple, tough, brilliant to stand up on, and the closest thing on this list to the Tuareg you liked, with a less revvy but very characterful engine.',
     tall: '875mm seat and a long seat-to-peg distance suit a 34" inseam. Bars are tall and wide. The stock seat is narrow and firm; a comfort seat is a common first upgrade.',
     pros: ['Superb standing position', 'Proven, simple engine', 'Holds its value', 'Huge aftermarket'],
-    cons: ['Firm, narrow stock seat', 'Buffeting from the small screen at 75mph', 'Some buzz above 5,500rpm'],
+    cons: ['Firm, narrow stock seat: budget about £300 for a comfort seat', 'Buffeting from the small screen at 75mph', 'Some buzz above 5,500rpm'],
     scores: {
-      comfort: [3, 'The narrow, firm stock seat gets sore after about 2 hours; a comfort seat (about £300) fixes most of it. Long-travel suspension rides well.'],
       highway: [3, 'Stable at 75mph on its 21" front, but the rally screen buffets tall riders and the twin gets buzzy around 75–80. An aftermarket screen helps.'],
       standing: [5, 'The class benchmark: tall bars, slim tank, pegs right under you.'],
       fun: [4.5, 'Torquey CP2 with a great crossplane-style bark. Light and playful on B-roads; long-travel forks dive under hard braking.'],
@@ -53,7 +52,6 @@ window.MOTO_BIKES = [
     pros: ['You already know it fits you', 'Rev-happy RS660-derived engine', 'Best electronics in class', 'Good screen'],
     cons: ['80hp felt slightly much on your test ride', 'Few dealers (nearest: Peterborough)', 'Aprilia electrical niggles reported'],
     scores: {
-      comfort: [4.5, 'You found it comfortable on your test ride: well-padded seat and compliant suspension.'],
       highway: [4, 'Better screen than the Ténéré, smooth 270° twin, stable at motorway speeds.'],
       standing: [5, 'You rated it great: tall bars and a narrow waist.'],
       fun: [5, 'Revs out like a sportsbike, with a sweet chassis and cornering electronics. The most fun-per-pound in the class.'],
@@ -82,7 +80,6 @@ window.MOTO_BIKES = [
     pros: ['Honda reliability', 'Light for its power', 'Rev-happy, fun engine', 'Honda dealer in Cambridge'],
     cons: ['91hp is above your comfort band', '2023–24 suspension is soft', 'Buffeting from the 2023–24 screen'],
     scores: {
-      comfort: [4, 'Decent seat and soft, comfortable suspension; good for full days.'],
       highway: [3.5, 'Relaxed at 75mph with some buffeting from the 2023–24 screen; the 2025 update brought a better screen.'],
       standing: [4, 'Decent, but bars sit a little low for 6\'4" standing. Risers fix it.'],
       fun: [4, 'Zingy 270° twin that loves revs, in a light, agile bike. Soft suspension limits hard riding on early bikes.'],
@@ -109,8 +106,7 @@ window.MOTO_BIKES = [
     pros: ['Very roomy', 'Smooth, gentle engine', '20L tank (300+ miles range)', 'Suzuki reliability'],
     cons: ['230kg: heaviest of the middleweights', 'Small non-adjustable screen', 'Not especially exciting'],
     scores: {
-      comfort: [4.5, 'Big, well-padded seat and plush suspension; among the best here for long days.'],
-      highway: [4, 'Twin balancers make it very smooth at 75mph. The screen is small; tall riders often fit a taller one.'],
+      highway: [4.5, 'Twin balancers make it very smooth at 75mph, and the suspension is plush. The screen is small; tall riders often fit a taller one.'],
       standing: [4.5, 'Wide, high bars and good standing ergonomics.'],
       fun: [3.5, 'Torquey and competent but not thrilling. Its weight shows on tight roads.'],
       reliability: [4.5, 'Solid so far and Suzuki\'s record is excellent.'],
@@ -136,7 +132,6 @@ window.MOTO_BIKES = [
     pros: ['Bulletproof', 'Best fuel economy here', 'Frunk storage', 'Cheap to own'],
     cons: ['Cramped legroom for 6\'4"', 'Not rev-happy', 'Low bars for standing'],
     scores: {
-      comfort: [4, 'Good, well-shaped seat and a compliant ride.'],
       highway: [3.5, 'Very relaxed and smooth at 75mph. The screen is fine with the taller accessory version.'],
       standing: [2, 'Bars too low. Not built for it.'],
       fun: [2, 'Torquey low down but hits the limiter early. Competent handling, no drama.'],
@@ -166,7 +161,6 @@ window.MOTO_BIKES = [
     pros: ['Cheap to buy and run', 'You can use all the power safely', 'Honda reliability', 'Light and easy'],
     cons: ['Small for a tall rider', 'Busy and buzzy at 75mph', 'Soft budget suspension'],
     scores: {
-      comfort: [3.5, 'Plush enough seat; soft budget suspension.'],
       highway: [3, 'Sits at 75–80mph with some buzz; being light, it gets pushed about in crosswinds.'],
       standing: [3, 'OK, though bars are low for your height.'],
       fun: [3.5, 'Light and thrashable. The fun of a small bike ridden hard.'],
@@ -194,7 +188,6 @@ window.MOTO_BIKES = [
     pros: ['Power in your sweet spot', 'Fun, revvy engine', 'Huge range', 'Good value used'],
     cons: ['Some buzz through bars and pegs', 'Road-only', 'Styling divides opinion'],
     scores: {
-      comfort: [4, 'Good seat and a comfortable, well-damped ride.'],
       highway: [3.5, 'Adjustable screen and stable, with some high-frequency vibration at 75mph.'],
       standing: [2.5, 'Bars are a little low for standing.'],
       fun: [4, 'Rev-happy twin with a zingy top end and sharp handling. Lots of fun on B-roads and not scary.'],
@@ -221,7 +214,6 @@ window.MOTO_BIKES = [
     pros: ['Very comfortable', 'Nearly unkillable', 'Cheap', 'Huge aftermarket'],
     cons: ['Stock screen buffets tall riders', 'Dated and soft', 'No longer sold new'],
     scores: {
-      comfort: [4, 'Well-padded seat and a comfortable ride. A proven long-distance bike.'],
       highway: [3.5, 'Smooth, stable V-twin at 75mph. The stock screen buffets a 6\'4" rider; a taller aftermarket screen is the usual fix.'],
       standing: [3, 'Acceptable. The XT version has slightly better bars.'],
       fun: [3, 'Characterful V-twin with good midrange, but soft suspension and a dated chassis.'],
@@ -246,7 +238,6 @@ window.MOTO_BIKES = [
     pros: ['Great on twisty roads', 'Light', 'Proven engine', 'GT comes with panniers'],
     cons: ['Knee bend for tall riders', 'Budget suspension', 'Road-only'],
     scores: {
-      comfort: [3.5, 'Reasonable seat (the GT\'s is better); budget suspension.'],
       highway: [3.5, 'Adjustable screen and stable, with some CP2 buzz at 75mph.'],
       standing: [2, 'Not designed for it.'],
       fun: [4.5, 'The CP2 in a light chassis is one of the most fun road bikes here.'],
@@ -275,7 +266,6 @@ window.MOTO_BIKES = [
     pros: ['Triple sound and character', 'Smooth at 75mph', '10,000-mile service intervals', 'Strong Triumph demo network'],
     cons: ['Compact for 6\'4"', '2026 model is 94hp', 'Road-only'],
     scores: {
-      comfort: [4, 'Good seat and a comfortable ride.'],
       highway: [4, 'Smooth triple, good adjustable screen, stable at 75mph.'],
       standing: [2, 'Not designed for it.'],
       fun: [4.5, 'Triple howl, eager revs and agile handling.'],
@@ -302,7 +292,6 @@ window.MOTO_BIKES = [
     pros: ['Superb at 75mph', 'Lazy, tractable power', 'Adjustable seat', 'Triple character'],
     cons: ['Seat on the low side', 'Some recalls on early Tiger 900-family bikes'],
     scores: {
-      comfort: [4, 'Comfortable seat and a plush, well-damped ride.'],
       highway: [4.5, 'Smooth, planted and quiet at 75mph with an adjustable screen.'],
       standing: [3, 'Acceptable.'],
       fun: [4, 'Characterful T-plane triple with a great sound. Less rev-happy than the 660.'],
@@ -327,7 +316,6 @@ window.MOTO_BIKES = [
     pros: ['Very smooth triple', 'Roomy XC ergonomics', 'Cheap for what it is', 'Plentiful'],
     cons: ['Ageing', 'Regulator and switchgear issues are known', '94hp on paper'],
     scores: {
-      comfort: [4, 'Good seat and a comfortable ride.'],
       highway: [4.5, 'Turbine-smooth at 75mph and very stable.'],
       standing: [3.5, 'XC bars work reasonably standing.'],
       fun: [4, 'The triple whine is addictive and it handles well, but it is heavy-ish.'],
@@ -354,7 +342,6 @@ window.MOTO_BIKES = [
     pros: ['Good value used', 'Easy power', 'Great OEM luggage', 'BMW demo network'],
     cons: ['Low stock seat', 'Some vibration', 'Dealer servicing is expensive'],
     scores: {
-      comfort: [3.5, 'Decent seat; comfortable suspension.'],
       highway: [3.5, 'Stable, with some vibration from the twin and a small screen.'],
       standing: [3.5, 'Reasonable bar height.'],
       fun: [3, 'Torquey and easy, but not rev-happy or playful.'],
@@ -378,7 +365,6 @@ window.MOTO_BIKES = [
     cons: ['Expensive', 'Heavy', 'Low stock seat'],
     scores: {
       fit: [3.5, 'No published geometry for the 2024-on model. 815mm base seat, with taller factory seats worth specifying.'],
-      comfort: [4, 'Comfortable seat and well-sorted suspension.'],
       highway: [4, 'Smooth and stable at 75mph.'],
       standing: [4, 'Good bar height.'],
       fun: [3.5, 'Punchy midrange but not especially playful.'],
@@ -404,7 +390,6 @@ window.MOTO_BIKES = [
     pros: ['Unique character and sound', 'Shaft drive, no chain', '23L tank', 'Relaxed power'],
     cons: ['Few dealers', 'Heavy-ish', 'Expensive new'],
     scores: {
-      comfort: [4, 'Plush seat and a relaxed, comfortable ride.'],
       highway: [3.5, 'Pleasant, mild vibration at 75mph. Stable. The TT Travel has a taller screen.'],
       standing: [3.5, 'Reasonable.'],
       fun: [4.5, 'Most character on the list. Not quick, but it makes every ride feel like an occasion.'],
@@ -426,12 +411,11 @@ window.MOTO_BIKES = [
     engine: '452cc single', hp: 40, torqueNm: 40, wetKg: 196, seatMm: 845, tankL: 17,
     delivery: 'normal', drive: 'chain',
     geo: { knee: 75.7, hip: 118.0, lean: 0, src: 'Motonomics', model: 'Himalayan 450 (2024–)' },
-    summary: 'Cheap, charming and genuinely capable on byways, with a dealer 2 miles from central Cambridge. Motorways are its weak spot: 75mph is near its comfortable limit.',
+    summary: 'Cheap, charming and genuinely capable on byways, with a dealer 2 miles from central Cambridge. Long motorway stints are its weak spot: single-cylinder vibes build up.',
     tall: 'Adjustable 825–845mm seat with tall bars. Surprisingly roomy; a tall-seat accessory exists.',
     pros: ['Cheap', 'Great for exploring back roads', 'Tall bars, good standing position', 'Dealer in Girton'],
     cons: ['Strained at 75mph', 'Early-model recalls', 'Single-cylinder vibes'],
     scores: {
-      comfort: [3, 'Firm seat on long days; soft, compliant suspension.'],
       highway: [3, 'Cruises at 70–75mph without fuss. Single-cylinder vibes build up on long stints.'],
       standing: [4, 'Tall bars, good standing position.'],
       fun: [3.5, 'You can thrash it everywhere. Charming character.'],
@@ -458,7 +442,6 @@ window.MOTO_BIKES = [
     pros: ['Smooth twin', 'Tall seat', 'Good standing position', 'Proven engine'],
     cons: ['Brand new model', 'Little in reserve at 75mph'],
     scores: {
-      comfort: [3.5, 'Hollowed comfort cushion in the seat; few long-distance reports yet.'],
       highway: [3, 'The twin is smoother than a single; the screen is small. A new model, so few long-term motorway reports yet.'],
       standing: [4.5, 'Bars and pegs placed for standing, KX-style.'],
       fun: [3.5, 'Revvy twin in a light bike.'],
@@ -481,9 +464,8 @@ window.MOTO_BIKES = [
     summary: 'Light, revvy and brilliant off-road, with the best electronics in its class. It is a KTM, which you are wary of, and a single at 75mph is tiring.',
     tall: '870mm seat and narrow body give plenty of legroom, but it is a small bike under a 6\'4" rider.',
     pros: ['Very light and agile', 'Great electronics', 'Tall seat'],
-    cons: ['Buzzy at 75mph', 'KTM reliability reputation', 'Firm, narrow seat'],
+    cons: ['Buzzy at 75mph', 'KTM reliability reputation', 'Narrow, hard seat: budget for a comfort seat'],
     scores: {
-      comfort: [2.5, 'Narrow, hard seat.'],
       highway: [2.5, 'A revvy single: buzzy at 75mph, and light enough to be pushed about by gusts.'],
       standing: [4.5, 'Designed to be ridden standing.'],
       fun: [4, 'Revvy and very agile.'],
@@ -510,7 +492,6 @@ window.MOTO_BIKES = [
     pros: ['Great value', 'Smooth twin', 'Well equipped'],
     cons: ['Cramped for tall riders', 'Small dealer network', 'Unknown long-term reliability'],
     scores: {
-      comfort: [3.5, 'Reasonable seat; decent suspension for the money.'],
       highway: [3, 'Smoother than a single, with an adjustable screen. Some buzz at 75mph.'],
       standing: [3.5, 'OK, but low for your height.'],
       fun: [3.5, 'Light and eager.'],
@@ -536,7 +517,6 @@ window.MOTO_BIKES = [
     pros: ['Huge spec for the money', 'Roomy', 'Long range', 'Cruise control'],
     cons: ['90hp, delivered with KTM-style punch', 'Young brand, few dealers', 'Resale values uncertain'],
     scores: {
-      comfort: [4, 'Comfortable seat and good suspension.'],
       highway: [4, 'Cruise control and an adjustable screen. Stable.'],
       standing: [4, 'Wide bars, rally-ish stance.'],
       fun: [4, 'Revvy, strong twin in a well-sorted chassis.'],
@@ -564,7 +544,6 @@ window.MOTO_BIKES = [
     pros: ['Excellent tall-rider fit', 'Very comfortable', 'Honda reliability', 'Great off-road for its size'],
     cons: ['94hp', '232kg and tall centre of gravity', 'Buffeting from the standard screen'],
     scores: {
-      comfort: [4, 'Comfortable seat and plush long-travel suspension.'],
       highway: [4, 'Stable and smooth; the standard screen buffets (the Adventure Sports version is better).'],
       standing: [4.5, 'Tall bars, excellent standing.'],
       fun: [4, 'Torquey, characterful twin; handles well for its size.'],
@@ -588,7 +567,6 @@ window.MOTO_BIKES = [
     pros: ['Very cheap', 'Unburstable engine', 'Comfortable and smooth'],
     cons: ['14–18 years old', 'Soft, dated chassis', 'Not exciting'],
     scores: {
-      comfort: [3.5, 'Decent seat and soft suspension.'],
       highway: [3.5, 'Smooth V-twin and a decent screen; comfortable at 75mph.'],
       standing: [3, 'OK.'],
       fun: [2.5, 'Soft and gentle.'],
@@ -611,9 +589,8 @@ window.MOTO_BIKES = [
     summary: 'A tall, tough big single with a 23-litre tank, built for overland travel. Fits a tall rider well, but the single-cylinder vibes make long motorway stints hard work.',
     tall: '895mm seat: one of the few bikes where a 34" inseam feels at home.',
     pros: ['Tall rider fit', '23L tank', 'Tough', 'Cheap'],
-    cons: ['Vibey at 75mph', 'Old', 'Plank seat'],
+    cons: ['Vibey at 75mph', 'Old', 'Plank-like seat: budget for a comfort seat'],
     scores: {
-      comfort: [2.5, 'The plank-like seat tires you on long days.'],
       highway: [2, 'Big single thumps at 75mph; buzzy mirrors and tingly hands.'],
       standing: [4.5, 'Tall bars, made for standing.'],
       fun: [3, 'Torquey thumper; fun on back roads.'],
@@ -637,7 +614,6 @@ window.MOTO_BIKES = [
     pros: ['Cheap for the performance', 'Light and fun', 'Honda reliability'],
     cons: ['No wind protection', 'Cramped for tall riders', '91hp in a light bike'],
     scores: {
-      comfort: [3, 'Reasonable sporty seat; firm suspension.'],
       highway: [2, 'Stable, but wind blast at 75mph is tiring.'],
       standing: [1.5, 'Not designed for it.'],
       fun: [4.5, 'Rev-happy engine, light chassis. Great on twisty roads.'],
@@ -663,8 +639,7 @@ window.MOTO_BIKES = [
     pros: ['Torquey, characterful twin', 'Great on twisty roads', 'Upright and roomy', 'Cheap'],
     cons: ['12–24 years old', 'Scarce: few for sale', 'Small screen'],
     scores: {
-      comfort: [4, 'Plush long-travel suspension and a good seat.'],
-      highway: [3.5, 'Smooth, balanced twin and stable at 75mph. The small screen buffets a tall rider.'],
+      highway: [4, 'Smooth, balanced twin, stable at 75mph, and plush long-travel suspension. The small screen buffets a tall rider.'],
       standing: [2.5, 'Wide bars, but a road bike.'],
       fun: [4, 'Grunty 270° twin, light steering, loves B-roads.'],
       reliability: [4.5, 'Tough, simple engine and chassis.'],
@@ -688,7 +663,6 @@ window.MOTO_BIKES = [
     pros: ['Very smooth triple', 'Shaft drive', 'Long-lived engine', 'Cheap classic'],
     cons: ['30–40 years old', 'Dated brakes and suspension', 'Parts via specialists'],
     scores: {
-      comfort: [3.5, 'Comfortable seat; dated but compliant suspension.'],
       highway: [3.5, 'Smooth and stable at 75mph. Wind protection depends on the variant (RT best, base K75 minimal).'],
       standing: [1.5, 'Not designed for it.'],
       fun: [3, 'Charming triple, but heavy with period brakes and suspension.'],
@@ -713,7 +687,6 @@ window.MOTO_BIKES = [
     pros: ['Tall rider fit', 'Very cheap', 'Frugal', 'Capable off-road'],
     cons: ['Buzzy at 75mph', 'Water pump and swingarm bearing issues', '18–25 years old'],
     scores: {
-      comfort: [3, 'The seat gets tiring on long days.'],
       highway: [2.5, 'Holds 75mph, but single-cylinder vibes wear on you.'],
       standing: [4, 'Tall, with decent bars for standing.'],
       fun: [3, 'Light-ish and thumpy.'],
@@ -738,8 +711,7 @@ window.MOTO_BIKES = [
     pros: ['Superb long-distance comfort', 'Shaft drive', 'Everything available for it', 'Plentiful used'],
     cons: ['100–125hp', 'Final drive and early-LC issues', 'Expensive to service'],
     scores: {
-      comfort: [4.5, 'Excellent seat and a plush ride; all-day comfortable.'],
-      highway: [4, 'Planted and smooth at 75mph with a decent screen.'],
+      highway: [4.5, 'Planted and smooth at 75mph with a decent screen; plush suspension soaks up bad roads.'],
       standing: [3.5, 'OK; the cylinders sit close to your shins.'],
       fun: [3.5, 'Torquey and surprisingly agile, but heavy and not rev-happy.'],
       reliability: [3.5, 'Mostly durable. Air-cooled bikes had final drive failures; early water-cooled (2013–14) bikes had some teething issues.'],
@@ -766,8 +738,7 @@ window.MOTO_BIKES = [
     pros: ['Very comfortable', 'Lazy, torquey engine', 'Shaft drive', 'Cheap for a big GS'],
     cons: ['249kg', 'Servo brakes (2002+) and final drive can be costly', '22–27 years old'],
     scores: {
-      comfort: [4.5, 'Comfortable seat and a plush ride.'],
-      highway: [4, 'Stable and relaxed at 75mph; buffeting from the standard screen.'],
+      highway: [4.5, 'Stable and relaxed at 75mph with a plush ride; buffeting from the standard screen.'],
       standing: [3.5, 'OK.'],
       fun: [3, 'Characterful boxer, but heavy and old.'],
       reliability: [3.5, 'Generally rugged; known issues are servo ABS brakes, final drive, clutch splines and fuel pump controller.'],
@@ -791,8 +762,7 @@ window.MOTO_BIKES = [
     pros: ['Smooth, characterful V-twin', 'Belt drive', 'Build quality'],
     cons: ['Cramped for 6\'4"', 'Little lean angle', 'No wind protection', 'Small tank'],
     scores: {
-      comfort: [2, 'Short-travel rear shocks give a harsh ride over bumps.'],
-      highway: [2.5, 'Stable, but full wind blast at 75mph.'],
+      highway: [2, 'Stable, but full wind blast at 75mph, and short-travel rear shocks give a harsh ride over bumps.'],
       standing: [0.5, 'No.'],
       fun: [2.5, 'Nice engine and sound, but pegs scrape early on twisty roads.'],
       reliability: [4, 'Liquid-cooled engine has a good record.'],
@@ -818,7 +788,6 @@ window.MOTO_BIKES = [
     pros: ['Fun and light', 'Cheap to buy and run', '10,000-mile services', 'Triumph demo network'],
     cons: ['Small for 6\'4"', 'No wind protection', 'Buzzy at 75mph'],
     scores: {
-      comfort: [3, 'Reasonable seat; firm-ish ride.'],
       highway: [2, 'No screen and a revving single at 75mph.'],
       standing: [3.5, 'Wide bars; OK standing.'],
       fun: [4, 'Light, punchy and playful. You can use all of it.'],
@@ -845,7 +814,6 @@ window.MOTO_BIKES = [
     pros: ['Lovely engine and sound', 'Cheap used', 'Dealer 2 miles away', 'Proven reliable'],
     cons: ['Low seat for your legs', 'No wind protection', 'Soft suspension, modest brakes'],
     scores: {
-      comfort: [4, 'Comfy seat and a soft ride.'],
       highway: [2.5, 'Smooth and happy at 70mph, but wind blast at 75 with no screen.'],
       standing: [2, 'Not designed for it.'],
       fun: [3.5, 'Characterful and engaging at sane speeds; soft chassis.'],
@@ -872,8 +840,7 @@ window.MOTO_BIKES = [
     pros: ['Tall rider fit', 'Good fairing', '23L tank', 'Classic, holding value'],
     cons: ['23–36 years old', 'Heavy for 60hp', 'Parts getting scarcer'],
     scores: {
-      comfort: [4, 'Comfortable seat and plush long-travel suspension.'],
-      highway: [3.5, 'Good fairing and smooth V-twin; relaxed at 75mph.'],
+      highway: [4, 'Good fairing, smooth V-twin and plush long-travel suspension; relaxed at 75mph.'],
       standing: [4, 'Tall bars; good standing.'],
       fun: [3, 'Charismatic, but soft and heavy by modern standards.'],
       reliability: [4.5, 'Famously tough. Known weak points: regulator/rectifier and fuel pump relay.'],
@@ -897,8 +864,7 @@ window.MOTO_BIKES = [
     pros: ['Incredible engine sound and revs', 'Sharp handling', 'Reliable'],
     cons: ['Very cramped for 6\'4"', 'Buzzy at motorway speeds', 'No luggage'],
     scores: {
-      comfort: [2.5, 'Thin sport seat; firm suspension.'],
-      highway: [2, 'Around 9,000rpm at 75mph with a small fairing. Tiring.'],
+      highway: [1.5, 'Around 9,000rpm at 75mph with a small fairing and firm suspension. Tiring.'],
       standing: [0.5, 'No.'],
       fun: [5, 'Wringing out a 16,000rpm four on a B-road is the whole point.'],
       reliability: [4.5, 'Modern Kawasaki.'],
@@ -924,8 +890,7 @@ window.MOTO_BIKES = [
     pros: ['V4 sound', 'Legendary handling', 'Classic value'],
     cons: ['Tiny for 6\'4"', '33–37 years old', 'Parts scarcity', 'Mostly grey imports'],
     scores: {
-      comfort: [2, 'Thin seat and firm, old suspension.'],
-      highway: [1.5, 'Revving hard at 75mph with an old, small fairing.'],
+      highway: [1, 'Revving hard at 75mph with an old, small fairing; firm, old suspension.'],
       standing: [0.5, 'No.'],
       fun: [4.5, 'Gear-driven cam whine and sublime handling.'],
       reliability: [4.5, 'Honda-built and robust.'],
@@ -947,9 +912,8 @@ window.MOTO_BIKES = [
     summary: 'The previous-generation mid-size GS: tall, light for its class, built to be ridden standing and genuinely good off-road. Cheap used. Its parallel twin buzzes at motorway speeds, and the stock seat is hard. The F 700 GS is the lower, 75hp road version.',
     tall: '880mm seat, one of the tallest in the class. A 34" inseam fits well; tall bars.',
     pros: ['Tall rider fit', 'Excellent standing position', 'Capable off-road', 'Cheap used'],
-    cons: ['Buzzy at 75mph', 'Hard stock seat', 'Fuel pump and ABS-unit quirks'],
+    cons: ['Buzzy at 75mph', 'Hard, narrow stock seat: budget for a comfort seat', 'Fuel pump and ABS-unit quirks'],
     scores: {
-      comfort: [2.5, 'The hard, narrow stock seat tires you on long days.'],
       highway: [2.5, 'Stable, but the twin buzzes through bars and pegs at 75mph and the small screen buffets tall riders.'],
       standing: [4.5, 'Tall bars and a slim waist; designed to be ridden standing.'],
       fun: [4, 'Eager engine in a light, agile chassis; good on B-roads and trails.'],
@@ -979,7 +943,6 @@ window.MOTO_BIKES = [
     pros: ['Tall seat options', 'Strong, easy midrange', 'Capable off-road', 'Excellent luggage'],
     cons: ['95hp', 'Some vibration', 'Pricey BMW servicing'],
     scores: {
-      comfort: [4, 'Comfortable seat and good suspension (electronic on many).'],
       highway: [3.5, 'Stable, with some vibration from the twin and a small screen.'],
       standing: [4, 'Tall bars; good standing position.'],
       fun: [3.5, 'Punchy midrange and competent handling, but not playful.'],
@@ -1005,7 +968,6 @@ window.MOTO_BIKES = [
     pros: ['Superb at 75mph', 'Characterful triple', 'Rally suits tall riders', 'Plentiful used'],
     cons: ['94hp', 'GT seat is low', 'Early-bike niggles and recalls'],
     scores: {
-      comfort: [4, 'Comfortable seat (heated on Pro models) and plush suspension.'],
       highway: [4.5, 'Smooth, planted and quiet at 75mph with an adjustable screen.'],
       standing: [3, 'GT: acceptable. The Rally is much better.'],
       fun: [4, 'Torquey triple with a great sound; handles well.'],
@@ -1033,7 +995,6 @@ window.MOTO_BIKES = [
     pros: ['Very roomy', 'Relaxed, torquey engine', 'Suzuki reliability', 'Cheap used'],
     cons: ['99hp', 'Not exciting', 'Some buffeting from the screen'],
     scores: {
-      comfort: [4.5, 'Well-padded seat and a plush ride.'],
       highway: [4, 'Smooth and stable at 75mph; the adjustable screen still buffets some tall riders.'],
       standing: [3.5, 'Tall, wide bars; acceptable standing.'],
       fun: [3.5, 'Torquey V-twin with character, but more competent than thrilling.'],
@@ -1058,7 +1019,6 @@ window.MOTO_BIKES = [
     pros: ['Huge character and torque', 'Tall seat (XE)', 'Great standing position', 'Long-travel suspension'],
     cons: ['No screen', 'Limited luggage', 'Pricey'],
     scores: {
-      comfort: [3, 'Firm seat on long days, but excellent suspension.'],
       highway: [2.5, 'Relaxed engine, but full wind blast at 75mph with no screen.'],
       standing: [4.5, 'Wide, high bars and long travel; made to be ridden standing.'],
       fun: [4.5, 'Big torque, a lovely twin sound and a sweet chassis.'],
@@ -1088,7 +1048,6 @@ window.MOTO_BIKES = [
     pros: ['Light', 'Great off-road', 'Cheap to run'],
     cons: ['Wobbly at motorway speeds', 'Low bars', 'Underpowered for touring'],
     scores: {
-      comfort: [2.5, 'Narrow seat; soft, squishy suspension.'],
       highway: [1.5, 'You found it wobbly and nervous at freeway speeds.'],
       standing: [2, 'You found the bars too low and close.'],
       fun: [3, 'Fun off-road; squishy on the road.'],
