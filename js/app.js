@@ -3,7 +3,7 @@
   'use strict';
   const BIKES = window.MOTO_BIKES;
   const DEALERS = window.MOTO_DEALERS;
-  const { CRITERIA, DEFAULT_CURVES, POWER_KNEE, REV_K, REV_CAP, revReference, FIT_PENALTY, PENALTY, ABS_LABEL, evaluate, overall, interp, effectiveHp } = window.MotoScoring;
+  const { CRITERIA, DEFAULT_CURVES, POWER_KNEE, REV_K, REV_CAP, revReference, FIT_PENALTY, PENALTY, ABS_NO, absNoScore, ABS_LABEL, evaluate, overall, interp, effectiveHp } = window.MotoScoring;
   const L = window.MotoListings;
   const esc = L.esc;
   const $ = (sel, root) => (root || document).querySelector(sel);
@@ -209,7 +209,6 @@
     });
   }
 
-  const absText = s => s >= 5 ? 'Yes' : s <= 0 ? 'No' : 'Some';
   function powerNote(ev) {
     const rev = `${ev.specs.hp}bhp and ${ev.specs.torqueNm}Nm: ${ev.hpPerNm.toFixed(2)} hp per Nm (about ${rpmEquiv(ev.hpPerNm).toLocaleString('en-GB')}rpm-equivalent; typical ${REV_REF.toFixed(2)})`;
     if (ev.specs.hp <= state.powerKnee) return `${rev}. Below ${state.powerKnee}bhp, so no rev-happiness adjustment.`;
@@ -225,10 +224,13 @@
     return parts[0] + (cuts.length ? ` (${cuts.join(', ')})` : '') + `. Source: ${g.src}, ${g.model}.`;
   }
   function absNote(ev) {
-    if (ev.source.abs === 'you') return ev.scores.abs >= 5 ? 'You marked this bike as having ABS.' : 'You marked this bike as having no ABS.';
-    const status = ev.option.abs || 'yes';
-    if (ev.option.absNote) return ev.option.absNote;
-    return status === 'yes' ? 'ABS as standard.' : status === 'no' ? 'No ABS on this model.' : 'ABS was optional; check the listing.';
+    const status = ev.absStatus;
+    const base = ev.source.abs === 'you' ? (status === 'yes' ? 'You marked this bike as having ABS.' : 'You marked this bike as having no ABS.')
+      : ev.option.absNote || (status === 'yes' ? 'ABS as standard.' : status === 'no' ? 'No ABS on this model.' : 'ABS was optional; check the listing.');
+    if (status === 'yes') return base;
+    const no = absNoScore(ev.specs.hp);
+    const why = `Without ABS, ${ev.specs.hp}bhp scores ${fmt1(no)} (${ABS_NO.score} at ${ABS_NO.hp}bhp, 0 from ${ABS_NO.hp + ABS_NO.score / ABS_NO.perHp}bhp)`;
+    return status === 'no' ? `${base} ${why}.` : `${base} ${why}; until you check, it scores halfway between that and 5.`;
   }
 
   // Diverging brick → grey → green; returns inline CSS custom properties.
@@ -344,7 +346,7 @@
         const s = ev.scores[c.key];
         const src = ev.source[c.key];
         const title = c.key === 'power' ? powerNote(ev) : (b.scores[c.key] ? b.scores[c.key][1] : c.help);
-        const text = c.binary ? absText(s) : fmt1(s);
+        const text = c.binary ? ABS_LABEL[ev.absStatus] : fmt1(s);
         return `<td class="score"><span class="score-chip${src === 'you' ? ' you' : ''}" style="${scoreStyle(s)}" title="${esc(c.binary ? absNote(ev) : title)}">${text}</span></td>`;
       }).join('')}
     </tr>`;
@@ -376,7 +378,7 @@
         ? `<input type="number" min="0" max="5" step="0.5" data-ov="${b.id}" data-key="${c.key}" value="${typeof ov[c.key] === 'number' ? ov[c.key] : ''}" placeholder="mine" aria-label="My ${esc(c.label)} score">`
         : '<span></span>';
       return `<div class="crit-item"><span class="ci-label">${esc(c.label)}</span>
-        <span><span class="score-chip${ev.source[c.key] === 'you' ? ' you' : ''}" style="${scoreStyle(s)}">${c.binary ? absText(s) : fmt1(s)}</span></span>
+        <span><span class="score-chip${ev.source[c.key] === 'you' ? ' you' : ''}" style="${scoreStyle(s)}">${c.binary ? ABS_LABEL[ev.absStatus] : fmt1(s)}</span></span>
         <span class="ci-note">${esc(note)}</span>${input}</div>`;
     }).join('');
     const optItems = r.evs.map(e => `<label class="opt-item${e.option.id === ev.option.id ? ' sel' : ''}">
@@ -441,6 +443,9 @@
       `Power above ${state.powerKnee}bhp counts as ${state.powerKnee} + (bhp − ${state.powerKnee}) × factor,`,
       `where factor = (hp per Nm ÷ ${REV_REF.toFixed(2)})^${state.revK}, kept between ${REV_CAP[0]} and ${REV_CAP[1]}.`,
       `(${REV_REF.toFixed(2)} hp per Nm is the typical engine here; hp per Nm × 7121 ≈ rpm of peak power.)`,
+      '',
+      `ABS = 5 with ABS; without it, ${ABS_NO.score} − ${ABS_NO.perHp} × (bhp − ${ABS_NO.hp}), kept between 0 and 5;`,
+      '      halfway between the two where ABS was optional and you haven’t checked',
       '',
       `Fit = knee-angle curve − ${FIT_PENALTY.perHipDegree} per degree of hip angle under ${FIT_PENALTY.hipBelow}°`,
       `                        − ${FIT_PENALTY.perLeanDegree} per degree of forward lean over ${FIT_PENALTY.leanAbove}°`

@@ -1,7 +1,7 @@
 # Next Bike Shortlist
 
 A static site for choosing a motorbike: 40 candidate bikes in a sortable,
-filterable table, scored 0–5 on twelve criteria plus ABS (yes/no), with an overall score
+filterable table, scored 0–5 on twelve criteria plus ABS, with an overall score
 out of 10 from weights you set. It also builds listing searches and shows dealers
 and saved listings on a map, sorted by distance from home (Cambridge by
 default).
@@ -57,9 +57,11 @@ add or remove a point; saved in your browser), or edit the defaults in
   **standing position, fun, reliability, running costs, luggage,
   green-laning** are researched judgements with a one-line
   reason each. Override any of them per bike after a test ride.
-- **ABS** is yes/no per buying option (5 or 0), with 2.5 where it was an
-  optional extra; mark the bike you find in its detail panel. It has a
-  weight like everything else.
+- **ABS** is set per buying option. With ABS it scores 5. Without it, the
+  score falls with power: 3 at 40bhp, 0.1 less per extra bhp, 0 from 70bhp.
+  Where ABS was an optional extra it scores halfway between the two until
+  you mark the bike you find in its detail panel. Its default weight is 10,
+  and there is deliberately no setting to soften the power scaling.
 - **Test-ride access** depends on the option: dealer demo fleets and
   distance for new bikes, how common the bike is for used.
 - **Overall** is a weighted mean of the criterion scores, or a weighted

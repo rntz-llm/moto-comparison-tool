@@ -28,8 +28,8 @@
       help: 'Ability on UK byways and gravel. The worry of dropping a heavy bike counts under Weight.' },
     { key: 'standing', label: 'Standing position', short: 'Standing', kind: 'researched', weight: 4,
       help: 'Bar height and reach when standing on the pegs.' },
-    { key: 'abs', label: 'ABS', short: 'ABS', kind: 'option', weight: 5, binary: true,
-      help: 'Anti-lock brakes. Has ABS scores 5, no ABS scores 0. Where ABS was an optional extra, it scores 2.5 until you mark whether the bike you found has it.' },
+    { key: 'abs', label: 'ABS', short: 'ABS', kind: 'option', weight: 10, binary: true,
+      help: 'Anti-lock brakes. Has ABS scores 5. No ABS scores worse the more powerful the bike: 3 at 40bhp, 0 at 70bhp and above. Where ABS was an optional extra, it scores halfway until you mark whether the bike you found has it.' },
     { key: 'testride', label: 'Test-ride access', short: 'Test ride', kind: 'option', weight: 3,
       help: 'How easy it is to test-ride the option you picked: nearby dealer demo fleets for new bikes, how common the bike is for used.' }
   ];
@@ -72,7 +72,17 @@
   // ABS is yes/no. 'some' is an option where it was an extra on some bikes.
   // Every new bike over 125cc registered in the EU/UK since 2017 has it, so
   // options default to 'yes'; bikes.js marks the older ones that differ.
-  const ABS_SCORE = { yes: 5, some: 2.5, no: 0 };
+  // Without ABS, the score falls with power: ABS_NO.score at ABS_NO.hp, minus
+  // ABS_NO.perHp per bhp above it (so 0 from 70bhp). 'some' scores halfway
+  // between having it and not. Fixed on purpose: there is no slider.
+  const ABS_NO = { hp: 40, score: 3, perHp: 0.1 };
+  const clamp5 = v => Math.max(0, Math.min(5, v));
+  const absNoScore = hp => clamp5(ABS_NO.score - ABS_NO.perHp * (hp - ABS_NO.hp));
+  function absScore(status, hp) {
+    if (status === 'no') return absNoScore(hp);
+    if (status === 'some') return (5 + absNoScore(hp)) / 2;
+    return 5;
+  }
   const ABS_LABEL = { yes: 'Yes', some: 'Some', no: 'No' };
 
   const PENALTY = {
@@ -102,7 +112,6 @@
     return knee + (hp - knee) * factor;
   }
 
-  const clamp5 = v => Math.max(0, Math.min(5, v));
 
   // Resolve a bike + option into specs and per-criterion scores.
   // overrides: { [criterionKey]: number, price: number } from the user.
@@ -119,6 +128,8 @@
 
     const curves = Object.assign({}, DEFAULT_CURVES, settings.curves || {});
     const geo = option.geo || bike.geo || null;
+    // The ABS override records what the bike you found has: 5 = ABS, 0 = none.
+    const absStatus = overrides.abs === 5 ? 'yes' : overrides.abs === 0 ? 'no' : option.abs || bike.abs || 'yes';
     const scores = {};
     const source = {};
     for (const c of CRITERIA) {
@@ -127,16 +138,16 @@
       else if (c.key === 'power') s = interp(curves.power, effHp);
       else if (c.key === 'weight') s = interp(curves.weight, specs.wetKg);
       else if (c.key === 'testride') s = option.testRide;
-      else if (c.key === 'abs') s = ABS_SCORE[option.abs || bike.abs || 'yes'];
+      else if (c.key === 'abs') s = absScore(absStatus, specs.hp);
       else if (c.key === 'fit' && geo) s = fitScore(geo, curves.fit);
       else s = bike.scores[c.key][0];
       if (option.adj && typeof option.adj[c.key] === 'number') { s += option.adj[c.key]; src = 'option'; }
-      if (c.kind !== 'computed' && typeof overrides[c.key] === 'number') { s = overrides[c.key]; src = 'you'; }
+      if (c.kind !== 'computed' && typeof overrides[c.key] === 'number') { if (c.key !== 'abs') s = overrides[c.key]; src = 'you'; }
       scores[c.key] = clamp5(s);
       source[c.key] = src;
     }
     if (priceOverridden) source.price = 'you';
-    return { specs, price, scores, source, geo, hpPerNm, rev, effHp };
+    return { specs, price, scores, source, geo, hpPerNm, rev, effHp, absStatus };
   }
 
   // Weighted power mean of the 0–5 criterion scores, doubled so the overall
@@ -157,5 +168,5 @@
     return 2 * mean;
   }
 
-  window.MotoScoring = { CRITERIA, DEFAULT_CURVES, POWER_KNEE, REV_K, REV_CAP, revReference, revFactor, FIT_PENALTY, fitScore, PENALTY, ABS_SCORE, ABS_LABEL, interp, effectiveHp, evaluate, overall };
+  window.MotoScoring = { CRITERIA, DEFAULT_CURVES, POWER_KNEE, REV_K, REV_CAP, revReference, revFactor, FIT_PENALTY, fitScore, PENALTY, ABS_NO, absNoScore, absScore, ABS_LABEL, interp, effectiveHp, evaluate, overall };
 })();
