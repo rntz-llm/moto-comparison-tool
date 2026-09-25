@@ -100,7 +100,8 @@
     return { specs, delivery, price, scores, source, effHp: effectiveHp(specs.hp, delivery) };
   }
 
-  // Weighted power mean. p=1 is the arithmetic mean; lower p punishes weak spots.
+  // Weighted power mean of the 0–5 criterion scores, doubled so the overall
+  // score runs 0–10. p=1 is the arithmetic mean; lower p punishes weak spots.
   function overall(scores, weights, penaltyKey) {
     const p = (PENALTY[penaltyKey] || PENALTY.none).p;
     let wsum = 0, acc = 0;
@@ -113,8 +114,8 @@
       else acc += w * Math.pow(s, p);
     }
     if (!wsum) return 0;
-    if (p === 0) return Math.exp(acc / wsum);
-    return clamp5(Math.pow(acc / wsum, 1 / p));
+    const mean = p === 0 ? Math.exp(acc / wsum) : clamp5(Math.pow(acc / wsum, 1 / p));
+    return 2 * mean;
   }
 
   window.MotoScoring = { CRITERIA, DEFAULT_CURVES, DELIVERY_FACTOR, PENALTY, interp, effectiveHp, evaluate, overall };

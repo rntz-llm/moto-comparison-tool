@@ -2,7 +2,7 @@
 
 A static site for choosing a motorbike: 35 candidate bikes in a sortable,
 filterable table, scored 0–5 on twelve criteria, with an overall score
-from weights you set. It also builds listing searches and shows dealers
+out of 10 from weights you set. It also builds listing searches and shows dealers
 and saved listings on a map, sorted by distance from home (Cambridge by
 default).
 
@@ -46,8 +46,9 @@ add or remove a point; saved in your browser), or edit the defaults in
   reason each. Override any of them per bike after a test ride.
 - **Test-ride access** depends on the option: dealer demo fleets and
   distance for new bikes, how common the bike is for used.
-- **Overall** is a weighted mean, or a weighted power mean when the
-  weak-spot penalty is on (so one bad score costs more).
+- **Overall** is a weighted mean of the criterion scores, or a weighted
+  power mean when the weak-spot penalty is on (so one bad score costs
+  more), doubled to run 0–10.
 
 ## Data sources
 

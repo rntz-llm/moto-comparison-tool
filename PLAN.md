@@ -4,7 +4,7 @@
 A static website (no build step, served by `python3 -m http.server` like the
 existing setup) for choosing the next bike: a sortable/filterable table of
 candidate bikes, per-criterion scores (objective ones computed, subjective
-ones researched and justified), and an overall 0–5 score from adjustable
+ones researched and justified), and an overall 0–10 score from adjustable
 weights. Bonus: listing search for chosen bikes plus a map of dealers and
 saved listings, sorted by distance from Cambridge.
 
@@ -35,7 +35,7 @@ demo fleet). An option can also override specs where generations differ.
 | Test-ride access | researched | per option (used private vs dealer demo policies) |
 | Green-laning | subjective | low default weight |
 
-**Overall score.** Weighted mean of criteria (0–5). A "weak-spot
+**Overall score.** Weighted mean of criteria (0–5), doubled to give 0–10. A "weak-spot
 penalty" control switches between a plain weighted mean and a generalized
 (power) mean so that one terrible score drags the total down more.
 Hard limits (max price, hp range) are filters, not scores.

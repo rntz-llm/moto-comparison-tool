@@ -14,6 +14,8 @@
   const clone = o => JSON.parse(JSON.stringify(o));
   const gbp = n => '£' + Math.round(n).toLocaleString('en-GB');
   const fmt1 = n => (Math.round(n * 10) / 10).toFixed(1);
+  // Overall scores (0–10) show two significant figures: 7.4, or 10 at the top.
+  const fmtOverall = n => { const r = Math.round(n * 10) / 10; return r >= 10 ? '10' : r.toFixed(1); };
 
   const DEFAULT_WEIGHTS = Object.fromEntries(CRITERIA.map(c => [c.key, c.weight]));
   const PRESETS = [
@@ -187,7 +189,7 @@
       <button class="route-row" type="button" data-goto="${r.bike.id}">
         <span class="rs-arrow" aria-hidden="true">↑</span>
         <span class="rs-name">${esc(r.bike.make)} ${esc(r.bike.model)}</span>
-        <span class="rs-score">${fmt1(r.ev.overall)}</span>
+        <span class="rs-score">${fmtOverall(r.ev.overall)}</span>
       </button>`).join('');
   }
 
@@ -274,7 +276,7 @@
     let html = `<tr class="row${open ? ' open' : ''}${state.hidden[b.id] ? ' is-hidden' : ''}" data-bike="${b.id}" aria-expanded="${open}">
       <td><button type="button" class="star" data-star="${b.id}" aria-pressed="${!!state.starred[b.id]}" aria-label="Shortlist ${esc(b.model)}">★</button></td>
       <td class="col-bike"><span class="bike-make">${esc(b.make)}</span><span class="bike-name">${esc(b.model)}</span><span class="bike-meta">${tags.join('')}</span></td>
-      <td><div class="overall"><span class="overall-num">${fmt1(ev.overall)}</span><span class="overall-bar"><i style="width:${(ev.overall / 5 * 100).toFixed(1)}%"></i></span></div></td>
+      <td><div class="overall"><span class="overall-num">${fmtOverall(ev.overall)}</span><span class="overall-bar"><i style="width:${(ev.overall / 10 * 100).toFixed(1)}%"></i></span></div></td>
       <td><select class="opt-select" data-opt="${b.id}" aria-label="Buying option for ${esc(b.model)}">${opts}</select></td>
       <td class="price">${gbp(ev.price)}${priceSrc ? `<small>${esc(priceSrc)}</small>` : ''}</td>
       <td class="spec">${ev.specs.hp}</td>
@@ -314,7 +316,7 @@
     const optItems = r.evs.map(e => `<label class="opt-item${e.option.id === ev.option.id ? ' sel' : ''}">
         <input type="radio" name="opt-${b.id}" data-opt-radio="${b.id}" value="${e.option.id}"${e.option.id === ev.option.id ? ' checked' : ''}>
         <span><span class="oi-label">${esc(e.option.label)}</span> · ${gbp(e.price)} <span class="hint">(${gbp(e.option.range[0])}–${gbp(e.option.range[1]).slice(1)})</span></span>
-        <span class="oi-score">${fmt1(e.overall)}</span>
+        <span class="oi-score">${fmtOverall(e.overall)}</span>
         ${e.option.note ? `<span class="oi-note">${esc(e.option.note)}</span>` : ''}
       </label>`).join('');
     return `<div class="detail-inner">
@@ -364,9 +366,10 @@
       'score_i  = 0–5 for each criterion i',
       'w_i      = your weight for criterion i (0–10)',
       '',
-      p === 1 ? 'overall  = Σ(w_i × score_i) / Σ w_i                     (weak-spot penalty: none)'
-        : p === 0 ? 'overall  = exp( Σ(w_i × ln score_i) / Σ w_i )           (weak-spot penalty: strong)'
-          : `overall  = ( Σ(w_i × score_i^${p}) / Σ w_i )^(1/${p})        (weak-spot penalty: ${state.penalty})`,
+      p === 1 ? 'overall  = 2 × Σ(w_i × score_i) / Σ w_i                     (weak-spot penalty: none)'
+        : p === 0 ? 'overall  = 2 × exp( Σ(w_i × ln score_i) / Σ w_i )           (weak-spot penalty: strong)'
+          : `overall  = 2 × ( Σ(w_i × score_i^${p}) / Σ w_i )^(1/${p})        (weak-spot penalty: ${state.penalty})`,
+      '           so the overall score runs 0–10',
       '',
       'Power above 70bhp counts as 70 + (bhp − 70) × factor,',
       'where factor = 0.6 relaxed, 1.0 normal, 1.3 punchy delivery.'
