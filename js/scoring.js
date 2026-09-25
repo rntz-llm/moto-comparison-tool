@@ -12,8 +12,10 @@
       help: 'Routine costs: fuel economy, insurance, service intervals and prices, parts prices, tyres and chains.' },
     { key: 'power', label: 'Power', short: 'Power', kind: 'computed', weight: 6,
       help: 'Peak bhp through the power curve (sweet spot 40–60, zero from 100). Above 70bhp, relaxed engines count as less powerful and punchy ones as more.' },
-    { key: 'comfort', label: 'Tall-rider comfort', short: 'Comfort', kind: 'researched', weight: 9,
-      help: 'Ergonomics for 6\'4" and a 34" inseam: legroom, bar reach and seat over 2+ hours. Vibration and wind count under Motorway manners.' },
+    { key: 'fit', label: 'Tall-rider fit', short: 'Fit', kind: 'geometry', weight: 6,
+      help: 'Knee angle for a 6\'4" rider with a 34" inseam, from the bike\'s seat, peg and bar positions, through the fit curve. A crouched hip (under 105°) or forward lean over 8° takes points off.' },
+    { key: 'comfort', label: 'Seat & ride comfort', short: 'Comfort', kind: 'researched', weight: 4,
+      help: 'Seat padding and shape, and how plush the suspension is, over 2+ hours. Legroom and reach count under Tall-rider fit; vibration and wind under Motorway manners.' },
     { key: 'highway', label: 'Motorway manners', short: 'Motorway', kind: 'researched', weight: 7,
       help: 'Stability, vibration and wind protection at 75mph. Power is judged under Power, not here.' },
     { key: 'standing', label: 'Standing position', short: 'Standing', kind: 'researched', weight: 4,
@@ -38,8 +40,20 @@
   const DEFAULT_CURVES = {
     price: [[2000, 5], [4500, 4.5], [8000, 3], [11000, 0]],
     power: [[20, 2], [40, 5], [60, 5], [80, 3.5], [100, 0]],
-    weight: [[140, 2.5], [180, 5], [200, 5], [300, 0]]
+    weight: [[140, 2.5], [180, 5], [200, 5], [300, 0]],
+    // Knee angle (degrees) for a 6'4" / 34" rider. 78° is your CRF300L Rally, whose
+    // legroom you called reasonable. Above 100° means feet-forward cruiser controls.
+    fit: [[60, 0], [68, 1.5], [74, 3], [78, 4], [84, 5], [100, 5], [115, 3], [130, 1.5]]
   };
+
+  // Fit deductions: a crouched hip angle, and forward lean.
+  const FIT_PENALTY = { hipBelow: 105, perHipDegree: 0.15, leanAbove: 8, perLeanDegree: 0.1 };
+  function fitScore(geo, curve) {
+    let s = interp(curve, geo.knee);
+    if (geo.hip < FIT_PENALTY.hipBelow) s -= (FIT_PENALTY.hipBelow - geo.hip) * FIT_PENALTY.perHipDegree;
+    if (geo.lean > FIT_PENALTY.leanAbove) s -= (geo.lean - FIT_PENALTY.leanAbove) * FIT_PENALTY.perLeanDegree;
+    return s;
+  }
 
   // Above 70bhp, the excess counts for less (relaxed) or more (punchy).
   const DELIVERY_FACTOR = { relaxed: 0.6, normal: 1, punchy: 1.3 };
@@ -89,7 +103,8 @@
     const priceOverridden = typeof overrides.price === 'number';
     if (priceOverridden) price = overrides.price;
 
-    const curves = settings.curves || DEFAULT_CURVES;
+    const curves = Object.assign({}, DEFAULT_CURVES, settings.curves || {});
+    const geo = option.geo || bike.geo || null;
     const scores = {};
     const source = {};
     for (const c of CRITERIA) {
@@ -99,6 +114,7 @@
       else if (c.key === 'weight') s = interp(curves.weight, specs.wetKg);
       else if (c.key === 'testride') s = option.testRide;
       else if (c.key === 'abs') s = ABS_SCORE[option.abs || bike.abs || 'yes'];
+      else if (c.key === 'fit' && geo) s = fitScore(geo, curves.fit);
       else s = bike.scores[c.key][0];
       if (option.adj && typeof option.adj[c.key] === 'number') { s += option.adj[c.key]; src = 'option'; }
       if (c.kind !== 'computed' && typeof overrides[c.key] === 'number') { s = overrides[c.key]; src = 'you'; }
@@ -106,7 +122,7 @@
       source[c.key] = src;
     }
     if (priceOverridden) source.price = 'you';
-    return { specs, delivery, price, scores, source, effHp: effectiveHp(specs.hp, delivery) };
+    return { specs, delivery, price, scores, source, geo, effHp: effectiveHp(specs.hp, delivery) };
   }
 
   // Weighted power mean of the 0–5 criterion scores, doubled so the overall
@@ -127,5 +143,5 @@
     return 2 * mean;
   }
 
-  window.MotoScoring = { CRITERIA, DEFAULT_CURVES, DELIVERY_FACTOR, POWER_KNEE, PENALTY, ABS_SCORE, ABS_LABEL, interp, effectiveHp, evaluate, overall };
+  window.MotoScoring = { CRITERIA, DEFAULT_CURVES, DELIVERY_FACTOR, POWER_KNEE, FIT_PENALTY, fitScore, PENALTY, ABS_SCORE, ABS_LABEL, interp, effectiveHp, evaluate, overall };
 })();

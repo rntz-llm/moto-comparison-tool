@@ -3,7 +3,7 @@
   'use strict';
   const BIKES = window.MOTO_BIKES;
   const DEALERS = window.MOTO_DEALERS;
-  const { CRITERIA, DEFAULT_CURVES, POWER_KNEE, DELIVERY_FACTOR, PENALTY, ABS_LABEL, evaluate, overall, interp, effectiveHp } = window.MotoScoring;
+  const { CRITERIA, DEFAULT_CURVES, POWER_KNEE, DELIVERY_FACTOR, FIT_PENALTY, PENALTY, ABS_LABEL, evaluate, overall, interp, effectiveHp } = window.MotoScoring;
   const L = window.MotoListings;
   const esc = L.esc;
   const $ = (sel, root) => (root || document).querySelector(sel);
@@ -20,9 +20,9 @@
   const PRESETS = [
     { id: 'default', label: 'Balanced', weights: DEFAULT_WEIGHTS },
     { id: 'cheap', label: 'Cheap & sensible', weights: Object.assign({}, DEFAULT_WEIGHTS, { price: 10, running: 7, reliability: 9, fun: 4, power: 4, standing: 2 }) },
-    { id: 'tour', label: 'Long trips', weights: Object.assign({}, DEFAULT_WEIGHTS, { comfort: 10, highway: 10, luggage: 7, fun: 5, standing: 3, weight: 4 }) },
+    { id: 'tour', label: 'Long trips', weights: Object.assign({}, DEFAULT_WEIGHTS, { fit: 10, comfort: 8, highway: 10, luggage: 7, fun: 5, standing: 3, weight: 4 }) },
     { id: 'twisties', label: 'Twisty roads', weights: Object.assign({}, DEFAULT_WEIGHTS, { fun: 10, power: 7, weight: 7, highway: 5, luggage: 1, greenlane: 0 }) },
-    { id: 'explore', label: 'Explorer', weights: Object.assign({}, DEFAULT_WEIGHTS, { standing: 7, greenlane: 5, luggage: 6, comfort: 9, fun: 6 }) },
+    { id: 'explore', label: 'Explorer', weights: Object.assign({}, DEFAULT_WEIGHTS, { standing: 7, greenlane: 5, luggage: 6, fit: 8, fun: 6 }) },
     { id: 'custom', label: 'Custom' }
   ];
   const sameWeights = (a, b) => CRITERIA.every(c => (a[c.key] || 0) === (b[c.key] || 0));
@@ -83,6 +83,15 @@
         if (s[k] && typeof s[k] === 'object' && !Array.isArray(s[k])) s[k] = Object.assign(s[k], saved[k]);
         else s[k] = saved[k];
       }
+      // Comfort was split into Tall-rider fit and Seat & ride comfort. Your old
+      // comfort weight carries over to fit; seat & ride starts at its default.
+      for (const k of ['weights', 'customWeights']) {
+        const old = saved[k];
+        if (old && typeof old === 'object' && !('fit' in old) && typeof old.comfort === 'number') {
+          s[k].fit = old.comfort;
+          s[k].comfort = DEFAULT_WEIGHTS.comfort;
+        }
+      }
       for (const c of CRITERIA) if (typeof s.weights[c.key] !== 'number') s.weights[c.key] = c.weight;
       for (const c of CRITERIA) if (typeof s.customWeights[c.key] !== 'number') s.customWeights[c.key] = c.weight;
       delete s.filters.styles; // style filter was removed
@@ -94,6 +103,8 @@
         else { s.preset = 'custom'; s.customWeights = clone(s.weights); }
       }
       if (!PRESETS.some(p => p.id === s.preset)) s.preset = 'custom';
+      // A named preset always shows its current definition.
+      if (s.preset !== 'custom') s.weights = clone(PRESETS.find(p => p.id === s.preset).weights);
       for (const k of Object.keys(DEFAULT_CURVES)) {
         if (OLD_DEFAULT_CURVES.some(old => JSON.stringify(s.curves[k]) === JSON.stringify(old[k]))) s.curves[k] = clone(DEFAULT_CURVES[k]);
       }
@@ -171,6 +182,7 @@
         case 'hp': return r.ev.specs.hp;
         case 'kg': return r.ev.specs.wetKg;
         case 'seat': return r.ev.specs.seatMm;
+        case 'knee': return r.ev.geo ? r.ev.geo.knee : -1;
         case 'star': return state.starred[r.bike.id] ? 1 : 0;
         default: return r.ev.scores[key];
       }
@@ -184,6 +196,14 @@
   }
 
   const absText = s => s >= 5 ? 'Yes' : s <= 0 ? 'No' : 'Some';
+  function fitNote(g) {
+    const parts = [`Knee ${Math.round(g.knee)}°, hip ${Math.round(g.hip)}°, forward lean ${Math.round(g.lean)}° for a 6′4″ rider with a 34″ inseam`];
+    const cuts = [];
+    if (g.hip < FIT_PENALTY.hipBelow) cuts.push(`crouched hip −${((FIT_PENALTY.hipBelow - g.hip) * FIT_PENALTY.perHipDegree).toFixed(1)}`);
+    if (g.lean > FIT_PENALTY.leanAbove) cuts.push(`forward lean −${((g.lean - FIT_PENALTY.leanAbove) * FIT_PENALTY.perLeanDegree).toFixed(1)}`);
+    if (g.knee > 100) cuts.push('feet-forward controls');
+    return parts[0] + (cuts.length ? ` (${cuts.join(', ')})` : '') + `. Source: ${g.src}, ${g.model}.`;
+  }
   function absNote(ev) {
     if (ev.source.abs === 'you') return ev.scores.abs >= 5 ? 'You marked this bike as having ABS.' : 'You marked this bike as having no ABS.';
     const status = ev.option.abs || 'yes';
@@ -269,9 +289,10 @@
       ${th('hp', 'bhp', '')}
       ${th('kg', 'Wet kg', '')}
       ${th('seat', 'Seat', '')}
+      ${th('knee', 'Knee°', '')}
       ${crits.map(c => th(c.key, esc(c.short), 'crit', `<span class="w-tag">×${state.weights[c.key]}</span>`)).join('')}
     </tr>`;
-    const ncols = 8 + crits.length;
+    const ncols = 9 + crits.length;
     const html = rows.map(r => rowHtml(r, crits, ncols)).join('');
     $('#bikes-tbody').innerHTML = html || `<tr><td colspan="${ncols}" class="empty">No bikes match these filters. Loosen the price or power limit, or clear the minimum scores.</td></tr>`;
     const hiddenCount = all.filter(r => !passesFilters(r) && !r.bike.reference).length;
@@ -298,6 +319,7 @@
       <td class="spec">${ev.specs.hp}</td>
       <td class="spec">${ev.specs.wetKg}</td>
       <td class="spec">${ev.specs.seatMm}</td>
+      <td class="spec" title="${ev.geo ? esc(`Knee ${Math.round(ev.geo.knee)}°, hip ${Math.round(ev.geo.hip)}°, lean ${Math.round(ev.geo.lean)}° for a 6′4″ rider`) : 'No geometry data'}">${ev.geo ? Math.round(ev.geo.knee) + '°' : '–'}</td>
       ${crits.map(c => {
         const s = ev.scores[c.key];
         const src = ev.source[c.key];
@@ -321,6 +343,7 @@
       else if (c.key === 'weight') note = `${ev.specs.wetKg}kg wet (${Math.round(ev.specs.wetKg * 2.2046)}lb).`;
       else if (c.key === 'testride') note = ev.option.condition === 'new' ? 'New: based on the nearest dealer and the brand’s demo fleet.' : 'Used: based on how many are for sale nearby.';
       else if (c.key === 'abs') note = absNote(ev);
+      else if (c.key === 'fit' && ev.geo) note = fitNote(ev.geo);
       else note = b.scores[c.key][1];
       if (ev.option.adj && ev.option.adj[c.key] && ev.source[c.key] !== 'you') note += ` (${ev.option.adj[c.key] > 0 ? '+' : ''}${ev.option.adj[c.key]} for this option)`;
       const editable = c.kind !== 'computed';
@@ -357,6 +380,7 @@
           <div><dt>Wet weight</dt><dd>${ev.specs.wetKg} kg</dd></div>
           <div><dt>Seat</dt><dd>${ev.specs.seatMm} mm</dd></div>
           <div><dt>Tank</dt><dd>${b.tankL} L</dd></div>
+          <div><dt>Knee / hip / lean</dt><dd>${ev.geo ? `${Math.round(ev.geo.knee)}° / ${Math.round(ev.geo.hip)}° / ${Math.round(ev.geo.lean)}°` : '–'}</dd></div>
           <div><dt>Final drive</dt><dd>${esc(b.drive)}</dd></div>
         </dl>
       </div>
@@ -395,7 +419,10 @@
       '           so the overall score runs 0–10',
       '',
       `Power above ${POWER_KNEE}bhp counts as ${POWER_KNEE} + (bhp − ${POWER_KNEE}) × factor,`,
-      `where factor = ${DELIVERY_FACTOR.relaxed} relaxed, ${DELIVERY_FACTOR.normal.toFixed(1)} normal, ${DELIVERY_FACTOR.punchy} punchy delivery.`
+      `where factor = ${DELIVERY_FACTOR.relaxed} relaxed, ${DELIVERY_FACTOR.normal.toFixed(1)} normal, ${DELIVERY_FACTOR.punchy} punchy delivery.`,
+      '',
+      `Fit = knee-angle curve − ${FIT_PENALTY.perHipDegree} per degree of hip angle under ${FIT_PENALTY.hipBelow}°`,
+      `                        − ${FIT_PENALTY.perLeanDegree} per degree of forward lean over ${FIT_PENALTY.leanAbove}°`
     ];
     $('#formula').textContent = lines.join('\n');
   }
@@ -409,7 +436,10 @@
       desc: 'Sweet spot 40–60bhp. Less than that struggles at 75mph; above 60 it gets more than you want, reaching zero at 100. Dots show each bike after the delivery adjustment.' },
     weight: { title: 'Wet weight → score', unit: 'kg', xLabel: v => v + '', min: 130, max: 320, step: 1,
       ticks: [140, 170, 200, 230, 260, 290, 320],
-      desc: 'Light bikes feel nervous at speed; 180–200kg is ideal; heavier bikes lose points steadily, reaching zero at 300kg.' }
+      desc: 'Light bikes feel nervous at speed; 180–200kg is ideal; heavier bikes lose points steadily, reaching zero at 300kg.' },
+    fit: { title: 'Knee angle → fit', unit: '°', xLabel: v => v + '°', min: 55, max: 135, step: 1,
+      ticks: [60, 70, 80, 90, 100, 110, 120, 130],
+      desc: 'Knee angle for a 6′4″ rider with a 34″ inseam; smaller means more bent. 78° is your CRF300L Rally. Above 100° means feet-forward cruiser controls. Dots are the bikes before hip and lean deductions.' }
   };
   const SCORE_STEP = 0.1;
 
@@ -425,7 +455,7 @@
       vy: y => (Y0 - y) / (Y0 - Y1) * 5
     };
   }
-  const fmtX = (key, v) => key === 'price' ? gbp(v) : v + ' ' + CURVE_META[key].unit;
+  const fmtX = (key, v) => key === 'price' ? gbp(v) : key === 'fit' ? v + '° knee' : v + ' ' + CURVE_META[key].unit;
   const pointsText = pts => pts.map(p => p[0] + ':' + p[1]).join(', ');
 
   function renderCurves() {
@@ -468,8 +498,8 @@
     out += `<rect class="curve-bg" x="${g.X0}" y="${g.Y1 - 6}" width="${g.X1 - g.X0}" height="${g.Y0 - g.Y1 + 12}"></rect>`;
     out += `<line class="hover-line" x1="0" x2="0" y1="${g.Y1}" y2="${g.Y0}" visibility="hidden"></line>`;
     for (const r of rows) {
-      const v = key === 'price' ? r.ev.price : key === 'power' ? r.ev.effHp : r.ev.specs.wetKg;
-      if (v < m.min || v > m.max) continue;
+      const v = key === 'price' ? r.ev.price : key === 'power' ? r.ev.effHp : key === 'fit' ? (r.ev.geo ? r.ev.geo.knee : null) : r.ev.specs.wetKg;
+      if (v == null || v < m.min || v > m.max) continue;
       out += `<circle class="bike-dot" data-v="${v}" cx="${g.sx(v).toFixed(1)}" cy="${g.sy(interp(pts, v)).toFixed(1)}" r="3"><title>${esc(r.bike.make + ' ' + r.bike.model)}</title></circle>`;
     }
     pts.forEach((p, i) => {
