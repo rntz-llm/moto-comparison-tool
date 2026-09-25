@@ -3,7 +3,7 @@
   'use strict';
   const BIKES = window.MOTO_BIKES;
   const DEALERS = window.MOTO_DEALERS;
-  const { CRITERIA, DEFAULT_CURVES, PENALTY, evaluate, overall, interp, effectiveHp } = window.MotoScoring;
+  const { CRITERIA, DEFAULT_CURVES, PENALTY, ABS_LABEL, evaluate, overall, interp, effectiveHp } = window.MotoScoring;
   const L = window.MotoListings;
   const esc = L.esc;
   const $ = (sel, root) => (root || document).querySelector(sel);
@@ -176,6 +176,14 @@
     });
   }
 
+  const absText = s => s >= 5 ? 'Yes' : s <= 0 ? 'No' : 'Some';
+  function absNote(ev) {
+    if (ev.source.abs === 'you') return ev.scores.abs >= 5 ? 'You marked this bike as having ABS.' : 'You marked this bike as having no ABS.';
+    const status = ev.option.abs || 'yes';
+    if (ev.option.absNote) return ev.option.absNote;
+    return status === 'yes' ? 'ABS as standard.' : status === 'no' ? 'No ABS on this model.' : 'ABS was optional; check the listing.';
+  }
+
   // Diverging brick → grey → green; returns inline CSS custom properties.
   function scoreStyle(s) {
     const t = Math.min(1, Math.abs(s - 2.5) / 2.5);
@@ -226,6 +234,8 @@
     $('#f-styles').innerHTML = STYLES.map(s => `<button type="button" class="chip" data-style="${esc(s)}" aria-pressed="${f.styles.includes(s)}">${esc(s)}</button>`).join('');
     $('#f-mins').innerHTML = CRITERIA.map(c => {
       const v = f.mins[c.key] || 0;
+      if (c.binary) return `<label class="field"><span class="field-label">${esc(c.label)}</span>
+        <select data-min="${c.key}"><option value="0"${v ? '' : ' selected'}>Any</option><option value="5"${v ? ' selected' : ''}>Must have ABS</option></select></label>`;
       return `<label class="field"><span class="field-label">${esc(c.label)} ≥ <output>${v ? fmt1(v) : 'any'}</output></span>
         <input type="range" min="0" max="5" step="0.5" value="${v}" data-min="${c.key}"></label>`;
     }).join('');
@@ -286,7 +296,8 @@
         const s = ev.scores[c.key];
         const src = ev.source[c.key];
         const title = c.key === 'power' ? `${ev.specs.hp}bhp, ${ev.delivery} delivery → counts as ${Math.round(ev.effHp)}bhp` : (b.scores[c.key] ? b.scores[c.key][1] : c.help);
-        return `<td class="score"><span class="score-chip${src === 'you' ? ' you' : ''}" style="${scoreStyle(s)}" title="${esc(title)}">${fmt1(s)}</span></td>`;
+        const text = c.binary ? absText(s) : fmt1(s);
+        return `<td class="score"><span class="score-chip${src === 'you' ? ' you' : ''}" style="${scoreStyle(s)}" title="${esc(c.binary ? absNote(ev) : title)}">${text}</span></td>`;
       }).join('')}
     </tr>`;
     if (open) html += `<tr class="detail" data-detail="${b.id}"><td colspan="${ncols}">${detailHtml(r)}</td></tr>`;
@@ -303,14 +314,20 @@
       else if (c.key === 'power') note = `${ev.specs.hp}bhp with ${ev.delivery} delivery${ev.specs.hp > 70 ? `, counted as ${Math.round(ev.effHp)}bhp` : ''}.`;
       else if (c.key === 'weight') note = `${ev.specs.wetKg}kg wet (${Math.round(ev.specs.wetKg * 2.2046)}lb).`;
       else if (c.key === 'testride') note = ev.option.condition === 'new' ? 'New: based on the nearest dealer and the brand’s demo fleet.' : 'Used: based on how many are for sale nearby.';
+      else if (c.key === 'abs') note = absNote(ev);
       else note = b.scores[c.key][1];
       if (ev.option.adj && ev.option.adj[c.key] && ev.source[c.key] !== 'you') note += ` (${ev.option.adj[c.key] > 0 ? '+' : ''}${ev.option.adj[c.key]} for this option)`;
       const editable = c.kind !== 'computed';
-      const input = editable
+      const input = c.binary
+        ? `<select data-ov="${b.id}" data-key="${c.key}" aria-label="Does the bike you found have ABS?">
+            <option value=""${typeof ov[c.key] === 'number' ? '' : ' selected'}>As listed</option>
+            <option value="5"${ov[c.key] === 5 ? ' selected' : ''}>Has ABS</option>
+            <option value="0"${ov[c.key] === 0 ? ' selected' : ''}>No ABS</option></select>`
+        : editable
         ? `<input type="number" min="0" max="5" step="0.5" data-ov="${b.id}" data-key="${c.key}" value="${typeof ov[c.key] === 'number' ? ov[c.key] : ''}" placeholder="mine" aria-label="My ${esc(c.label)} score">`
         : '<span></span>';
       return `<div class="crit-item"><span class="ci-label">${esc(c.label)}</span>
-        <span><span class="score-chip${ev.source[c.key] === 'you' ? ' you' : ''}" style="${scoreStyle(s)}">${fmt1(s)}</span></span>
+        <span><span class="score-chip${ev.source[c.key] === 'you' ? ' you' : ''}" style="${scoreStyle(s)}">${c.binary ? absText(s) : fmt1(s)}</span></span>
         <span class="ci-note">${esc(note)}</span>${input}</div>`;
     }).join('');
     const optItems = r.evs.map(e => `<label class="opt-item${e.option.id === ev.option.id ? ' sel' : ''}">
@@ -836,7 +853,8 @@
     }
     if (d.min) {
       state.filters.mins[d.min] = +t.value;
-      t.previousElementSibling.querySelector('output').textContent = +t.value ? fmt1(+t.value) : 'any';
+      const out = t.previousElementSibling && t.previousElementSibling.querySelector('output');
+      if (out) out.textContent = +t.value ? fmt1(+t.value) : 'any';
       const n = Object.values(state.filters.mins).filter(v => v > 0).length;
       $('#min-count').textContent = n ? n : '';
       changed(); return;

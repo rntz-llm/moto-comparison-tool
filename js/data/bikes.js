@@ -7,6 +7,7 @@
 //   options  : the ways you could buy it (new / used generations), each with a typical
 //              on-the-road price in GBP, a price range, a test-ride score, and optional
 //              adjustments (adj) or spec overrides (specs)
+//   abs      : on an option, 'some' (optional extra) or 'no'; omitted means ABS as standard
 //   search   : names used to build listing-site searches (slug: AutoTrader model page,
 //              null where AutoTrader has none; mcn: MCN path when it differs)
 window.MOTO_BIKES = [
@@ -570,7 +571,7 @@ window.MOTO_BIKES = [
       greenlane: [3, '21" front; fine on easy byways.']
     },
     options: [
-      { id: 'used-08', label: 'Used 2008–12', condition: 'used', years: '2008–12', price: 3400, range: [2800, 4200], testRide: 4, adj: { reliability: -0.5 },
+      { id: 'used-08', label: 'Used 2008–12', condition: 'used', years: '2008–12', price: 3400, abs: 'some', absNote: 'ABS was optional (XL700VA models). Check the listing.', range: [2800, 4200], testRide: 4, adj: { reliability: -0.5 },
         note: 'Condition matters more than year. Budget for tyres, chain and a service.' }
     ],
     search: { at: ['HONDA', 'XL700V TRANSALP'], slug: null, mcn: 'honda/xl700v-transalp', q: 'Honda XL700V Transalp' }
@@ -594,7 +595,7 @@ window.MOTO_BIKES = [
       greenlane: [4.5, 'Very capable.']
     },
     options: [
-      { id: 'used-08', label: 'Used 2008–16', condition: 'used', years: '2008–16', price: 3700, range: [3000, 4500], testRide: 3.5, adj: { reliability: -0.5 } }
+      { id: 'used-08', label: 'Used 2008–16', condition: 'used', years: '2008–16', price: 3700, abs: 'some', absNote: 'An ABS version was sold from 2012; earlier bikes have none. Check the listing.', range: [3000, 4500], testRide: 3.5, adj: { reliability: -0.5 } }
     ],
     search: { at: ['YAMAHA', 'XT660Z TENERE'], slug: null, mcn: 'yamaha/xt660z-tenere', q: 'Yamaha XT660Z Tenere' }
   },
@@ -642,7 +643,7 @@ window.MOTO_BIKES = [
       greenlane: [1.5, 'Road bike with 18/17" wheels.']
     },
     options: [
-      { id: 'used-02', label: 'Used 2002–14', condition: 'used', years: '2002–14', price: 2800, range: [2000, 3800], testRide: 3, adj: { reliability: -0.5 },
+      { id: 'used-02', label: 'Used 2002–14', condition: 'used', years: '2002–14', price: 2800, abs: 'some', absNote: 'ABS was optional from about 2005 (TDM900A, which has a black frame). Check the listing.', range: [2000, 3800], testRide: 3, adj: { reliability: -0.5 },
         note: 'Only about 3 on AutoTrader at a time, so look on eBay, Gumtree and Facebook too. Check chain, suspension, corrosion and history.' }
     ],
     search: { at: ['YAMAHA', 'TDM900'], slug: 'yamaha/tdm900', mcn: 'yamaha/tdm900', q: 'Yamaha TDM900' }
@@ -666,7 +667,7 @@ window.MOTO_BIKES = [
       greenlane: [0.5, 'No.']
     },
     options: [
-      { id: 'used-85', label: 'Used 1985–96', condition: 'used', years: '1985–96', price: 3300, range: [2500, 4500], testRide: 3, adj: { reliability: -1 },
+      { id: 'used-85', label: 'Used 1985–96', condition: 'used', years: '1985–96', price: 3300, abs: 'some', absNote: 'ABS was optional from 1988; many K75S and K75RT have it. Check the listing.', range: [2500, 4500], testRide: 3, adj: { reliability: -1 },
         note: 'Most observed prices are £2,900–4,300. Rare on AutoTrader; try eBay and classic sites. Check the gearbox input spline, fuel pump and electrics. K75RT variant: about 258kg.' }
     ],
     search: { at: ['BMW', 'K 75'], slug: 'bmw/k-75', mcn: 'bmw/k75', q: 'BMW K75' }
@@ -690,7 +691,7 @@ window.MOTO_BIKES = [
       greenlane: [4, '21" front and long travel.']
     },
     options: [
-      { id: 'used-00', label: 'Used 2000–07', condition: 'used', years: '2000–07', price: 2300, range: [1500, 3200], testRide: 3.5, adj: { reliability: -0.5 },
+      { id: 'used-00', label: 'Used 2000–07', condition: 'used', years: '2000–07', price: 2300, abs: 'some', absNote: 'ABS was optional. Check the listing.', range: [1500, 3200], testRide: 3.5, adj: { reliability: -0.5 },
         note: 'Bennetts puts a good private one at about £1,500 and a very tidy one at £2,500–3,000. Check the water pump, swingarm bearings and lambda sensor.' }
     ],
     search: { at: ['BMW', 'F 650 GS'], slug: 'bmw/f-650', mcn: 'bmw/f650gs', q: 'BMW F650GS Dakar' }
@@ -714,9 +715,9 @@ window.MOTO_BIKES = [
       greenlane: [3.5, 'Capable, but hard work on loose surfaces.']
     },
     options: [
-      { id: 'used-04', label: 'Used 2004–09 (air-cooled)', condition: 'used', years: '2004–09', price: 4500, range: [3500, 5500], testRide: 4.5, adj: { reliability: -0.25 }, specs: { hp: 100, wetKg: 229 },
+      { id: 'used-04', label: 'Used 2004–09 (air-cooled)', condition: 'used', years: '2004–09', price: 4500, abs: 'some', absNote: 'ABS was optional on 2004–12 bikes. Check the listing.', range: [3500, 5500], testRide: 4.5, adj: { reliability: -0.25 }, specs: { hp: 100, wetKg: 229 },
         note: 'Check final drive for play or leaks, and service history.' },
-      { id: 'used-10', label: 'Used 2010–12 (DOHC)', condition: 'used', years: '2010–12', price: 5600, range: [4800, 6500], testRide: 4.5, specs: { hp: 110, wetKg: 229 } },
+      { id: 'used-10', label: 'Used 2010–12 (DOHC)', condition: 'used', years: '2010–12', price: 5600, abs: 'some', absNote: 'ABS was optional on 2004–12 bikes. Check the listing.', range: [4800, 6500], testRide: 4.5, specs: { hp: 110, wetKg: 229 } },
       { id: 'used-13', label: 'Used 2013–18 (water-cooled)', condition: 'used', years: '2013–18', price: 7600, range: [6000, 9500], testRide: 4.5, adj: { highway: 0.5, fun: 0.25 }, specs: { hp: 125, wetKg: 244 },
         note: 'Smoother, stronger and better equipped. 2013–14 bikes: check recall work.' }
     ],
@@ -741,7 +742,7 @@ window.MOTO_BIKES = [
       greenlane: [3.5, 'Capable, but hard work on loose surfaces.']
     },
     options: [
-      { id: 'used-99', label: 'Used 1999–2004', condition: 'used', years: '1999–2004', price: 3300, range: [2200, 4500], testRide: 3.5, adj: { reliability: -0.5 },
+      { id: 'used-99', label: 'Used 1999–2004', condition: 'used', years: '1999–2004', price: 3300, abs: 'some', absNote: 'ABS was optional; 2002-on bikes with it have the servo-assisted integral system. Check the listing.', range: [2200, 4500], testRide: 3.5, adj: { reliability: -0.5 },
         note: 'Adventure versions (30L tank, taller) command a premium. Check final drive, servo brake operation and clutch.' }
     ],
     search: { at: ['BMW', 'R 1150 GS'], slug: 'bmw/r-1150-gs', mcn: 'bmw/r1150gs-adventure', q: 'BMW R1150GS' }
@@ -843,7 +844,7 @@ window.MOTO_BIKES = [
       greenlane: [4, 'Capable, if heavy.']
     },
     options: [
-      { id: 'used-90', label: 'Used 1990–2003', condition: 'used', years: '1990–2003', price: 4500, range: [3500, 5800], testRide: 3, adj: { reliability: -1 },
+      { id: 'used-90', label: 'Used 1990–2003', condition: 'used', years: '1990–2003', price: 4500, abs: 'no', absNote: 'No ABS on this model.', range: [3500, 5800], testRide: 3, adj: { reliability: -1 },
         note: 'Everyday usable bikes mostly sell for £3,000–4,300; the best are above £5,500. Only about 3 on AutoTrader.' }
     ],
     search: { at: ['HONDA', 'XRV750 AFRICA TWIN'], slug: 'honda/xrv750-africa-twin', mcn: 'honda/xrv750-africa-twin', q: 'Honda XRV750 Africa Twin' }
@@ -893,7 +894,7 @@ window.MOTO_BIKES = [
       greenlane: [0, 'No.']
     },
     options: [
-      { id: 'used-89', label: 'Used 1989–93', condition: 'used', years: '1989–93', price: 4800, range: [3000, 8000], testRide: 3, adj: { reliability: -1 },
+      { id: 'used-89', label: 'Used 1989–93', condition: 'used', years: '1989–93', price: 4800, abs: 'no', absNote: 'No ABS on this model.', range: [3000, 8000], testRide: 3, adj: { reliability: -1 },
         note: 'Tidy grey imports are £3,000–5,000; rarer UK-spec bikes (62hp) £4,000–6,000, mint up to £9,000. Few for sale, and parts are getting scarce.' }
     ],
     search: { at: ['HONDA', 'VFR400'], slug: 'honda/vfr400', mcn: 'honda/vfr400', q: 'Honda VFR400 NC30' }

@@ -28,6 +28,8 @@
       help: 'Racks, panniers and touring capacity, including fuel range.' },
     { key: 'testride', label: 'Test-ride access', short: 'Test ride', kind: 'option', weight: 3,
       help: 'How easy it is to test-ride the option you picked: nearby dealer demo fleets for new bikes, how common the bike is for used.' },
+    { key: 'abs', label: 'ABS', short: 'ABS', kind: 'option', weight: 5, binary: true,
+      help: 'Anti-lock brakes. Has ABS scores 5, no ABS scores 0. Where ABS was an optional extra, it scores 2.5 until you mark whether the bike you found has it.' },
     { key: 'greenlane', label: 'Green-laning', short: 'Green lane', kind: 'researched', weight: 1,
       help: 'Ability on UK byways and gravel. The worry of dropping a heavy bike counts under Weight.' }
   ];
@@ -42,6 +44,12 @@
   // Above 70bhp, the excess counts for less (relaxed) or more (punchy).
   const DELIVERY_FACTOR = { relaxed: 0.6, normal: 1, punchy: 1.3 };
   const POWER_KNEE = 70;
+
+  // ABS is yes/no. 'some' is an option where it was an extra on some bikes.
+  // Every new bike over 125cc registered in the EU/UK since 2017 has it, so
+  // options default to 'yes'; bikes.js marks the older ones that differ.
+  const ABS_SCORE = { yes: 5, some: 2.5, no: 0 };
+  const ABS_LABEL = { yes: 'Yes', some: 'Some', no: 'No' };
 
   const PENALTY = {
     none: { p: 1, label: 'None: plain weighted average' },
@@ -90,6 +98,7 @@
       else if (c.key === 'power') s = interp(curves.power, effectiveHp(specs.hp, delivery));
       else if (c.key === 'weight') s = interp(curves.weight, specs.wetKg);
       else if (c.key === 'testride') s = option.testRide;
+      else if (c.key === 'abs') s = ABS_SCORE[option.abs || bike.abs || 'yes'];
       else s = bike.scores[c.key][0];
       if (option.adj && typeof option.adj[c.key] === 'number') { s += option.adj[c.key]; src = 'option'; }
       if (c.kind !== 'computed' && typeof overrides[c.key] === 'number') { s = overrides[c.key]; src = 'you'; }
@@ -118,5 +127,5 @@
     return 2 * mean;
   }
 
-  window.MotoScoring = { CRITERIA, DEFAULT_CURVES, DELIVERY_FACTOR, PENALTY, interp, effectiveHp, evaluate, overall };
+  window.MotoScoring = { CRITERIA, DEFAULT_CURVES, DELIVERY_FACTOR, PENALTY, ABS_SCORE, ABS_LABEL, interp, effectiveHp, evaluate, overall };
 })();
